@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PsyHub - 个人备考手账</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Ma+Shan+Zheng&family=ZCOOL+QingKe+HuangYou&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --paper-bg: #fdfbf7;
+            --paper-texture: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23b2bec3' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            --line-color: #e5e7eb; /* tailwind gray-200 */
+            --ink-color: #374151; /* tailwind gray-700 */
+            --accent-color: #d97706; /* tailwind amber-600 */
+            --font-hand: 'Ma Shan Zheng', cursive;
+            --font-title: 'ZCOOL QingKe HuangYou', cursive;
+            --font-en-hand: 'Dancing Script', cursive;
+        }
+
+        body {
+            background-color: #f3f4f6; /* gray-100 */
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        /* 隐藏滚动条但保留功能 */
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* 手账本容器 */
+        .journal-book {
+            box-shadow: 
+                0 20px 25px -5px rgba(0, 0, 0, 0.1), 
+                0 10px 10px -5px rgba(0, 0, 0, 0.04),
+                0 0 0 1px rgba(0,0,0,0.05); /* 边框 */
+            background-color: var(--paper-bg);
+            background-image: var(--paper-texture);
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* 翻页动画类 */
+        .page-flip-next {
+            animation: flipNext 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        .page-flip-prev {
+            animation: flipPrev 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes flipNext {
+            0% { transform: rotateY(0); opacity: 1; }
+            50% { transform: rotateY(-90deg); opacity: 0.5; }
+            100% { transform: rotateY(0); opacity: 1; }
+        }
+        @keyframes flipPrev {
+            0% { transform: rotateY(0); opacity: 1; }
+            50% { transform: rotateY(90deg); opacity: 0.5; }
+            100% { transform: rotateY(0); opacity: 1; }
+        }
+
+        /* 手写字体应用 */
+        .font-hand { font-family: var(--font-hand), serif; }
+        .font-title { font-family: var(--font-title), sans-serif; }
+        .font-en-hand { font-family: var(--font-en-hand), cursive; }
+
+        /* 格子样式 */
+        .grid-cell {
+            border-right: 1px solid var(--line-color);
+            border-bottom: 1px solid var(--line-color);
+            position: relative;
+            transition: background-color 0.2s;
+        }
+        .grid-cell:hover {
+            background-color: rgba(243, 244, 246, 0.5); /* gray-100 / 50% */
+        }
+        .grid-cell:focus-within {
+            background-color: rgba(255, 255, 255, 0.8);
+            outline: 2px solid #a5b4fc; /* indigo-300 */
+            z-index: 10;
+        }
+
+        /* 提示文字 */
+        .placeholder-text:empty::before {
+            content: attr(data-placeholder);
+            color: #9ca3af; /* gray-400 */
+            font-family: var(--font-hand);
+            pointer-events: none;
+            font-size: 0.9em;
+        }
+
+        /* 悬浮提示 */
+        .tooltip-trigger:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #374151;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 50;
+            pointer-events: none;
+            margin-bottom: 5px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* 富文本工具栏激活状态 */
+        .tool-btn.active {
+            background-color: #e0e7ff; /* indigo-100 */
+            color: #4f46e5; /* indigo-600 */
+        }
+
+        /* 模拟装订线圈 */
+        .binding-coil {
+            background: linear-gradient(to bottom, #94a3b8 0%, #cbd5e1 50%, #94a3b8 100%);
+            box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .journal-book {
+                border-radius: 0;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center py-8">
+
+    <!-- 顶部导航 -->
+    <nav class="w-full max-w-6xl px-4 mb-6 flex justify-between items-center">
+        <a href="index.html" class="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            <span class="font-medium">返回首页</span>
+        </a>
+        <h1 class="text-3xl font-title text-slate-800 tracking-wide">个人备考手账</h1>
+        <div class="flex gap-2">
+            <button onclick="exportData()" class="px-3 py-1.5 text-sm bg-white border border-slate-300 rounded-lg hover:bg-slate-50 text-slate-600 shadow-sm transition-all">导出数据</button>
+            <label class="px-3 py-1.5 text-sm bg-white border border-slate-300 rounded-lg hover:bg-slate-50 text-slate-600 shadow-sm transition-all cursor-pointer">
+                导入数据
+                <input type="file" onchange="importData(this)" class="hidden" accept=".json">
+            </label>
+        </div>
+    </nav>
+
+    <!-- 工具栏 -->
+    <div class="w-full max-w-6xl px-4 mb-4 flex flex-wrap gap-4 items-center justify-between">
+        <!-- 视图切换 -->
+        <div class="flex bg-white rounded-xl p-1 shadow-sm border border-slate-200">
+            <button onclick="switchView('weekly')" id="btn-weekly" class="px-4 py-1.5 rounded-lg text-sm font-medium transition-colors bg-indigo-50 text-indigo-600">周计划</button>
+            <button onclick="switchView('monthly')" id="btn-monthly" class="px-4 py-1.5 rounded-lg text-sm font-medium text-slate-500 hover:text-slate-700 transition-colors">月概览</button>
+            <button onclick="switchView('habits')" id="btn-habits" class="px-4 py-1.5 rounded-lg text-sm font-medium text-slate-500 hover:text-slate-700 transition-colors">习惯打卡</button>
+        </div>
+
+        <!-- 日期导航 -->
+        <div class="flex items-center gap-3 bg-white px-3 py-1.5 rounded-xl shadow-sm border border-slate-200">
+            <button onclick="changeDate(-1)" class="p-1 hover:bg-slate-100 rounded-full text-slate-500">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+            </button>
+            <span id="current-date-range" class="font-title text-lg w-48 text-center text-slate-700 select-none">2026年2月 第4周</span>
+            <button onclick="changeDate(1)" class="p-1 hover:bg-slate-100 rounded-full text-slate-500">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </button>
+            <button onclick="goToToday()" class="text-xs font-medium text-indigo-600 hover:underline ml-1">今天</button>
+        </div>
+
+        <!-- 编辑工具 -->
+        <div class="flex items-center gap-1 bg-white px-2 py-1.5 rounded-xl shadow-sm border border-slate-200">
+            <button onclick="formatDoc('bold')" class="tool-btn p-1.5 rounded hover:bg-slate-100 text-slate-600" title="加粗">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 4h8a4 4 0 014 4 4 4 0 01-4 4H6V4zm0 8h9a4 4 0 014 4 4 4 0 01-4 4H6v-8z"></path></svg>
+            </button>
+            <button onclick="formatDoc('italic')" class="tool-btn p-1.5 rounded hover:bg-slate-100 text-slate-600" title="斜体">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+            </button>
+            <div class="w-px h-4 bg-slate-200 mx-1"></div>
+            <!-- 荧光笔颜色 -->
+            <button onclick="formatDoc('hiliteColor', '#fef3c7')" class="tool-btn w-6 h-6 rounded-full border border-slate-200 bg-amber-100 hover:scale-110 transition-transform" title="黄色荧光笔"></button>
+            <button onclick="formatDoc('hiliteColor', '#bfdbfe')" class="tool-btn w-6 h-6 rounded-full border border-slate-200 bg-blue-200 hover:scale-110 transition-transform" title="蓝色荧光笔"></button>
+            <button onclick="formatDoc('hiliteColor', '#bbf7d0')" class="tool-btn w-6 h-6 rounded-full border border-slate-200 bg-green-200 hover:scale-110 transition-transform" title="绿色荧光笔"></button>
+            <div class="w-px h-4 bg-slate-200 mx-1"></div>
+            <button onclick="formatDoc('removeFormat')" class="tool-btn p-1.5 rounded hover:bg-slate-100 text-slate-600" title="橡皮擦 (清除格式)">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+            </button>
+            <button onclick="undo()" class="tool-btn p-1.5 rounded hover:bg-slate-100 text-slate-600" title="撤销">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- 主体内容 -->
+    <main id="journal-container" class="journal-book w-full max-w-6xl min-h-[700px] rounded-2xl flex overflow-hidden relative">
+        
+        <!-- 左侧装订线圈 (视觉装饰) -->
+        <div class="absolute left-0 top-0 bottom-0 w-8 md:w-12 z-20 flex flex-col justify-evenly py-4 pointer-events-none">
+            <div class="w-full h-4 bg-gradient-to-r from-gray-400 to-gray-200 rounded-r-lg shadow-md mb-4 transform -translate-x-1"></div>
+            <div class="w-full h-4 bg-gradient-to-r from-gray-400 to-gray-200 rounded-r-lg shadow-md mb-4 transform -translate-x-1"></div>
+            <div class="w-full h-4 bg-gradient-to-r from-gray-400 to-gray-200 rounded-r-lg shadow-md mb-4 transform -translate-x-1"></div>
+            <div class="w-full h-4 bg-gradient-to-r from-gray-400 to-gray-200 rounded-r-lg shadow-md mb-4 transform -translate-x-1"></div>
+            <div class="w-full h-4 bg-gradient-to-r from-gray-400 to-gray-200 rounded-r-lg shadow-md mb-4 transform -translate-x-1"></div>
+            <div class="w-full h-4 bg-gradient-to-r from-gray-400 to-gray-200 rounded-r-lg shadow-md mb-4 transform -translate-x-1"></div>
+            <div class="w-full h-4 bg-gradient-to-r from-gray-400 to-gray-200 rounded-r-lg shadow-md mb-4 transform -translate-x-1"></div>
+            <div class="w-full h-4 bg-gradient-to-r from-gray-400 to-gray-200 rounded-r-lg shadow-md mb-4 transform -translate-x-1"></div>
+        </div>
+
+        <!-- 内容区域 -->
+        <div class="flex-1 pl-10 md:pl-16 pr-4 md:pr-8 py-6 md:py-8 overflow-auto relative" id="page-content">
+            <!-- 动态渲染区域 -->
+        </div>
+
+    </main>
+
+    <!-- Toast 提示 -->
+    <div id="toast" class="fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-slate-800 text-white px-4 py-2 rounded-lg shadow-lg opacity-0 transition-opacity duration-300 pointer-events-none">
+        保存成功
+    </div>
+
+    <script>
+        // ================= 状态管理 =================
+        const state = {
+            currentView: 'weekly', // weekly, monthly, habits
+            currentDate: new Date(),
+            data: JSON.parse(localStorage.getItem('psy_note_calendar_data')) || {
+                weekly: {}, // key: "2026-W08", value: { "0-0": "text", ... }
+                monthly: {}, // key: "2026-M02", value: { "day-1": "text", ... }
+                habits: {}, // key: "2026-M02", value: { "habit-1": { name: "", checks: [] } }
+                customTimeBlocks: ["08:00 - 09:00", "09:00 - 10:00", "10:00 - 11:00", "11:00 - 12:00", "14:00 - 15:00", "15:00 - 16:00", "16:00 - 17:00", "19:00 - 20:00", "20:00 - 21:00", "21:00 - 22:00"]
+            },
+            history: [] // 简单的撤销栈
+        };
+
+        const weekDays = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
+
+        // ================= 初始化 =================
+        document.addEventListener('DOMContentLoaded', () => {
+            render();
+            // 自动保存监听
+            document.addEventListener('input', debounce(saveData, 1000));
+        });
+
+        // ================= 核心渲染逻辑 =================
+        function render() {
+            const container = document.getElementById('page-content');
+            const dateRangeEl = document.getElementById('current-date-range');
+            
+            // 动画过渡
+            container.parentElement.classList.add('page-flip-next');
+            setTimeout(() => container.parentElement.classList.remove('page-flip-next'), 600);
+
+            // 更新标题
+            if (state.currentView === 'weekly') {
+                const weekInfo = getWeekInfo(state.currentDate);
+                dateRangeEl.innerText = `${weekInfo.year}年 ${weekInfo.month}月 第${weekInfo.weekNum}周`;
+                renderWeeklyView(container, weekInfo);
+            } else if (state.currentView === 'monthly') {
+                const year = state.currentDate.getFullYear();
+                const month = state.currentDate.getMonth() + 1;
+                dateRangeEl.innerText = `${year}年 ${month}月`;
+                renderMonthlyView(container, year, month);
+            } else if (state.currentView === 'habits') {
+                const year = state.currentDate.getFullYear();
+                const month = state.currentDate.getMonth() + 1;
+                dateRangeEl.innerText = `${year}年 ${month}月 习惯打卡`;
+                renderHabitsView(container, year, month);
+            }
+        }
+
+        // 渲染周视图 (核心功能)
+        function renderWeeklyView(container, weekInfo) {
+            const weekId = `${weekInfo.year}-W${weekInfo.weekNum}`;
+            const weekData = state.data.weekly[weekId] || {};
+            const timeBlocks = state.data.customTimeBlocks;
+
+            let html = `
+                <div class="min-w-[800px]">
+                    <div class="grid grid-cols-8 border-b-2 border-slate-300">
+                        <div class="p-2 font-title text-slate-500 text-center border-r border-slate-300">时间块</div>
+                        ${weekDays.map((d, i) => {
+                            const date = new Date(weekInfo.start);
+                            date.setDate(date.getDate() + i);
+                            const isToday = isSameDay(date, new Date());
+                            return `
+                                <div class="p-2 text-center border-r border-slate-200 ${isToday ? 'bg-amber-50' : ''}">
+                                    <div class="font-title text-lg ${isToday ? 'text-amber-600' : 'text-slate-700'}">${d}</div>
+                                    <div class="text-xs text-slate-400 font-en-hand">${date.getMonth()+1}/${date.getDate()}</div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+            `;
+
+            // 生成时间行
+            timeBlocks.forEach((time, rIndex) => {
+                html += `<div class="grid grid-cols-8 border-b border-slate-200 min-h-[80px]">`;
+                
+                // 左侧时间块 (可编辑)
+                html += `
+                    <div class="p-2 border-r border-slate-300 bg-slate-50 flex items-center justify-center group relative">
+                        <div contenteditable="true" 
+                             class="font-en-hand text-lg text-slate-600 outline-none w-full text-center"
+                             onblur="updateTimeBlock(${rIndex}, this.innerText)">${time}</div>
+                        <div class="absolute right-1 top-1 opacity-0 group-hover:opacity-100 cursor-pointer text-slate-400" title="编辑时间段">✎</div>
+                    </div>
+                `;
+
+                // 7天格子
+                for (let cIndex = 0; cIndex < 7; cIndex++) {
+                    const cellId = `${rIndex}-${cIndex}`;
+                    const content = weekData[cellId] || '';
+                    html += `
+                        <div class="grid-cell p-2 font-hand text-lg text-slate-800 outline-none relative" 
+                             contenteditable="true" 
+                             data-cell-id="${cellId}"
+                             data-view="weekly"
+                             data-week-id="${weekId}"
+                             data-placeholder="点击记录..."
+                             class="placeholder-text tooltip-trigger"
+                             data-tooltip="支持富文本编辑"
+                             oninput="handleInput(this)">${content}</div>
+                    `;
+                }
+                html += `</div>`;
+            });
+
+            // 底部添加行按钮
+            html += `
+                <div class="py-4 text-center">
+                    <button onclick="addTimeBlock()" class="text-slate-400 hover:text-indigo-600 font-medium text-sm flex items-center justify-center gap-1 mx-auto transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        添加新的时间段
+                    </button>
+                </div>
+                </div>
+            `;
+            
+            container.innerHTML = html;
+        }
+
+        // 渲染月视图
+        function renderMonthlyView(container, year, month) {
+            const monthId = `${year}-M${month}`;
+            const monthData = state.data.monthly[monthId] || {};
+            
+            const firstDay = new Date(year, month - 1, 1);
+            const lastDay = new Date(year, month, 0);
+            const daysInMonth = lastDay.getDate();
+            const startDayOfWeek = (firstDay.getDay() + 6) % 7; // Convert Sun=0 to Mon=0 base
+
+            let html = `
+                <div class="grid grid-cols-7 border-2 border-slate-300 rounded-lg overflow-hidden min-h-[600px]">
+                    ${weekDays.map(d => `<div class="bg-slate-100 p-2 text-center font-title text-slate-600 border-b border-r border-slate-300">${d}</div>`).join('')}
+            `;
+
+            // 空白填充
+            for (let i = 0; i < startDayOfWeek; i++) {
+                html += `<div class="bg-slate-50/50 border-b border-r border-slate-200"></div>`;
+            }
+
+            // 日期格子
+            for (let day = 1; day <= daysInMonth; day++) {
+                const cellId = `day-${day}`;
+                const content = monthData[cellId] || '';
+                const isToday = isSameDay(new Date(year, month-1, day), new Date());
+                
+                html += `
+                    <div class="border-b border-r border-slate-200 p-2 relative min-h-[100px] flex flex-col group hover:bg-white transition-colors ${isToday ? 'bg-amber-50' : ''}">
+                        <span class="text-sm font-en-hand ${isToday ? 'text-amber-600 font-bold' : 'text-slate-400'} mb-1">${day}</span>
+                        <div contenteditable="true" 
+                             class="flex-1 font-hand text-base outline-none placeholder-text" 
+                             data-cell-id="${cellId}"
+                             data-view="monthly"
+                             data-month-id="${monthId}"
+                             data-placeholder="计划..."
+                             oninput="handleInput(this)">${content}</div>
+                    </div>
+                `;
+            }
+            html += `</div>`;
+            container.innerHTML = html;
+        }
+
+        // 渲染习惯打卡
+        function renderHabitsView(container, year, month) {
+            const monthId = `${year}-M${month}`;
+            const daysInMonth = new Date(year, month, 0).getDate();
+            // 初始化习惯数据结构
+            if (!state.data.habits[monthId]) {
+                state.data.habits[monthId] = [
+                    { name: "背单词 50 个", checks: [] },
+                    { name: "阅读 30 分钟", checks: [] },
+                    { name: "运动", checks: [] }
+                ];
+            }
+            const habits = state.data.habits[monthId];
+
+            let html = `
+                <div class="overflow-x-auto">
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr>
+                                <th class="p-2 border border-slate-300 bg-slate-100 min-w-[150px] font-title text-slate-700">习惯项目</th>
+                                ${Array.from({length: daysInMonth}, (_, i) => `<th class="p-1 border border-slate-300 bg-slate-50 text-xs text-slate-500 w-8">${i+1}</th>`).join('')}
+                                <th class="p-2 border border-slate-300 bg-slate-100 w-16">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            habits.forEach((habit, hIndex) => {
+                html += `
+                    <tr>
+                        <td class="p-2 border border-slate-300">
+                            <input type="text" value="${habit.name}" 
+                                   class="w-full bg-transparent font-hand text-lg outline-none"
+                                   onchange="updateHabitName('${monthId}', ${hIndex}, this.value)">
+                        </td>
+                        ${Array.from({length: daysInMonth}, (_, dIndex) => {
+                            const isChecked = habit.checks.includes(dIndex + 1);
+                            return `
+                                <td class="border border-slate-300 text-center cursor-pointer hover:bg-slate-100 transition-colors"
+                                    onclick="toggleHabit('${monthId}', ${hIndex}, ${dIndex + 1})">
+                                    ${isChecked ? '<span class="text-green-500 text-xl">✔</span>' : ''}
+                                </td>
+                            `;
+                        }).join('')}
+                        <td class="border border-slate-300 text-center">
+                            <button onclick="deleteHabit('${monthId}', ${hIndex})" class="text-red-400 hover:text-red-600">×</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                        </tbody>
+                    </table>
+                    <button onclick="addHabit('${monthId}')" class="mt-4 px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 font-medium transition-colors">+ 添加新习惯</button>
+                </div>
+            `;
+            container.innerHTML = html;
+        }
+
+        // ================= 交互逻辑 =================
+        
+        function switchView(view) {
+            state.currentView = view;
+            // 更新按钮状态
+            ['weekly', 'monthly', 'habits'].forEach(v => {
+                const btn = document.getElementById(`btn-${v}`);
+                if (v === view) {
+                    btn.classList.add('bg-indigo-50', 'text-indigo-600');
+                    btn.classList.remove('text-slate-500');
+                } else {
+                    btn.classList.remove('bg-indigo-50', 'text-indigo-600');
+                    btn.classList.add('text-slate-500');
+                }
+            });
+            render();
+        }
+
+        function changeDate(delta) {
+            if (state.currentView === 'weekly') {
+                state.currentDate.setDate(state.currentDate.getDate() + (delta * 7));
+            } else {
+                state.currentDate.setMonth(state.currentDate.getMonth() + delta);
+            }
+            state.currentDate = new Date(state.currentDate); // trigger update
+            render();
+        }
+
+        function goToToday() {
+            state.currentDate = new Date();
+            render();
+        }
+
+        function handleInput(el) {
+            const view = el.dataset.view;
+            const id = el.dataset.cellId;
+            const content = el.innerHTML;
+            
+            if (view === 'weekly') {
+                const weekId = el.dataset.weekId;
+                if (!state.data.weekly[weekId]) state.data.weekly[weekId] = {};
+                state.data.weekly[weekId][id] = content;
+            } else if (view === 'monthly') {
+                const monthId = el.dataset.monthId;
+                if (!state.data.monthly[monthId]) state.data.monthly[monthId] = {};
+                state.data.monthly[monthId][id] = content;
+            }
+            
+            // 简单的撤销记录 (实际生产环境需要更复杂的 Diff 算法)
+            // state.history.push(JSON.parse(JSON.stringify(state.data)));
+        }
+
+        function updateTimeBlock(index, value) {
+            state.data.customTimeBlocks[index] = value;
+            saveData();
+        }
+
+        function addTimeBlock() {
+            state.data.customTimeBlocks.push("New Block");
+            saveData();
+            render();
+        }
+
+        function toggleHabit(monthId, habitIndex, day) {
+            const habit = state.data.habits[monthId][habitIndex];
+            const checkIndex = habit.checks.indexOf(day);
+            if (checkIndex > -1) {
+                habit.checks.splice(checkIndex, 1);
+            } else {
+                habit.checks.push(day);
+            }
+            saveData();
+            render();
+        }
+
+        function updateHabitName(monthId, index, value) {
+            state.data.habits[monthId][index].name = value;
+            saveData();
+        }
+
+        function addHabit(monthId) {
+            state.data.habits[monthId].push({ name: "新习惯", checks: [] });
+            saveData();
+            render();
+        }
+
+        function deleteHabit(monthId, index) {
+            if(confirm('确定删除这个习惯吗？')) {
+                state.data.habits[monthId].splice(index, 1);
+                saveData();
+                render();
+            }
+        }
+
+        // ================= 工具函数 =================
+        
+        function formatDoc(cmd, value) {
+            document.execCommand(cmd, false, value);
+            // 保持焦点在编辑框中
+            const selection = window.getSelection();
+            if (selection.rangeCount > 0) {
+                const range = selection.getRangeAt(0);
+                const container = range.commonAncestorContainer;
+                if (container.nodeType === 1 && container.isContentEditable) {
+                    container.focus();
+                } else if (container.parentElement && container.parentElement.isContentEditable) {
+                    container.parentElement.focus();
+                }
+            }
+        }
+
+        function undo() {
+            // 简化版撤销：实际应从 history 栈中恢复
+            alert('撤销功能暂未完全实现 (需配合复杂状态栈)');
+        }
+
+        function saveData() {
+            localStorage.setItem('psy_note_calendar_data', JSON.stringify(state.data));
+            showToast();
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.style.opacity = '1';
+            setTimeout(() => toast.style.opacity = '0', 2000);
+        }
+
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state.data));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "psynote_calendar_backup.json");
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+
+        function importData(input) {
+            const file = input.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const json = JSON.parse(e.target.result);
+                    state.data = json;
+                    saveData();
+                    render();
+                    alert('导入成功！');
+                } catch (err) {
+                    alert('文件格式错误，请导入有效的 JSON 备份文件。');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function getWeekInfo(d) {
+            const date = new Date(d);
+            const day = date.getDay() || 7; 
+            date.setHours(0, 0, 0, 0);
+            date.setDate(date.getDate() + 4 - day);
+            const yearStart = new Date(date.getFullYear(), 0, 1);
+            const weekNo = Math.ceil((((date - yearStart) / 86400000) + 1) / 7);
+            
+            // 计算周一日期
+            const start = new Date(d);
+            const currentDay = start.getDay() || 7;
+            start.setDate(start.getDate() - currentDay + 1);
+            
+            return {
+                year: date.getFullYear(),
+                weekNum: weekNo,
+                start: start,
+                month: start.getMonth() + 1
+            };
+        }
+
+        function isSameDay(d1, d2) {
+            return d1.getFullYear() === d2.getFullYear() &&
+                   d1.getMonth() === d2.getMonth() &&
+                   d1.getDate() === d2.getDate();
+        }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+    </script>
+</body>
+</html>

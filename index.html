@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PsyHub - 本地化心理学考研工具台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600&family=ZCOOL+QingKe+HuangYou&display=swap');
+
+        body {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            background-color: #F8F7F4; /* 燕麦暖白色 */
+            color: #3f3f46;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .font-artistic {
+            font-family: 'Dancing Script', cursive;
+        }
+
+        /* 极简网格背景 */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: 
+                linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px);
+            background-size: 32px 32px;
+            z-index: -3;
+        }
+
+        /* 氛围光晕 */
+        .ambient-blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: -2;
+            opacity: 0.6;
+            animation: slow-flow 25s infinite alternate ease-in-out;
+        }
+        .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: #cce3de; }
+        .blob-2 { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: #e2d9f3; animation-delay: -5s; }
+        .blob-3 { top: 40%; left: 30%; width: 45vw; height: 45vw; background: #fdf0d5; animation-delay: -10s; }
+
+        @keyframes slow-flow {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(4%, 6%) scale(1.1); }
+            100% { transform: translate(-3%, -4%) scale(0.95); }
+        }
+
+        /* 液态毛玻璃 (Liquid Glass) */
+        .liquid-glass {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.3) 100%);
+            backdrop-filter: blur(24px) saturate(160%);
+            -webkit-backdrop-filter: blur(24px) saturate(160%);
+            border-top: 1px solid rgba(255, 255, 255, 1);
+            border-left: 1px solid rgba(255, 255, 255, 1);
+            border-right: 1px solid rgba(255, 255, 255, 0.4);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: inset 0 0 16px rgba(255, 255, 255, 0.5), 
+                        0 10px 30px -10px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-hover { transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.5) 100%);
+            box-shadow: inset 0 0 24px rgba(255, 255, 255, 0.8), 
+                        0 16px 40px -12px rgba(0, 0, 0, 0.08);
+        }
+
+        .btn-solid { background: #27272a; color: #ffffff; transition: all 0.3s ease; }
+        .btn-solid:hover { background: #3f3f46; transform: scale(0.98); }
+
+        /* SVG 连线动画 */
+        .svg-node {
+            opacity: 0;
+            transform: translateY(18px) scale(0.985);
+            transform-origin: center;
+            animation: svg-in 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation-delay: var(--enter-delay, 0s);
+            will-change: transform, opacity;
+        }
+
+        .svg-bubble {
+            transform-origin: center;
+            animation: node-float 8s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+            animation-delay: calc(var(--enter-delay, 0s) + 1.45s);
+            will-change: transform;
+        }
+
+        .svg-node:hover .svg-bubble,
+        .svg-node.tooltip-active .svg-bubble {
+            filter: drop-shadow(0 16px 24px rgba(15, 23, 42, 0.16)) drop-shadow(0 6px 10px rgba(15, 23, 42, 0.10));
+            transition: filter 0.3s ease; /* 增加阴影过渡 */
+        }
+
+        .svg-node circle {
+            transition: stroke 0.3s ease, stroke-width 0.3s ease; /* 增加描边过渡 */
+        }
+
+        .svg-node:hover circle,
+        .svg-node.tooltip-active circle {
+            stroke: #0f172a;
+            stroke-width: 3.25;
+        }
+
+        .svg-tooltip {
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 30;
+            width: min(360px, calc(100vw - 32px));
+            opacity: 0;
+            transform: translateY(10px) scale(0.98);
+            pointer-events: none;
+            transition: opacity 180ms cubic-bezier(0.16, 1, 0.3, 1), transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* 解决气泡闪烁：增加一个 invisible 状态用于初始定位 */
+        .svg-tooltip.invisible {
+            opacity: 0 !important;
+            visibility: hidden;
+            transition: none !important;
+        }
+
+        .svg-tooltip.open {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .svg-tooltip-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.82) 0%, rgba(255, 255, 255, 0.55) 100%);
+            backdrop-filter: blur(20px) saturate(160%);
+            -webkit-backdrop-filter: blur(20px) saturate(160%);
+            border: 1px solid rgba(255, 255, 255, 0.85);
+            box-shadow: 0 18px 55px rgba(15, 23, 42, 0.14);
+            border-radius: 16px;
+            padding: 14px 14px 12px 14px;
+        }
+
+        .svg-tooltip-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #0f172a;
+            letter-spacing: 0.2px;
+            line-height: 1.25;
+        }
+
+        .svg-tooltip-sub {
+            margin-top: 6px;
+            font-size: 12px;
+            color: rgba(15, 23, 42, 0.72);
+            line-height: 1.5;
+        }
+
+        .svg-tooltip-sub b {
+            color: rgba(15, 23, 42, 0.9);
+            font-weight: 700;
+        }
+
+        @keyframes node-float {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-6px); }
+        }
+        .svg-line { stroke-dasharray: 60; animation: dash-flow 22s linear infinite; }
+        @keyframes dash-flow { to { stroke-dashoffset: -600; } }
+
+        @keyframes svg-in {
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .page-enter {
+            opacity: 0;
+            transform: translateY(18px);
+            animation: page-in 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation-delay: var(--enter-delay, 0s);
+        }
+
+        @keyframes page-in {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .page-enter, .svg-node, .svg-bubble {
+                animation: none !important;
+                opacity: 1 !important;
+                transform: none !important;
+            }
+        }
+
+        /* 滚动丝滑浮现特效 (Scroll Reveal) */
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(40px) scale(0.96);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); /* 苹果级丝滑曲线 */
+        }
+        .reveal-up.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+
+        /* 移动端菜单过渡动画 */
+        #mobile-menu {
+            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        #mobile-menu.open {
+            max-height: 300px; /* 足够容纳所有菜单项的高度 */
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 背景层 -->
+    <div class="grid-bg"></div>
+    <div class="ambient-blob blob-1"></div>
+    <div class="ambient-blob blob-2"></div>
+    <div class="ambient-blob blob-3"></div>
+
+    <!-- 导航栏 -->
+    <nav class="fixed w-full z-50 top-4 px-4 sm:px-6 flex justify-center">
+        <div class="liquid-glass w-full max-w-6xl rounded-2xl px-6 py-3 flex flex-col lg:flex-row justify-between items-center relative page-enter" style="--enter-delay: 0.05s;">
+            <div class="w-full lg:w-auto flex justify-between items-center">
+                <div class="flex items-center gap-2 font-semibold text-lg text-slate-800 tracking-tight">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-slate-700">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <path d="M3 9h18M9 21V9"></path>
+                    </svg>
+                    PsyHub
+                </div>
+                
+                <!-- 移动端汉堡菜单按钮 -->
+                <button id="mobile-menu-btn" class="lg:hidden text-slate-700 focus:outline-none p-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- 桌面端菜单 -->
+            <div class="hidden lg:flex gap-7 text-sm text-slate-600 font-medium absolute left-1/2 transform -translate-x-1/2">
+                <a href="考研全攻略.html" class="hover:text-slate-900 transition-colors">考研全攻略</a>
+                <a href="个人日历.html" class="hover:text-slate-900 transition-colors">个人日历</a>
+                <a href="资源合辑.html" class="hover:text-slate-900 transition-colors">资源合辑</a>
+                <a href="备考时间线.html" class="hover:text-slate-900 transition-colors">备考时间线</a>
+            </div>
+
+            <!-- 右侧Logo/用户名 (桌面端显示) -->
+            <div class="hidden lg:flex items-center pr-2">
+                <span class="font-artistic text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-700 to-slate-500 tracking-wider cursor-default select-none relative">
+                    Xun
+                </span>
+            </div>
+
+            <!-- 移动端下拉菜单 -->
+            <div id="mobile-menu" class="w-full lg:hidden flex flex-col gap-4 text-sm text-slate-600 font-medium mt-2 items-center">
+                <div class="w-full h-px bg-slate-200/50 my-1"></div>
+                <a href="考研全攻略.html" class="hover:text-slate-900 transition-colors py-2 w-full text-center">考研全攻略</a>
+                <a href="个人日历.html" class="hover:text-slate-900 transition-colors py-2 w-full text-center">个人日历</a>
+                <a href="资源合辑.html" class="hover:text-slate-900 transition-colors py-2 w-full text-center">资源合辑</a>
+                <a href="备考时间线.html" class="hover:text-slate-900 transition-colors py-2 w-full text-center">备考时间线</a>
+                 <div class="py-2 w-full text-center">
+                    <span class="font-artistic text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-700 to-slate-500 tracking-wider">
+                        Xun
+                    </span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主体区域 -->
+    <main class="relative pt-32 lg:pt-36 pb-20 min-h-[85vh] flex items-center">
+        <div class="max-w-6xl mx-auto px-6 w-full lg:flex lg:items-center lg:gap-16 flex-col lg:flex-row">
+            
+            <!-- 左侧：实用导向面板 (在移动端放在下方) -->
+            <div class="w-full lg:w-1/2 mb-12 lg:mb-0 mt-8 lg:mt-0 page-enter" style="--enter-delay: 0.15s;">
+                <h1 class="text-4xl sm:text-5xl lg:text-7xl font-normal text-slate-800 leading-tight mb-5 tracking-wide text-center lg:text-left" style="font-family: 'ZCOOL QingKe HuangYou', cursive;">
+                    心理学考研<br/>学习系统
+                </h1>
+                <p class="text-base text-slate-600 mb-8 max-w-md leading-relaxed mx-auto lg:mx-0 text-center lg:text-left">
+                    当前专为 312 统考设计。结构化备考指南、院校情报筛选与个人备考日历，构建你的专属复习知识库。
+                </p>
+                
+                <div class="flex flex-wrap gap-4 mb-10 justify-center lg:justify-start">
+                    <button onclick="window.location.href='备考时间线.html'" class="btn-solid px-6 py-3 rounded-xl font-medium flex items-center gap-2 shadow-lg shadow-zinc-200 text-sm sm:text-base">
+                        查看备考时间线
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </button>
+                </div>
+
+                <!-- 动态时间进度看板 -->
+                <div class="liquid-glass rounded-2xl p-6 sm:flex gap-6 items-center mx-auto lg:mx-0 max-w-md lg:max-w-none">
+                    <div class="flex-1 mb-4 sm:mb-0">
+                        <div class="flex justify-between items-end mb-2">
+                            <div class="text-sm font-semibold text-slate-700" id="target-year">考研复习进度</div>
+                            <div class="text-xs font-bold text-slate-800" id="progress-text">0%</div>
+                        </div>
+                        <div class="w-full bg-black/5 rounded-full h-2 overflow-hidden border border-black/5">
+                            <div class="bg-slate-700 h-2 rounded-full transition-all duration-1000 ease-out" id="progress-bar" style="width: 0%"></div>
+                        </div>
+                        <div class="mt-2 flex justify-between text-xs text-slate-500">
+                            <span id="days-left">距初试约 -- 天</span>
+                            <span>保持专注，稳步向前</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧：七大学科结构图 (艺术级缩放，发心与社心位置对调) -->
+            <div class="w-full lg:w-1/2 flex justify-center relative mb-8 lg:mb-0 page-enter" style="--enter-delay: 0.25s;">
+                <!-- 扩大画布至600x600，并添加响应式类确保不溢出 -->
+                <svg viewBox="-24 -24 648 648" fill="none" xmlns="http://www.w3.org/2000/svg" class="relative z-10 drop-shadow-md w-full max-w-[400px] lg:max-w-[600px] h-auto mx-auto">
+                    
+                    <!-- 自由连接线 (扩大40%间距后重新计算的坐标) -->
+                    <g stroke="#cbd5e1" stroke-width="1.5" stroke-linecap="round" class="svg-line">
+                        <path d="M132 104 L468 76" /> <path d="M132 104 L384 272" /> <path d="M132 104 L90 328" />
+                        <path d="M384 272 L468 76" /> <path d="M384 272 L496 454" /> <path d="M384 272 L286 524" />
+                        <path d="M496 454 L286 524" /> <path d="M286 524 L118 496" /> <path d="M118 496 L90 328" />
+                        <path d="M90 328 L286 524" stroke-dasharray="4 6" stroke="#e2e8f0" /> 
+                    </g>
+
+                    <!-- 节点大小保持极致艺术落差感，位置向外围拓展40% -->
+                    
+                    <!-- 1. 普心 (绝对核心, 占据左上主视野) -->
+                    <g class="svg-node" data-key="puxin" tabindex="0" style="--enter-delay: 0.20s;">
+                        <g class="svg-bubble">
+                            <circle cx="132" cy="104" r="100" fill="rgba(255,255,255,0.85)" stroke="#71717a" stroke-width="3"/>
+                        </g>
+                        <text x="132" y="114" font-family="sans-serif" font-size="33" font-weight="600" fill="#3f3f46" text-anchor="middle">普心</text>
+                    </g>
+                    
+                    <!-- 2. 实验 (方法论核心, 中心偏右) -->
+                    <g class="svg-node" data-key="shiyan" tabindex="0" style="--enter-delay: 0.30s;">
+                        <g class="svg-bubble">
+                            <circle cx="384" cy="272" r="80" fill="rgba(255,255,255,0.85)" stroke="#71717a" stroke-width="2.5"/>
+                        </g>
+                        <text x="384" y="280" font-family="sans-serif" font-size="28" font-weight="600" fill="#52525b" text-anchor="middle">实验</text>
+                    </g>
+                    
+                    <!-- 3. 社心 (右上角外围) -->
+                    <g class="svg-node" data-key="shexin" tabindex="0" style="--enter-delay: 0.40s;">
+                        <g class="svg-bubble">
+                            <circle cx="468" cy="76" r="32" fill="rgba(255,255,255,0.85)" stroke="#a1a1aa" stroke-width="1.5"/>
+                        </g>
+                        <text x="468" y="82" font-family="sans-serif" font-size="21" font-weight="500" fill="#71717a" text-anchor="middle">社心</text>
+                    </g>
+                    
+                    <!-- 4. 统计 (右下角拓展) -->
+                    <g class="svg-node" data-key="tongji" tabindex="0" style="--enter-delay: 0.50s;">
+                        <g class="svg-bubble">
+                            <circle cx="496" cy="454" r="63" fill="rgba(255,255,255,0.85)" stroke="#71717a" stroke-width="2"/>
+                        </g>
+                        <text x="496" y="462" font-family="sans-serif" font-size="27" font-weight="500" fill="#52525b" text-anchor="middle">统计</text>
+                    </g>
+                    
+                    <!-- 5. 测量 (底部深处) -->
+                    <g class="svg-node" data-key="celiang" tabindex="0" style="--enter-delay: 0.60s;">
+                        <g class="svg-bubble">
+                            <circle cx="286" cy="524" r="51" fill="rgba(255,255,255,0.85)" stroke="#a1a1aa" stroke-width="1.5"/>
+                        </g>
+                        <text x="286" y="531" font-family="sans-serif" font-size="24" font-weight="500" fill="#71717a" text-anchor="middle">测量</text>
+                    </g>
+                    
+                    <!-- 6. 教心 (左侧外围) -->
+                    <g class="svg-node" data-key="jiaoxin" tabindex="0" style="--enter-delay: 0.70s;">
+                        <g class="svg-bubble">
+                            <circle cx="90" cy="328" r="42" fill="rgba(255,255,255,0.85)" stroke="#a1a1aa" stroke-width="1.5"/>
+                        </g>
+                        <text x="90" y="335" font-family="sans-serif" font-size="22" font-weight="500" fill="#71717a" text-anchor="middle">教心</text>
+                    </g>
+                    
+                    <!-- 7. 发心 (左下角拓展) -->
+                    <g class="svg-node" data-key="faxin" tabindex="0" style="--enter-delay: 0.80s;">
+                        <g class="svg-bubble">
+                            <circle cx="118" cy="496" r="63" fill="rgba(255,255,255,0.85)" stroke="#a1a1aa" stroke-width="2"/>
+                        </g>
+                        <text x="118" y="504" font-family="sans-serif" font-size="27" font-weight="500" fill="#52525b" text-anchor="middle">发心</text>
+                    </g>
+                </svg>
+
+                <div id="svg-tooltip" class="svg-tooltip">
+                    <div class="svg-tooltip-card">
+                        <div id="svg-tooltip-title" class="svg-tooltip-title"></div>
+                        <div id="svg-tooltip-body" class="svg-tooltip-sub"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 工具模块索引区 -->
+    <section class="max-w-6xl mx-auto px-6 pb-24" id="module-section">
+        <h2 class="text-xl font-bold text-slate-800 mb-6 pl-2 border-l-4 border-slate-700 reveal-up">系统功能模块</h2>
+        
+        <!-- 标签栏 (Plan A) -->
+        <div class="flex gap-3 mb-8 overflow-x-auto pb-2 scrollbar-hide reveal-up delay-100">
+            <span class="px-3 py-1.5 rounded-full text-sm font-medium bg-slate-800 text-white cursor-pointer whitespace-nowrap">全部</span>
+            <span class="px-3 py-1.5 rounded-full text-sm font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors whitespace-nowrap">新手必读</span>
+            <span class="px-3 py-1.5 rounded-full text-sm font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors whitespace-nowrap">备考工具</span>
+            <span class="px-3 py-1.5 rounded-full text-sm font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors whitespace-nowrap">数据查询</span>
+            <span class="px-3 py-1.5 rounded-full text-sm font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors whitespace-nowrap">刷题</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- 主打卡 (Plan A: 占据 2 列) -->
+            <div class="lg:col-span-2 liquid-glass rounded-2xl p-8 card-hover cursor-pointer reveal-up delay-100 relative overflow-hidden group" onclick="window.location.href='考研全攻略.html'">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-full blur-3xl opacity-60 -translate-y-1/2 translate-x-1/3 group-hover:scale-110 transition-transform duration-700"></div>
+                
+                <div class="relative z-10 h-full flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-6">
+                            <div class="w-12 h-12 rounded-xl bg-slate-800 text-white flex items-center justify-center shadow-lg shadow-slate-200">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                            </div>
+                            <span class="px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-xs font-bold tracking-wide">RECOMMENDED</span>
+                        </div>
+                        
+                        <h3 class="text-2xl font-bold text-slate-800 mb-3 group-hover:text-indigo-600 transition-colors">考研全攻略</h3>
+                        <p class="text-slate-500 text-base leading-relaxed max-w-lg mb-6">
+                            专为 312 统考设计。从方向选择到复习规划，这里有你备考初期需要知道的一切。
+                        </p>
+                        
+                        <div class="flex gap-2 mb-8">
+                            <span class="text-xs font-medium text-slate-500 bg-slate-100 px-2 py-1 rounded">#新手必读</span>
+                            <span class="text-xs font-medium text-slate-500 bg-slate-100 px-2 py-1 rounded">#择校指南</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center text-indigo-600 font-semibold text-sm group-hover:translate-x-1 transition-transform">
+                        立即开始学习
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧次级卡片堆叠 (Plan A) -->
+            <div class="flex flex-col gap-6 lg:col-span-1">
+                <div class="liquid-glass rounded-2xl p-6 card-hover cursor-pointer reveal-up delay-200 h-full flex flex-col justify-between group" onclick="window.location.href='个人日历.html'">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-white/60 border border-white flex items-center justify-center text-slate-700">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            </div>
+                        </div>
+                        <h3 class="text-lg font-semibold text-slate-800 mb-2 group-hover:text-indigo-600 transition-colors">个人备考日历</h3>
+                        <p class="text-slate-500 text-sm leading-relaxed mb-3">手账风格的备考计划本，支持周计划、月概览与习惯打卡。</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <span class="text-[10px] font-medium text-slate-400 border border-slate-200 px-1.5 py-0.5 rounded">#计划管理</span>
+                    </div>
+                </div>
+
+                <div class="liquid-glass rounded-2xl p-6 card-hover cursor-pointer reveal-up delay-300 h-full flex flex-col justify-between group" onclick="window.location.href='资源合辑.html'">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-white/60 border border-white flex items-center justify-center text-slate-700">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                            </div>
+                        </div>
+                        <h3 class="text-lg font-semibold text-slate-800 mb-2 group-hover:text-indigo-600 transition-colors">资源合辑</h3>
+                        <p class="text-slate-500 text-sm leading-relaxed mb-3">2026 全程班网课、学霸笔记等核心备考资料汇总。</p>
+                    </div>
+                    <div class="flex gap-2">
+                         <span class="text-[10px] font-medium text-slate-400 border border-slate-200 px-1.5 py-0.5 rounded">#资料库</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // 基于真实日期的考研进度计算逻辑
+        document.addEventListener('DOMContentLoaded', () => {
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            
+            // 设定每年的考研初试日期（通常在12月20日左右）
+            const examDate = new Date(currentYear, 11, 20); 
+            // 设定全年的复习起点（设定为1月1日，便于计算全年全局进度）
+            const startDate = new Date(currentYear, 0, 1);
+            
+            let targetExamDate = examDate;
+            let cycleStartDate = startDate;
+            
+            // 如果今天已经超过今年的考研日，进度条自动切换到明年
+            if (now > examDate) {
+                targetExamDate = new Date(currentYear + 1, 11, 20);
+                cycleStartDate = new Date(currentYear + 1, 0, 1);
+            }
+
+            const totalTime = targetExamDate - cycleStartDate;
+            let elapsedTime = now - cycleStartDate;
+            
+            if (elapsedTime < 0) elapsedTime = 0;
+            
+            let percent = (elapsedTime / totalTime) * 100;
+            if (percent > 100) percent = 100;
+            if (percent < 0) percent = 0;
+            
+            const daysLeft = Math.ceil((targetExamDate - now) / (1000 * 60 * 60 * 24));
+            const finalPercent = Math.round(percent);
+
+            setTimeout(() => {
+                document.getElementById('progress-bar').style.width = finalPercent + '%';
+                
+                let current = 0;
+                if (finalPercent > 0) {
+                    const interval = setInterval(() => {
+                        current += 1;
+                        if (current >= finalPercent) {
+                            current = finalPercent;
+                            clearInterval(interval);
+                        }
+                        document.getElementById('progress-text').innerText = current + '%';
+                    }, 15);
+                }
+                
+                document.getElementById('days-left').innerText = `距初试约 ${daysLeft} 天`;
+                document.getElementById('target-year').innerText = `考研复习进度`;
+            }, 300);
+        });
+
+        // 滚动动画观察器 (Intersection Observer)
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.15 // 元素露出 15% 时触发动画
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target); // 动画只触发一次，避免上下滚动反复闪烁
+                    }
+                });
+            }, observerOptions);
+
+            const revealElements = document.querySelectorAll('.reveal-up');
+            revealElements.forEach(el => observer.observe(el));
+
+            // 移动端菜单控制
+            const menuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (menuBtn && mobileMenu) {
+                menuBtn.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('open');
+                });
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const finePointer = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
+
+            if (prefersReducedMotion || !finePointer) return;
+
+            let targetY = window.scrollY;
+            let currentY = window.scrollY;
+            let rafId = null;
+
+            const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+            const animate = () => {
+                rafId = window.requestAnimationFrame(() => {
+                    const diff = targetY - currentY;
+                    currentY += diff * 0.12;
+
+                    if (Math.abs(diff) < 0.5) {
+                        currentY = targetY;
+                        window.scrollTo(0, currentY);
+                        rafId = null;
+                        return;
+                    }
+
+                    window.scrollTo(0, currentY);
+                    animate();
+                });
+            };
+
+            window.addEventListener('wheel', (e) => {
+                if (e.ctrlKey) return;
+                if (Math.abs(e.deltaY) < 40) return;
+
+                e.preventDefault();
+
+                const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+                targetY = clamp(targetY + e.deltaY, 0, maxScroll);
+
+                if (rafId === null) animate();
+            }, { passive: false });
+
+            window.addEventListener('scroll', () => {
+                if (rafId !== null) return;
+                targetY = window.scrollY;
+                currentY = window.scrollY;
+            }, { passive: true });
+
+            window.addEventListener('resize', () => {
+                targetY = window.scrollY;
+                currentY = window.scrollY;
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const tooltip = document.getElementById('svg-tooltip');
+            const tooltipTitle = document.getElementById('svg-tooltip-title');
+            const tooltipBody = document.getElementById('svg-tooltip-body');
+            const svg = document.querySelector('svg[viewBox="-24 -24 648 648"]');
+
+            if (!tooltip || !tooltipTitle || !tooltipBody || !svg) return;
+
+            const contentMap = {
+                puxin: {
+                    title: '1. 彭聃龄《普通心理学》第6版 <span style="color:#F59E0B">★★★★★</span>',
+                    body: '<b>分值占比：</b>80-90分左右<br/><b>科目特点：</b>入门第一本书，涉及领域广，内容多<br/><b>学习重心：</b>所有理论都非常重要，动机、情绪、能力、人格是主观题常考点。近年考查越发细致，边边角角都要看。<br/><b>扩展阅读：</b>梁宁建《心理学导论》',
+                },
+                faxin: {
+                    title: '2. 林崇德《发展心理学》第3版 <span style="color:#F59E0B">★★★</span>',
+                    body: '<b>分值占比：</b>40分左右<br/><b>科目特点：</b>内容多，按照时间发展顺序编排<br/><b>学习重心：</b>注重知识脉络横向梳理，横纵结合。理论知识较重要，婴儿期和青少年期是考查重点。<br/><b>扩展阅读：</b>桑标《儿童发展心理学》',
+                },
+                jiaoxin: {
+                    title: '3. 陈琦《当代教育心理学》第3版 <span style="color:#F59E0B">★★★</span>',
+                    body: '<b>分值占比：</b>25分左右<br/><b>科目特点：</b>理论很多，较难背诵<br/><b>学习重心：</b>重点在于学习理论这一大块，注重对理论的理解和梳理，抓住每个理论的核心。',
+                },
+                shexin: {
+                    title: '4. 侯玉波《社会心理学》第5版 <span style="color:#F59E0B">★★</span>',
+                    body: '<b>分值占比：</b>10-30分左右<br/><b>科目特点：</b>贴近实际生活，容易理解<br/><b>学习重心：</b>注意易混淆概念的区分，将知识与生活中的例子结合起来帮助理解。',
+                },
+                shiyan: {
+                    title: '5. 郭秀艳《实验心理学》第2版 <span style="color:#F59E0B">★★★★</span>',
+                    body: '<b>分值占比：</b>60分左右<br/><b>科目特点：</b>内容繁杂、考查方式灵活多变<br/><b>学习重心：</b>理解为主，重点在于三大变量和实验分析与设计，掌握学习、记忆、注意等相关的经典实验。',
+                },
+                tongji: {
+                    title: '6. 张厚粲《现代心理与教育统计学》第5版 <span style="color:#F59E0B">★★★★</span>',
+                    body: '<b>分值占比：</b>40分左右<br/><b>科目特点：</b>概念较为抽象，公式多，理解难度高<br/><b>学习重心：</b>理清每一种统计方法的适用范围，多做题。推论统计中假设检验、方差分析和回归分析是重中之重。',
+                },
+                celiang: {
+                    title: '7. 戴海崎《心理与教育测量》第4版 <span style="color:#F59E0B">★★★</span>',
+                    body: '<b>分值占比：</b>30分左右<br/><b>科目特点：</b>内容较多，难理解和背诵，但考查难度不高<br/><b>学习重心：</b>重点在于信效度、经典测量理论、心理测验及其应用等。',
+                },
+            };
+
+            const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+            const positionTooltip = (clientX, clientY) => {
+                const wrap = tooltip.parentElement;
+                if (!wrap) return;
+
+                const wrapRect = wrap.getBoundingClientRect();
+                const tRect = tooltip.getBoundingClientRect();
+
+                const offsetX = 20; // 稍微增加偏移量，避免遮挡
+                const offsetY = 20;
+
+                let x = clientX - wrapRect.left + offsetX;
+                let y = clientY - wrapRect.top + offsetY;
+
+                // 边界检测：防止溢出右侧和底部
+                if (x + tRect.width > wrapRect.width) {
+                    x = clientX - wrapRect.left - tRect.width - 10; // 改为显示在鼠标左侧
+                }
+                if (y + tRect.height > wrapRect.height) {
+                    y = clientY - wrapRect.top - tRect.height - 10; // 改为显示在鼠标上方
+                }
+                
+                // 确保不溢出左侧和顶部
+                x = Math.max(10, x);
+                y = Math.max(10, y);
+
+                tooltip.style.left = `${x}px`;
+                tooltip.style.top = `${y}px`;
+            };
+
+            const openTooltip = (node, clientX, clientY) => {
+                const key = node.getAttribute('data-key');
+                const content = key ? contentMap[key] : null;
+                if (!content) return;
+
+                node.classList.add('tooltip-active');
+                tooltipTitle.innerHTML = content.title; // 改为 innerHTML 以支持星星颜色
+                tooltipBody.innerHTML = content.body;
+                
+                // 先定位（设为 invisible 以便获取尺寸但不显示），再显示
+                tooltip.classList.add('invisible');
+                tooltip.classList.add('open');
+                
+                // 强制重绘以确保尺寸正确
+                tooltip.offsetHeight; 
+                
+                positionTooltip(clientX, clientY);
+                tooltip.classList.remove('invisible');
+            };
+
+            const closeTooltip = (node) => {
+                node.classList.remove('tooltip-active');
+                tooltip.classList.remove('open');
+            };
+
+            const nodes = svg.querySelectorAll('.svg-node[data-key]');
+            nodes.forEach(node => {
+                node.addEventListener('pointerenter', (e) => {
+                    openTooltip(node, e.clientX, e.clientY);
+                });
+                node.addEventListener('pointermove', (e) => {
+                    if (!tooltip.classList.contains('open')) return;
+                    positionTooltip(e.clientX, e.clientY);
+                });
+                node.addEventListener('pointerleave', () => {
+                    closeTooltip(node);
+                });
+                node.addEventListener('focus', () => {
+                    const rect = node.getBoundingClientRect();
+                    openTooltip(node, rect.left + rect.width / 2, rect.top + rect.height / 2);
+                });
+                node.addEventListener('blur', () => {
+                    closeTooltip(node);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

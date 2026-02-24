@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>考研全攻略 - 心理学考研学习系统</title>
+    <meta name="description" content="心理学考研全攻略，包含学硕专硕区别、考试科目详解、择校指南、备考全流程及院校汇总。">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600&family=ZCOOL+QingKe+HuangYou&display=swap');
+
+        :root {
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-main: #2d3436;
+            --text-sub: #636e72;
+            --accent-yellow: #f1c40f;
+            --accent-red: #d63031;
+            --line-color: #dfe6e9;
+            --hover-blue: #0984e3;
+            --font-main: 'Inter', 'Noto Sans SC', sans-serif;
+            --font-hand: 'Dancing Script', cursive; /* Using the font available in index.html */
+        }
+
+        @media (prefers-color-scheme: dark) {
+            /* Basic dark mode support if system prefers it, though manual toggle requested */
+            /* We will stick to the light theme as default to match reference, 
+               but variables make it easy to switch */
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Back Button - matching 备考时间线.html */
+        .back-home {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            color: var(--text-sub);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid var(--line-color);
+        }
+        .back-home:hover {
+            background: var(--hover-blue);
+            color: white;
+            transform: translateX(-3px);
+            border-color: var(--hover-blue);
+        }
+        .back-home svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Main Layout */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 80px 20px 60px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 0;
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'ZCOOL QingKe HuangYou', cursive;
+            font-size: 3rem;
+            color: var(--text-main);
+            margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
+            font-weight: normal;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--accent-yellow);
+            border-radius: 2px;
+        }
+
+        .intro {
+            font-size: 1.1rem;
+            color: var(--text-sub);
+            max-width: 700px;
+            margin: 20px auto 0;
+        }
+
+        /* Section Styles */
+        section {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            border: 1px solid rgba(0,0,0,0.02);
+            transition: transform 0.3s ease;
+        }
+
+        section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.06);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: var(--text-main);
+            margin-top: 0;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px dashed var(--line-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            color: var(--hover-blue);
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul, ol {
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+            border-radius: 10px;
+            border: 1px solid var(--line-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--line-color);
+        }
+
+        th {
+            background-color: #f9fbfd;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Highlights & Alerts */
+        .highlight-box {
+            background: #fff9db; /* Light yellow */
+            border-left: 4px solid var(--accent-yellow);
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .alert-box {
+            background: #ffecec; /* Light red */
+            border-left: 4px solid var(--accent-red);
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        /* Scroll Animations */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+
+        .scroll-reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 60px 15px 40px;
+            }
+            h1 { font-size: 2.2rem; }
+            h2 { font-size: 1.5rem; }
+            section { padding: 25px; }
+        }
+
+        /* SVG Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .anim-icon {
+            width: 40px;
+            height: 40px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .scroll-reveal {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+            .anim-icon, .back-home, section {
+                transition: none;
+                animation: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Back Button -->
+    <a href="index.html" class="back-home" accesskey="m" aria-label="返回主菜单">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回首页
+    </a>
+
+    <div class="container">
+        <!-- content from `c:\Users\12047\Desktop\考研网\考研全攻略.md` -->
+        
+        <header class="scroll-reveal">
+            <h1>心理学考研指南</h1>
+            <div class="intro">
+                在正式投入复习前，有几个方向性的问题，你必须想清楚。这不仅决定了你未来相当长一段时间的学习生涯，更直接关系到你的备考策略和努力方向。
+            </div>
+        </header>
+
+        <section class="scroll-reveal">
+            <h2>
+                <svg class="anim-icon" viewBox="0 0 24 24" fill="none" stroke="#0984e3" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                一、你的选择
+            </h2>
+            
+            <h3>1.1 我为什么要读研？读研 vs. 工作</h3>
+            <p><strong>心理学本科毕业，通常能做什么？</strong></p>
+            <ul>
+                <li>心理健康教师</li>
+            </ul>
+            
+            <p><strong>一个心理学硕士学位，能为你提供什么？</strong></p>
+            <ul>
+                <li><strong>成为心理咨询师：</strong> 虽然本科也可以考取相关证书，但缺乏相关的咨询和督导经历，基本很难入职，但拥有硕士学位，能够获得实践机会，积累实战经验，成为真正具有咨询能力的咨询师。</li>
+                <li><strong>进入高校/科研院所：</strong> 一般来说，高校教师的基本要求是博士学位，所以硕士是起点（学硕更有优势）。</li>
+                <li><strong>成为专业的“用户研究员”/“体验研究员”：</strong> 许多互联网大厂和科技公司都有这个职位，他们非常青睐有实验设计、数据分析能力的心理学硕士，薪资较为可观（可以在各类招聘软件上查询）。</li>
+                <li><strong>进入事业单位/政府机构：</strong> 如公检法系统的心理矫正岗位、人才测评中心等。</li>
+            </ul>
+
+            <h3>1.2 学硕 vs. 专硕，哪种更适合我？</h3>
+            <p>心理学考研分为专硕和学硕，其中专硕又分为全日制专硕和非全日制专硕。全日制需要每个工作日都待在学校进行学业学习（绝大部分同学选这个）；非全则是周末完成学业学习，一般针对在职的同学报考。</p>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>学术硕士 （学硕）</th>
+                            <th>专业硕士 （专硕）</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>培养</strong></td>
+                            <td>科研学术人才</td>
+                            <td>应用实践人才</td>
+                        </tr>
+                        <tr>
+                            <td><strong>方向</strong></td>
+                            <td>基础心理学、发展与教育心理学、应用心理学等</td>
+                            <td>临床与咨询、人力资源管理、社会心理学、学校心理，用户体验（UX）等</td>
+                        </tr>
+                        <tr>
+                            <td><strong>考情</strong></td>
+                            <td>全国100+所学校为312统考，同一张试卷，少部分学校为自命题</td>
+                            <td>所有学校的专硕都是347自命题</td>
+                        </tr>
+                        <tr>
+                            <td><strong>参考书</strong></td>
+                            <td>312统考：7本（普发教社实统测）<br>自命题：2-14本不等</td>
+                            <td>347自命题：2-14本不等</td>
+                        </tr>
+                        <tr>
+                            <td><strong>学制与学费</strong></td>
+                            <td>通常3年；学费较低，一般为 8000元/年。</td>
+                            <td>通常2-3年 （2年居多）；学费较高，1万-数万元/年不等。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>优势</strong></td>
+                            <td>①选择范围广:全国100所学校学硕是312统考，全国上下一张卷<br>②前期没有择校压力:先复习，到明年9月看复习水平选学校<br>③公平:统考学校题目难度一致<br>④透明:没有院校压分暗箱操作<br>⑤调剂:调剂机会相对更多</td>
+                            <td>①英语二相对简单<br>②读研期间科研压力相对更小<br>③实践机会相对更多</td>
+                        </tr>
+                        <tr>
+                            <td><strong>劣势</strong></td>
+                            <td>①英语一难度更大<br>②读研期间有科研压力</td>
+                            <td>①出题风格不稳定<br>②部分院校有压分操作<br>③报录比相对更高</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="highlight-box">
+                <p><strong>简单来说：</strong></p>
+                <ul>
+                    <li>想做研究、想读博、想走学术路线 → <strong>优先考虑学硕</strong>。</li>
+                    <li>想快速就业、想做咨询/用户研究等应用工作、跨专业求稳 → <strong>优先考虑专硕</strong>。</li>
+                </ul>
+            </div>
+
+            <h3>1.3 统考 vs. 自命题？——你的专业课试卷由谁决定？</h3>
+            <h4>什么是“312统考”？</h4>
+            <p>全称是“心理学专业基础综合”，由国家统一命题、统一考试大纲。可以把它理解为心理学考研领域的“高考”。</p>
+            <ul>
+                <li><strong>优点：</strong>
+                    <ol>
+                        <li><strong>公平透明：</strong> 全国用同一张卷子，复习范围明确，参考书目固定。</li>
+                        <li><strong>选择面广：</strong> 复习一套内容，可以报考所有采用312作为考试科目的学校，方便后期调剂。</li>
+                    </ol>
+                </li>
+                <li><strong>缺点：</strong> 竞争者来自全国各地，高手云集，题目可能非常考验细节和深度。</li>
+                <li><strong>哪些学校用312？</strong> --见文章最后附录</li>
+            </ul>
+
+            <h4>什么是“自命题”？</h4>
+            <p>由招生院校自己组织命题。代码通常是347。</p>
+            <ul>
+                <li><strong>优点：</strong>
+                    <ol>
+                        <li><strong>方向性强：</strong>考试题目会更贴近该校老师的研究方向和学术偏好。</li>
+                        <li><strong>信息差优势：</strong>如果你能通过直系学长学姐等渠道获取到内部笔记、历年真题等宝贵资料，将建立巨大优势。</li>
+                    </ol>
+                </li>
+                <li><strong>缺点：</strong>
+                    <ol>
+                        <li><strong>信息不透明：</strong>考试范围、参考书、出题风格都需要自己花大量时间去搜集和研究。</li>
+                        <li><strong>风险较高：</strong>复习针对性强，意味着如果该校没考上，换其他学校调剂的难度极大，因为考试内容不匹配。</li>
+                    </ol>
+                </li>
+                <li><strong>哪些学校用自命题？</strong> --见附录</li>
+            </ul>
+        </section>
+
+        <section class="scroll-reveal">
+            <h2>
+                <svg class="anim-icon" viewBox="0 0 24 24" fill="none" stroke="#d63031" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+                二、你的考试科目
+            </h2>
+
+            <h3>2.1 公共课：政治 & 英语 （总分各100）</h3>
+            
+            <h4>思想政治理论 （政治）</h4>
+            <p><strong>考什么？</strong> 主要由五部分构成：</p>
+            <ol>
+                <li><strong>马原 （马克思主义基本原理）：</strong> 最抽象、最需要理解的部分，建议前期花时间跟住一位老师听懂。</li>
+                <li><strong>毛中特 （毛泽东思想和中国特色社会主义理论体系）：</strong> 分值最重、内容最多、与时政结合最紧密的部分。</li>
+                <li><strong>史纲 （中国近现代史纲要）：</strong> 像一个故事，按时间线索复习会很清晰。</li>
+                <li><strong>思修法基 （思想道德与法治）：</strong> 相对简单，很多内容与生活常识贴近。</li>
+                <li><strong>时政 （形势与政策以及当代世界经济与政治）：</strong> 不用专门复习，后期跟着老师的总结材料背诵即可。</li>
+            </ol>
+
+            <p><strong>怎么学？</strong> 推荐“短线作战”策略：</p>
+            <ol>
+                <li><strong>暑假-9月：</strong> 跟随一位你喜欢的老师（如肖秀荣、徐涛等），看强化阶段的课程，理解知识点，并配合做选择题练习</li>
+                <li><strong>10月-11月：</strong> 继续刷题，巩固知识点，开始注意背诵一些重要概念。</li>
+                <li><strong>12月冲刺：</strong> 市面上会出现各种“冲刺背诵手册”或“预测卷”（如《肖秀荣8套卷》、《肖秀荣4套卷》）。</li>
+            </ol>
+
+            <h4>英语 （英语一 / 英语二）</h4>
+            <p><strong>英语一 vs. 英语二，有什么区别？</strong></p>
+            <ol>
+                <li><strong>谁考：</strong> 学硕通常考英语一，专硕通常考英语二。</li>
+                <li><strong>难度：</strong> 普遍认为 英语一 > 英语二。主要体现在：
+                    <ul>
+                        <li><strong>阅读理解：</strong> 英语一的文章更长、句子结构更复杂、词汇更生僻。</li>
+                        <li><strong>作文：</strong> 英语一的大作文是“图画作文”，需要自己提炼主题；英语二的大作文是“图表作文”，信息更直观，模板化程度更高。</li>
+                        <li><strong>翻译：</strong> 英语一考查一个段落中的五个长难句，英语二考查整个段落的翻译。</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <p><strong>怎么学？</strong> 英语需要全程保持投入。</p>
+            <ol>
+                <li><strong>核心任务一：单词。</strong> 从备考第一天到考试前一天，请务必天天背单词！用APP或单词书都可以，关键是“重复”。</li>
+                <li><strong>核心任务二：真题。</strong> 考研英语的灵魂就是历年真题。尤其是阅读理解部分，占据了40分，是得分的关键。</li>
+                <li><strong>后期任务：作文。</strong> 11月左右开始准备作文。不用追求华丽的辞藻，关键是形成自己的专属模板，字迹工整，没有语法错误，就能拿到不错的基本分。</li>
+            </ol>
+
+            <h3>2.2 专业课：心理学的核心战场 （总分300）</h3>
+            
+            <h4>详解“312心理学专业基础综合” （统考）</h4>
+            <p>如果你考的是采用312统考的学硕，那么恭喜你，你的复习范围非常明确。它主要考察以下七门学科：</p>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>书名与作者/版本</th>
+                            <th>重点程度</th>
+                            <th>分值占比</th>
+                            <th>真题考法</th>
+                            <th>科目特点</th>
+                            <th>学习重心</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td>彭聃龄 《普通心理学》 第6版</td><td>★★★★☆</td><td>80-90分左右</td><td>原文默写题、结合理论分析材料</td><td>入门的第一本书，涉及领域较广，内容较多</td><td>所有的理论都非常重要，其中主观题最常考的有动机、情绪、能力、人格这四章。近年来考查越来越细致，应更加注重细节。</td></tr>
+                        <tr><td>2</td><td>林崇德 《发展心理学》 第3版</td><td>★★★☆☆</td><td>40分左右</td><td>原文默写题、结合理论分析材料、教结合进行考查</td><td>内容多，按照时间发展顺序编排</td><td>注重对知识脉络的横向梳理，横纵结合学习。涉及理论的知识都较为重要，其中婴儿期和青少年期是考查的重点。</td></tr>
+                        <tr><td>3</td><td>陈琦 《当代教育心理学》 第3版</td><td>★★★☆☆</td><td>25分左右</td><td>原文默写题、结合理论分析材料、发教结合进行考查</td><td>理论很多，较难背诵。</td><td>重点在于学习理论，注重对理论的理解和梳理，抓住每个理论的核心。</td></tr>
+                        <tr><td>4</td><td>侯玉波 《社会心理学》 第4版</td><td>★★☆☆☆</td><td>10-30分左右</td><td>原文默写题、偶尔可能考结合理论分析材料</td><td>贴近实际生活，容易理解。</td><td>注意易混淆概念的区分，将知识与生活中的例子结合起来帮助理解。</td></tr>
+                        <tr><td>5</td><td>郭秀艳 《实验心理学》 第2版</td><td>★★★★☆</td><td>60分左右</td><td>原文默写题、理解应用题、实验分析与设计（知识运用）</td><td>内容繁杂、考查方式灵活多变</td><td>理解为主，重点在于三大变量和实验分析与设计，掌握学习、记忆、注意等相关的经典实验。</td></tr>
+                        <tr><td>6</td><td>张厚粲 《现代心理与教育统计学》 第5版</td><td>★★★☆☆</td><td>40分左右</td><td>理解应用题、计算题</td><td>概念较为抽象，公式多，理解难度高</td><td>理清每一种统计方法的适用范围，多做题。描述统计中的平均数和相关系数，推论统计中的假设检验、方差分析和回归分析是重点。</td></tr>
+                        <tr><td>7</td><td>戴海崎 《心理与教育测量》 第4版</td><td>★★☆☆☆</td><td>30分左右</td><td>原文默写题、图表题</td><td>内容较多，难理解和背诵，但考查难度不高</td><td>重点在于信效度、经典测量理论、心理测验及其应用等。</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4>详解“347自命题”</h4>
+            <p><strong>它会考什么？</strong></p>
+            <ol>
+                <li><strong>核心内容：</strong> 绝大多数自命题院校的考察范围，依然会包含312的核心课程，只是各科分值比例和侧重点不同。</li>
+                <li><strong>特色内容：</strong> 学校会根据自己的专业特色和导师研究方向，增加一些特色科目。例如：
+                    <ul>
+                        <li>想考应用心理（临床与咨询方向）：很可能加考《人格心理学》、《变态心理学》。</li>
+                        <li>想考应用心理（用户体验/人力资源方向）：可能涉及《工程心理学》、《管理心理学》。</li>
+                        <li>想考认知神经科学方向的学硕：可能会有《认知神经科学》的基础内容。</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <p><strong>如何确定考什么？</strong></p>
+            <ol>
+                <li><strong>第一步：找到“官方文件”。</strong> 登录你的目标院校研究生院官网，找到当年的《硕士研究生招生简章》和《招生专业目录》。这里面会明确写出考试科目的名称和代码，最重要的是，通常会提供《考试大纲》或参考书目。这是你复习的“最高指示”，必须严格遵守！</li>
+                <li><strong>第二步：搜集“历年真题”。</strong> 这是你能找到的最有价值的资料！通过各种渠道弄到目标院校近5-10年的真题。分析真题，你就能知道：
+                    <ul>
+                        <li><strong>题型：</strong> 名词解释？简答题？论述题？实验设计题？</li>
+                        <li><strong>高频考点：</strong> 哪些章节、哪些知识点每年都考？</li>
+                        <li><strong>出题风格：</strong> 喜欢考细节还是宏观框架？</li>
+                    </ul>
+                </li>
+                <li><strong>第三步：分析“导师信息”。</strong> 去学院官网上看看你想报考的专业的导师们，他们的研究方向是什么？最近发表了什么论文？这些都可能成为论述题的考点。</li>
+                <li><strong>Tips：</strong>可以在微信关注各类心理学考研公众号，历年自命题的院校信息都有。</li>
+            </ol>
+        </section>
+
+        <section class="scroll-reveal">
+            <h2>
+                <svg class="anim-icon" viewBox="0 0 24 24" fill="none" stroke="#f1c40f" stroke-width="2">
+                    <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+                    <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
+                </svg>
+                三、择校与专业方向
+            </h2>
+
+            <h3>3.1 心理学专业方向，都有哪几种？</h3>
+            <ul>
+                <li><strong>认知神经科学：</strong> 热门方向，交叉学科，研究脑机制。就业多在科研机构、高校。</li>
+                <li><strong>大数据：</strong> 关注利用大数据技术分析心理和行为。就业方向：数据分析师、市场研究员等。</li>
+                <li><strong>人工智能：</strong> 心理学指导AI，情感智能。就业方向：机器人情感设计师、AI训练师等。</li>
+                <li><strong>工程心理学/用户体验（UX）：</strong> 交叉融合，定义“用户想要的产品”。就业方向：UX研究员、产品经理等。</li>
+                <li><strong>临床与咨询：</strong> 研究心理障碍、咨询治疗。就业方向：临床心理学家、咨询师。</li>
+                <li><strong>犯罪心理学 / 法医心理学：</strong> 研究犯罪动机、心理侧写。就业方向：公检法、监狱等。</li>
+                <li><strong>体育心理学：</strong> 研究心理因素影响运动表现。就业方向：运动队、体育院校等。</li>
+            </ul>
+
+            <h3>3.2 择校的关键决策维度：如何找到你的梦中情校？</h3>
+            <h4>3.2.1 信息获取渠道：</h4>
+            <ul>
+                <li><strong>中国研究生招生信息网 （研招网）：</strong> 宝藏网站，查简章、目录、大纲、分数线、报录比。</li>
+                <li><strong>目标院校官网 / 研究生院官网：</strong> 权威信息，查章程、参考书、真题、复试办法、导师。</li>
+            </ul>
+            <h4>3.2.2 信息获取辅助渠道：</h4>
+            <ul>
+                <li><strong>学长学姐：</strong> 活情报，但有个体局限性。</li>
+                <li><strong>考研论坛 / 社群 / APP：</strong> 信息量大但鱼龙混杂，需辨别。</li>
+                <li><strong>学术数据库：</strong> 了解导师研究动态。</li>
+            </ul>
+            <h4>3.2.3 择校的关键决策维度：</h4>
+            <ul>
+                <li><strong>专业实力与排名：</strong> 参考学科评估。</li>
+                <li><strong>录取难度与竞争：</strong> 看报录比、复试线、推免人数。</li>
+                <li><strong>导师资源与研究方向：</strong> 匹配度、导师数量。</li>
+                <li><strong>地理位置与城市：</strong> 发展机会 vs 生活成本。</li>
+                <li><strong>学制与学费：</strong> 经济考量。</li>
+                <li><strong>自身实力客观评估：</strong> 本科背景、学习能力、分数目标。</li>
+            </ul>
+        </section>
+
+        <section class="scroll-reveal">
+            <h2>
+                <svg class="anim-icon" viewBox="0 0 24 24" fill="none" stroke="#00b894" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                四、考研全流程
+            </h2>
+
+            <h3>4.1 备考前：大三上学期 – 大三下学期（9月 - 次年3月）</h3>
+            <ol>
+                <li><strong>了解基础信息 （大三上）：</strong> 思考读研目的，浏览研招网。</li>
+                <li><strong>确定专业方向 & 初步择校 （大三下）：</strong> 聚焦方向，锁定3-5所院校，搜集信息。</li>
+                <li><strong>制定初步复习计划 （大三下）：</strong> 科目拆解，准备资料。</li>
+            </ol>
+
+            <h3>4.2 暑期强化：大三暑假（7月 - 8月）</h3>
+            <ul>
+                <li><strong>开启“正式”备考：</strong> 政治看课，英语背单词读真题，专业课一轮精读。</li>
+            </ul>
+
+            <h3>4.3 报名阶段：大四上学期（9月 - 10月）</h3>
+            <ol>
+                <li><strong>研招网预报名 （9月底）：</strong> 应届生提前熟悉。</li>
+                <li><strong>研招网正式报名 （10月）：</strong> 重点关注招生单位、报考点等信息，完成缴费。</li>
+                <li><strong>网上确认 （11月）：</strong> 确认报名信息，采集照片。未确认报名无效！</li>
+            </ol>
+
+            <h3>4.4 冲刺阶段：大四上学期（11月 - 12月）</h3>
+            <ol>
+                <li><strong>打印准考证 （考前一周左右）：</strong> 多打印几份。</li>
+                <li><strong>调整心态 & 查漏补缺 （12月上旬）：</strong> 模考，背诵，调整心态。</li>
+                <li><strong>参加初试 （12月底）：</strong> 带齐证件文具，合理分配时间。</li>
+            </ol>
+
+            <h3>4.5 复试与录取：次年1月 - 5月</h3>
+            <ol>
+                <li><strong>查询初试成绩 （次年2月中旬左右）</strong></li>
+                <li><strong>国家线公布 （次年3月中旬）：</strong> 判断是否过线。</li>
+                <li><strong>自主划线院校复试线公布 （3月上旬）</strong></li>
+                <li><strong>准备复试 （3月 - 4月）：</strong> 了解内容，准备材料，模拟面试。</li>
+                <li><strong>参加复试 （3月下旬 - 4月）</strong></li>
+                <li><strong>调剂 （4月 - 5月，如果需要）：</strong> 信息战，速度战。</li>
+                <li><strong>拟录取与体检 （4月 - 5月）</strong></li>
+                <li><strong>发放录取通知书 （6月 - 7月）</strong></li>
+            </ol>
+
+            <h3>4.6 入学：次年9月</h3>
+            <p>报道入学，开启你的研究生新生活</p>
+        </section>
+
+        <section class="scroll-reveal">
+            <h2>
+                <svg class="anim-icon" viewBox="0 0 24 24" fill="none" stroke="#6c5ce7" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                五、答疑
+            </h2>
+
+            <h3>5.1 什么是报录比？如何查询？它意味着什么？</h3>
+            <p><strong>什么是报录比？</strong> 报录比 = 报考人数 / 录取人数。反映竞争激烈程度。</p>
+            <p><strong>如何查询？</strong> 目标院校官网（招生简章/录取数据）、研招网、考研机构公众号。</p>
+            <p><strong>意味着什么？</strong> 越高竞争越激烈。但非唯一指标，需结合招生人数等判断。</p>
+
+            <h3>5.2 如何确定自己选择的院校能否成功上岸？</h3>
+            <ul>
+                <li><strong>充分的信息搜集与分析：</strong> 查历年分数线（国家线、院线、录取最低分）、报录比、招生推免人数、真题、导师信息。</li>
+                <li><strong>客观评估自身实力：</strong> 本科背景、学习能力、基础、抗压能力。</li>
+                <li><strong>制定合理目标与“冲稳保”策略：</strong> 冲刺、稳妥、保底。</li>
+                <li><strong>全力以赴的备考：</strong> 扎实基础、高效复习、真题训练、复试准备。</li>
+            </ul>
+
+            <h3>5.3 调剂适用于所有312，347和自命题吗？</h3>
+            <p>原则上适用于所有过国家线且符合条件的考生。</p>
+            <ul>
+                <li><strong>312统考考生：</strong> 优势在于知识体系标准化，适应性强，选择面广。主要调剂到其他312或部分自命题院校。</li>
+                <li><strong>347自命题考生：</strong> 若科目吻合有优势，若科目小众受限。调剂方向：科目相近院校、部分招312但分低的院校、新开专业/二区院校。</li>
+            </ul>
+            <div class="highlight-box">
+                <strong>调剂的通用原则：</strong>
+                <ul>
+                    <li>过国家线。</li>
+                    <li>专业或考试科目相近。</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="scroll-reveal">
+            <h2>
+                <svg class="anim-icon" viewBox="0 0 24 24" fill="none" stroke="#e17055" stroke-width="2">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+                六、写在最后：一场名为“考研”的自我修行
+            </h2>
+            <p>实话说，心理学考研的战场，从来都不是一片坦途。它的通过率或许并不乐观，当你翻开书本时，和你并肩作战的，有可能是已经身经百战的二战、三战前辈，有可能是平衡着工作与学习的在职勇士。他们中的许多人，可能早已对战局了如指掌，而你，或许还站在起点，对自己该做什么感到一丝迷茫。</p>
+            <p>在我接触过的大多数考研生中，每年都有太多遗憾发生：有同学埋头苦读一年，却因不了解目标院校的出题风格而功亏一篑；有同学初试分数尚可，却因不熟悉规则而错过了黄金调剂期；更有同学一路过关斩将，最终却在不了解技巧的复试面试中表现失利。</p>
+            <p>幸运的是，在今天这个商业化与信息化的时代，你并非孤立无援。有许多优秀的机构、负责任的公众号，正在努力将那些原本深藏在院校内部、流传于学长学姐口中的宝贵信息，呈现在你的面前。这极大地抹平了信息壁垒，让你的努力，能够更精准地用在刀刃上。善用这些资源，是你在这场竞赛中赢得先机的关键一步。</p>
+            <p>然而，请务必警惕，不要让自己成为一个沉溺于搜集信息的“计划派”，而忘记了考研的本质是成为一个“行动派”。</p>
+            <p>你要明白：收藏再多攻略，看再多经验贴，都不是你今天付出的“努力”。真正让你日积月累、走向成功的，只有那些你脚踏实地啃下一个知识点、背熟一个英文单词、弄懂一道统计公式的瞬间。</p>
+            <p>信息是你的指南针，但双脚的丈量，才是唯一能带你到达终点的途径。</p>
+            <p>所以，考研这场筛选，最终筛掉的，或许不是不够聪明的人，而是那些在信息洪流中迷失了方向，在巨大压力下放弃了行动的人。</p>
+        </section>
+
+        <section class="scroll-reveal">
+            <h2>附录</h2>
+            
+            <h3>1. 学硕院校汇总</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>所在省市</th>
+                            <th>312统考院校 （共100所）</th>
+                            <th>自命题院校 （共10所）</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>北京 （12所）</td><td>北京师范大学、中国科学院大学、北京语言大学、中国地质大学（北京）、北京林业大学、中央财经大学、中国政法大学、首都师范大学、北京体育大学、中国人民大学、首都体育学院、首都医科大学 （25新增学硕）</td><td>/</td></tr>
+                        <tr><td>天津 （3所）</td><td>天津大学、天津师范大学、天津职业技术师范大学</td><td>/</td></tr>
+                        <tr><td>河北 （3所）</td><td>河北大学、河北师范大学、华北理工大学</td><td>河北大学 （077101基础心理学: 659+816）</td></tr>
+                        <tr><td>山西 （3所）</td><td>山西大学、山西医科大学、山西师范大学</td><td>/</td></tr>
+                        <tr><td>内蒙古 （1所）</td><td>内蒙古师范大学</td><td>/</td></tr>
+                        <tr><td>辽宁 （4所）</td><td>大连医科大学、中国医科大学、辽宁师范大学、沈阳师范大学</td><td>/</td></tr>
+                        <tr><td>吉林 （3所）</td><td>东北师范大学、吉林大学、吉林师范大学</td><td>/</td></tr>
+                        <tr><td>黑龙江 （2所）</td><td>哈尔滨师范大学、哈尔滨工程大学</td><td>/</td></tr>
+                        <tr><td>上海 （5所）</td><td>华东师范大学 （0401Z4学习心理与发展）、复旦大学、上海交通大学 （25新增学硕）、上海师范大学、上海体育学院</td><td>华东师范大学 （07理学: 616+951）</td></tr>
+                        <tr><td>江苏 （8所）</td><td>南京大学、扬州大学、苏州科技大学、苏州大学、东南大学、南京医科大学</td><td>南京师范大学 （07理学: 644+872）、江苏师范大学 （07理学: 627+827）</td></tr>
+                        <tr><td>浙江 （5所）</td><td>浙江师范大学、杭州师范大学、浙江理工大学、宁波大学、浙江工业大学 （25新增学硕）</td><td>/</td></tr>
+                        <tr><td>安徽 （3所）</td><td>安徽医科大学、安徽师范大学、淮北师范大学</td><td>/</td></tr>
+                        <tr><td>福建 （4所）</td><td>福州大学、福建师范大学、闽南师范大学、福建医科大学 （25新增学硕）</td><td>/</td></tr>
+                        <tr><td>江西 （3所）</td><td>南昌大学、江西师范大学、赣南师范大学 （25自命题变312）</td><td>/</td></tr>
+                        <tr><td>山东 （8所）</td><td>济南大学、山东中医药大学、山东师范大学、曲阜师范大学、聊城大学、青岛大学、鲁东大学</td><td>山东第二医科大学 （347）</td></tr>
+                        <tr><td>河南 （5所）</td><td>郑州大学、新乡医学院、河南大学、河南师范大学、信阳师范学院 （25自命题变312）</td><td>/</td></tr>
+                        <tr><td>湖北 （7所）</td><td>武汉大学、华中科技大学 （040100教育学: 教育心理学方向）、中国地质大学（武汉）、华中师范大学、湖北大学、武汉体育学院、江汉大学 （25新增学硕）</td><td>/</td></tr>
+                        <tr><td>湖南 （4所）</td><td>中南大学、湖南科技大学、湖南师范大学</td><td>湖南中医药大学 （347）</td></tr>
+                        <tr><td>广东 （7所）</td><td>暨南大学、华南师范大学、深圳大学、广州大学、南方医科大学、广东外语外贸大学</td><td>中山大学 （07理学: 635+838）</td></tr>
+                        <tr><td>广西 （2所）</td><td>广西师范大学</td><td>南宁师范大学 （629）</td></tr>
+                        <tr><td>海南 （1所）</td><td>海南师范大学</td><td>/</td></tr>
+                        <tr><td>重庆 （2所）</td><td>西南大学</td><td>重庆师范大学 （07理学: 612+817）</td></tr>
+                        <tr><td>四川 （3所）</td><td>西南交通大学、四川师范大学、电子科技大学</td><td>四川师范大学</td></tr>
+                        <tr><td>贵州 （1所）</td><td>贵州师范大学</td><td>/</td></tr>
+                        <tr><td>云南 （1所）</td><td>云南师范大学</td><td>/</td></tr>
+                        <tr><td>西藏 （1所）</td><td>西藏大学 （0401Z1教育心理学）</td><td>/</td></tr>
+                        <tr><td>陕西 （3所）</td><td>空军军医大学、陕西师范大学</td><td>西安体育学院 （616）</td></tr>
+                        <tr><td>甘肃 （1所）</td><td>西北师范大学</td><td>/</td></tr>
+                        <tr><td>青海 （1所）</td><td>青海师范大学</td><td>/</td></tr>
+                        <tr><td>宁夏 （1所）</td><td>宁夏大学</td><td>/</td></tr>
+                        <tr><td>新疆 （1所）</td><td>新疆师范大学</td><td>/</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>2. 专硕院校汇总</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>所在省市</th>
+                            <th>学校名称</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>北京 （13所）</td><td>北京大学、清华大学、北京师范大学、中国人民大学、中国政法大学、中国科学院大学、北京林业大学、中央财经大学、首都师范大学、首都医科大学、北京语言大学、北京体育大学、国防大学 （25新增专硕）</td></tr>
+                        <tr><td>天津 （8所）</td><td>南开大学、天津大学、天津医科大学、天津中医药大学、天津师范大学、天津体育学院、天津职业技术师范大学、武警后勤学院 （25新增专硕）</td></tr>
+                        <tr><td>河北 （4所）</td><td>河北大学、河北师范大学、华北理工大学、承德医学院</td></tr>
+                        <tr><td>山西 （2所）</td><td>山西大学、山西医科大学</td></tr>
+                        <tr><td>内蒙古 （1所）</td><td>内蒙古师范大学</td></tr>
+                        <tr><td>辽宁 （5所）</td><td>辽宁师范大学、沈阳师范大学、中国刑事警察学院、中国医科大学 （25新增专硕）、沈阳体育学院 （25新增专硕）</td></tr>
+                        <tr><td>吉林 （2所）</td><td>吉林大学、东北师范大学</td></tr>
+                        <tr><td>黑龙江 （4所）</td><td>黑龙江大学、哈尔滨医科大学、齐齐哈尔医学院、黑龙江中医药大学 （25新增专硕）</td></tr>
+                        <tr><td>上海 （7所）</td><td>华东师范大学、复旦大学、上海师范大学、海军军医大学、同济大学、上海体育学院、上海交通大学 （25新增专硕）</td></tr>
+                        <tr><td>江苏 （9所）</td><td>南京大学、南京师范大学、苏州大学、东南大学、南京医科大学、南京中医药大学、南通大学、江苏师范大学、江苏理工学院 （25新增专硕）</td></tr>
+                        <tr><td>浙江 （11所）</td><td>浙江大学、浙江工业大学、温州医科大学、浙江师范大学、杭州师范大学、浙江理工大学、宁波大学、温州大学、湖州师范学院 （25新增专硕）、绍兴文理学院 （25新增专硕）</td></tr>
+                        <tr><td>安徽 （9所）</td><td>安徽医科大学、皖南医学院、淮北师范大学、安徽大学、蚌埠医学院、安徽师范大学、安庆师范大学、安徽农业大学 （25新增专硕）、安徽中医药大学 （25新增专硕）</td></tr>
+                        <tr><td>福建 （4所）</td><td>福建医科大学、福建师范大学、闽南师范大学、福州大学</td></tr>
+                        <tr><td>江西 （4所）</td><td>江西中医药大学、江西师范大学、赣南医学院、南昌大学 （25新增专硕）</td></tr>
+                        <tr><td>山东 （9所）</td><td>潍坊医学院、山东师范大学、曲阜师范大学、聊城大学、鲁东大学、青岛大学、滨州医学院、济南大学、临沂大学、山东中医药大学 （25新增专硕）</td></tr>
+                        <tr><td>河南 （6所）</td><td>郑州大学、河南大学、新乡医学院、河南师范大学、信阳师范学院、南阳师范学院 （25新增专硕）</td></tr>
+                        <tr><td>湖北 （8所）</td><td>华中师范大学、江汉大学、武汉体育学院、湖北医药学院、中南民族大学 （25新增专硕）、湖北大学 （25新增专硕）、湖北中医药大学 （25新增专硕）、长江大学 （25新增专硕）</td></tr>
+                        <tr><td>湖南 （4所）</td><td>国防科技大学、湖南师范大学、湖南中医药大学 （25新增专硕）、衡阳师范学院 （25新增专硕）</td></tr>
+                        <tr><td>广东 （9所）</td><td>中山大学、华南师范大学、深圳大学、广州大学、南方医科大学、广东外语外贸大学、广州医科大学、广东医科大学、广东技术师范大学 （25新增专硕）</td></tr>
+                        <tr><td>海南 （2所）</td><td>海南师范大学 （25新增专硕）、三亚学院 （25新增专硕）</td></tr>
+                        <tr><td>广西 （2所）</td><td>广西师范大学、南宁师范大学</td></tr>
+                        <tr><td>重庆 （4所）</td><td>西南大学、重庆医科大学、重庆师范大学、陆军军医大学</td></tr>
+                        <tr><td>四川 （9所）</td><td>西南民族大学、四川大学、成都医学院、四川师范大学、西南交通大学、中国民用航空飞行学院、西南医科大学、西华师范大学、西南科技大学 （25新增专硕）</td></tr>
+                        <tr><td>贵州 （4所）</td><td>贵州师范大学、贵州医科大学、贵州中医药大学 （25新增专硕）、遵义师范学院 （25新增专硕）</td></tr>
+                        <tr><td>云南 （4所）</td><td>昆明医科大学、云南师范大学、大理大学、云南民族大学 （25新增专硕）</td></tr>
+                        <tr><td>西藏 （1所）</td><td>西藏大学</td></tr>
+                        <tr><td>陕西 （3所）</td><td>陕西师范大学、陕西中医药大学、空军军医大学</td></tr>
+                        <tr><td>甘肃 （1所）</td><td>西北师范大学</td></tr>
+                        <tr><td>青海 （1所）</td><td>青海师范大学</td></tr>
+                        <tr><td>新疆 （2所）</td><td>石河子大学、新疆师范大学 （25新增专硕）</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Scroll Reveal Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const revealElements = document.querySelectorAll('.scroll-reveal');
+            revealElements.forEach(el => observer.observe(el));
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PsyHub - 资源合辑</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=ZCOOL+QingKe+HuangYou&display=swap');
+
+        body {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            background-color: #F8F7F4;
+            color: #3f3f46;
+            overflow-x: hidden;
+        }
+
+        /* 复用背景样式 */
+        .grid-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-image: linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px);
+            background-size: 32px 32px;
+            z-index: -3;
+        }
+
+        .ambient-blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -2;
+            opacity: 0.5;
+            animation: float 20s infinite alternate ease-in-out;
+        }
+        .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: #cce3de; }
+        .blob-2 { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: #e2d9f3; animation-delay: -5s; }
+        .blob-3 { top: 30%; left: 40%; width: 40vw; height: 40vw; background: #fdf0d5; animation-delay: -10s; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(20px, 40px) scale(1.05); }
+        }
+
+        /* 核心卡片样式 */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-6px);
+            background: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.01);
+            border-color: rgba(255, 255, 255, 1);
+        }
+
+        /* 标签与按钮 */
+        .tag-pill {
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-weight: 600;
+            letter-spacing: 0.025em;
+        }
+        
+        .btn-icon {
+            width: 36px; height: 36px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 10px;
+            transition: all 0.2s;
+        }
+        .btn-icon:hover { background-color: rgba(0,0,0,0.05); }
+
+        /* 入场动画 */
+        .reveal-up {
+            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+        
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+
+        .font-artistic {
+            font-family: 'Dancing Script', cursive;
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-20">
+
+    <!-- 背景层 -->
+    <div class="grid-bg"></div>
+    <div class="ambient-blob blob-1"></div>
+    <div class="ambient-blob blob-2"></div>
+    <div class="ambient-blob blob-3"></div>
+
+    <!-- 导航栏 -->
+    <nav class="fixed w-full z-50 top-4 px-4 sm:px-6 flex justify-center">
+        <div class="glass-card w-full max-w-6xl rounded-2xl px-6 py-3 flex flex-col lg:flex-row justify-between items-center relative reveal-up">
+            <div class="w-full lg:w-auto flex justify-between items-center">
+                <a href="index.html" class="flex items-center gap-2 font-semibold text-lg text-slate-800 tracking-tight">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-slate-700">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <path d="M3 9h18M9 21V9"></path>
+                    </svg>
+                    PsyHub <span class="text-slate-400 font-normal">/ Resources</span>
+                </a>
+            </div>
+            
+            <!-- 桌面端菜单 -->
+            <div class="hidden lg:flex gap-7 text-sm text-slate-600 font-medium absolute left-1/2 transform -translate-x-1/2">
+                <a href="考研全攻略.html" class="hover:text-slate-900 transition-colors">考研全攻略</a>
+                <a href="个人日历.html" class="hover:text-slate-900 transition-colors">个人日历</a>
+                <a href="资源合辑.html" class="text-slate-900 font-bold">资源合辑</a>
+                <a href="备考时间线.html" class="hover:text-slate-900 transition-colors">备考时间线</a>
+            </div>
+
+            <!-- 右侧Logo/用户名 -->
+            <div class="hidden lg:flex items-center pr-2">
+                <span class="font-artistic text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-700 to-slate-500 tracking-wider cursor-default select-none relative">
+                    Xun
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <main class="max-w-6xl mx-auto px-6 pt-36">
+        
+        <!-- 头部标题 -->
+        <header class="mb-12 text-center reveal-up">
+            <h1 class="text-4xl md:text-5xl font-normal text-slate-800 mb-4 tracking-wide" style="font-family: 'ZCOOL QingKe HuangYou', cursive;">资源合辑</h1>
+            <p class="text-slate-500 max-w-2xl text-lg mx-auto">
+                这里汇集了备考所需的核心资源，助你一臂之力。
+            </p>
+        </header>
+
+        <!-- 资源矩阵 Grid Layout -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 reveal-up delay-1 max-w-4xl mx-auto">
+
+            <!-- Card 1: 网课 (可点击) -->
+            <div onclick="window.open('https://pan.baidu.com/s/1g0zn_BSi95wqzRq-dznuag?pwd=1111', '_blank')" class="glass-card rounded-2xl p-8 flex flex-col h-full group cursor-pointer relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-48 h-48 bg-indigo-50 rounded-full blur-3xl opacity-50 -translate-y-1/2 translate-x-1/3 group-hover:scale-110 transition-transform duration-700"></div>
+                
+                <div class="relative z-10">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="w-16 h-16 rounded-2xl bg-indigo-50 text-indigo-500 flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform duration-300">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <span class="tag-pill bg-indigo-100 text-indigo-700 px-3 py-1">2026 全程班</span>
+                    </div>
+                    
+                    <h3 class="text-2xl font-bold text-slate-800 mb-3 group-hover:text-indigo-600 transition-colors">网课资源</h3>
+                    <p class="text-slate-500 mb-6 leading-relaxed">
+                        包含 312 统考基础、强化、冲刺全阶段视频课程。
+                        <br><span class="text-xs text-slate-400 mt-2 block">提取码：1111</span>
+                    </p>
+                    
+                    <div class="mt-auto pt-4 border-t border-slate-100 flex items-center text-indigo-600 font-medium group-hover:translate-x-1 transition-transform">
+                        前往百度网盘下载
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: 笔记 (暂未开放) -->
+            <div class="glass-card rounded-2xl p-8 flex flex-col h-full group cursor-not-allowed opacity-80 grayscale-[0.5] hover:grayscale-0 transition-all">
+                <div class="flex justify-between items-start mb-6">
+                    <div class="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shadow-sm">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    </div>
+                    <span class="tag-pill bg-slate-100 text-slate-500 px-3 py-1">Coming Soon</span>
+                </div>
+                
+                <h3 class="text-2xl font-bold text-slate-800 mb-3">学霸笔记</h3>
+                <p class="text-slate-500 mb-6 leading-relaxed">
+                    核心考点、逻辑框架与背诵口诀汇总。
+                    <br><span class="text-xs text-slate-400 mt-2 block">正在整理中...</span>
+                </p>
+                
+                <div class="mt-auto pt-4 border-t border-slate-100 flex items-center text-slate-400 font-medium">
+                    敬请期待
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+</body>
+</html>
