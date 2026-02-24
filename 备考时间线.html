@@ -307,45 +307,99 @@
 
     /* 响应式调整 */
         @media (max-width: 768px) {
-            body { padding: 20px 10px; }
-            .timeline-container { 
-                padding: 20px 15px 30px 15px; 
-                border-radius: 12px;
-                min-height: 500px;
+            body { 
+                padding: 15px 10px; 
+                background-color: #f0f2f5; /* 略微加深背景增加对比 */
             }
-            .view-toggle { margin-bottom: 25px; margin-top: 40px; } /* 留出返回按钮空间 */
-            .view-toggle button { padding: 8px 20px; font-size: 14px; }
-            .back-home { top: 15px; left: 15px; padding: 6px 12px; font-size: 12px; }
-            .back-home svg { width: 14px; height: 14px; } /* 修正SVG大小 */
+            .timeline-container { 
+                padding: 25px 15px 30px 15px; 
+                border-radius: 16px;
+                min-height: auto;
+                box-shadow: 0 5px 20px rgba(0,0,0,0.03);
+            }
             
+            /* 顶部交互区域优化 */
+            .view-toggle { 
+                margin-bottom: 30px; 
+                margin-top: 50px; /* 增加顶部间距给返回按钮 */
+                gap: 10px;
+            } 
+            .view-toggle button { 
+                padding: 10px 16px; 
+                font-size: 14px; 
+                flex: 1; /* 按钮均分宽度 */
+                white-space: nowrap;
+            }
+            
+            .back-home { 
+                top: 15px; 
+                left: 15px; 
+                padding: 8px 14px; /* 增大点击区域 */
+                font-size: 13px; 
+                background: white;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            }
+            .back-home svg { width: 16px; height: 16px; }
+            
+            /* 横向时间轴移动端优化 */
             .linear-timeline {
                 overflow-x: auto;
-                width: 100%; /* 允许滚动 */
+                width: 100%;
                 min-width: 0;
-                padding-bottom: 20px;
-                display: flex; /* 恢复 flex 布局，配合 min-width 实现滚动 */
+                padding-bottom: 10px;
+                display: flex;
                 flex-wrap: nowrap;
-                height: 140px;
+                height: 110px;
+                -webkit-overflow-scrolling: touch; /* iOS顺滑滚动 */
+                scrollbar-width: none; /* Firefox 隐藏滚动条 */
             }
+            .linear-timeline::-webkit-scrollbar { display: none; } /* Chrome 隐藏滚动条 */
             
             /* 修正移动端 flex 布局 */
             .segment {
-                flex: 0 0 auto !important; /* 不压缩，允许超出 */
+                flex: 0 0 auto !important;
             }
             
-            /* 重新手动设置移动端各阶段宽度 */
-            .segment[data-target="content-stage1"] { width: 140px; }
-            .segment[data-target="content-stage2"] { width: 280px; }
-            .segment[data-target="content-stage3"] { width: 140px; }
-            .segment[data-target="content-stage4"] { width: 140px; }
+            /* 调整移动端各阶段宽度，确保文字不折行 */
+            .segment[data-target="content-stage1"] { width: 110px; }
+            .segment[data-target="content-stage2"] { width: 180px; }
+            .segment[data-target="content-stage3"] { width: 130px; }
+            .segment[data-target="content-stage4"] { width: 130px; }
             .segment[data-target="content-stage5"] { width: 100px; }
 
-            .content-display-area {
-                padding: 20px;
-                min-height: auto;
+            .segment-label {
+                font-size: 12px;
+                padding: 4px 10px;
+                bottom: calc(50% + 12px);
             }
-            .title { font-size: 20px; }
-            .item { font-size: 15px; }
+            .node-text {
+                font-size: 12px;
+                top: 20px;
+            }
+
+            .content-display-area {
+                padding: 20px 15px;
+                min-height: auto;
+                border: none;
+                background: #f8f9fa;
+                border-radius: 12px;
+            }
+            
+            .h-content-list li {
+                font-size: 15px; /* 保持正文可读性 */
+                line-height: 1.5;
+                margin-bottom: 12px;
+                padding-left: 18px;
+            }
+            
+            /* 纵向SVG视图字体调整 */
+            #view-vertical svg text.title { font-size: 32px; } /* 放大标题 */
+            #view-vertical svg text.item { font-size: 24px; } /* 放大列表项 */
+            #view-vertical svg .bullet { r: 8; } /* 放大圆点 */
+            /* 调整SVG视口以适应移动端比例 */
+            #view-vertical svg {
+                min-height: 800px; /* 强制拉伸高度 */
+            }
         }
     </style>
 </head>
