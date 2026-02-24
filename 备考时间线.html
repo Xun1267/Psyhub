@@ -352,6 +352,9 @@
                 height: 110px;
                 -webkit-overflow-scrolling: touch; /* iOS顺滑滚动 */
                 scrollbar-width: none; /* Firefox 隐藏滚动条 */
+                /* 关键修复：确保左侧有足够空间不被遮挡 */
+                padding-left: 20px;
+                box-sizing: content-box; /* 确保 padding 不包含在 width 内 */
             }
             .linear-timeline::-webkit-scrollbar { display: none; } /* Chrome 隐藏滚动条 */
             
@@ -366,6 +369,10 @@
             .segment[data-target="content-stage3"] { width: 130px; }
             .segment[data-target="content-stage4"] { width: 130px; }
             .segment[data-target="content-stage5"] { width: 100px; }
+            /* 最后一个元素右侧增加padding，防止紧贴边缘 */
+            .segment:last-child {
+                margin-right: 20px;
+            }
 
             .segment-label {
                 font-size: 12px;
@@ -383,22 +390,35 @@
                 border: none;
                 background: #f8f9fa;
                 border-radius: 12px;
+                /* 增大文字尺寸，充分利用空间 */
             }
             
             .h-content-list li {
-                font-size: 15px; /* 保持正文可读性 */
-                line-height: 1.5;
+                font-size: 16px; /* 进一步增大正文 */
+                line-height: 1.6; /* 增加行距 */
                 margin-bottom: 12px;
                 padding-left: 18px;
             }
+
+            /* 消除顶部空白 */
+            #view-vertical {
+                margin-top: -50px; /* 向上偏移，减少空白 */
+            }
             
-            /* 纵向SVG视图字体调整 */
-            #view-vertical svg text.title { font-size: 32px; } /* 放大标题 */
-            #view-vertical svg text.item { font-size: 24px; } /* 放大列表项 */
-            #view-vertical svg .bullet { r: 8; } /* 放大圆点 */
-            /* 调整SVG视口以适应移动端比例 */
+            /* 纵向SVG视图字体进一步优化 */
+            #view-vertical svg text.title { 
+                font-size: 36px; /* 再次放大标题 */
+                font-weight: bold;
+            } 
+            #view-vertical svg text.item { 
+                font-size: 28px; /* 再次放大列表项 */
+            } 
+            #view-vertical svg .bullet { r: 10; } /* 进一步放大圆点 */
+            
+            /* 调整SVG视口宽度以适应屏幕 */
             #view-vertical svg {
-                min-height: 800px; /* 强制拉伸高度 */
+                min-height: 800px;
+                width: 100%; /* 占满宽度 */
             }
         }
     </style>
