@@ -255,6 +255,7 @@
                 <a href="个人日历.html" class="hover:text-slate-900 transition-colors">个人日历</a>
                 <a href="资源合辑.html" class="hover:text-slate-900 transition-colors">资源合辑</a>
                 <a href="备考时间线.html" class="hover:text-slate-900 transition-colors">备考时间线</a>
+                <a href="刷题.html" class="hover:text-slate-900 transition-colors">真题刷题</a>
             </div>
 
             <!-- 右侧Logo/用户名 (桌面端显示) -->
@@ -271,6 +272,7 @@
                 <a href="个人日历.html" class="hover:text-slate-900 transition-colors py-2 w-full text-center">个人日历</a>
                 <a href="资源合辑.html" class="hover:text-slate-900 transition-colors py-2 w-full text-center">资源合辑</a>
                 <a href="备考时间线.html" class="hover:text-slate-900 transition-colors py-2 w-full text-center">备考时间线</a>
+                <a href="刷题.html" class="hover:text-slate-900 transition-colors py-2 w-full text-center">真题刷题</a>
                  <div class="py-2 w-full text-center">
                     <span class="font-artistic text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-700 to-slate-500 tracking-wider">
                         Xun
@@ -404,14 +406,7 @@
     <section class="max-w-6xl mx-auto px-6 pb-24" id="module-section">
         <h2 class="text-xl font-bold text-slate-800 mb-6 pl-2 border-l-4 border-slate-700 reveal-up">系统功能模块</h2>
         
-        <!-- 标签栏 (Plan A) -->
-        <div class="flex gap-3 mb-8 overflow-x-auto pb-2 scrollbar-hide reveal-up delay-100">
-            <span class="px-3 py-1.5 rounded-full text-sm font-medium bg-slate-800 text-white cursor-pointer whitespace-nowrap">全部</span>
-            <span class="px-3 py-1.5 rounded-full text-sm font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors whitespace-nowrap">新手必读</span>
-            <span class="px-3 py-1.5 rounded-full text-sm font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors whitespace-nowrap">备考工具</span>
-            <span class="px-3 py-1.5 rounded-full text-sm font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors whitespace-nowrap">数据查询</span>
-            <span class="px-3 py-1.5 rounded-full text-sm font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors whitespace-nowrap">刷题</span>
-        </div>
+
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- 主打卡 (Plan A: 占据 2 列) -->
@@ -474,6 +469,21 @@
                     </div>
                     <div class="flex gap-2">
                          <span class="text-[10px] font-medium text-slate-400 border border-slate-200 px-1.5 py-0.5 rounded">#资料库</span>
+                    </div>
+                </div>
+
+                <div class="liquid-glass rounded-2xl p-6 card-hover cursor-pointer reveal-up delay-400 h-full flex flex-col justify-between group" onclick="window.location.href='刷题.html'">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-white/60 border border-white flex items-center justify-center text-slate-700">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            </div>
+                        </div>
+                        <h3 class="text-lg font-semibold text-slate-800 mb-2 group-hover:text-indigo-600 transition-colors">真题刷题</h3>
+                        <p class="text-slate-500 text-sm leading-relaxed mb-3">各科专项真题与历年统考真题练习库，支持错题记录。</p>
+                    </div>
+                    <div class="flex gap-2">
+                         <span class="text-[10px] font-medium text-slate-400 border border-slate-200 px-1.5 py-0.5 rounded">#真题练习</span>
                     </div>
                 </div>
             </div>

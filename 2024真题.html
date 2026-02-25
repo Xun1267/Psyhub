@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2024年 心理学专业基础综合真题 - 模拟考试</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            }
+        };
+    </script>
+    <script src="2024_data.js"></script>
+    <script src="2024_data_part2.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600&display=swap');
+        
+        body {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            background-color: #F8F7F4;
+            color: #3f3f46;
+        }
+
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f1f5f9;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-label:hover {
+            background-color: #f8fafc;
+            border-color: #cbd5e1;
+        }
+
+        input[type="radio"]:checked + span {
+            color: #4f46e5;
+            font-weight: 500;
+        }
+
+        input[type="radio"]:checked + span::before {
+            content: "";
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #4f46e5;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body class="pb-24">
+
+    <!-- Sticky Header with Timer -->
+    <header class="sticky-header px-6 py-4 flex justify-between items-center shadow-sm">
+        <div class="flex items-center gap-4">
+            <a href="刷题.html" class="text-slate-500 hover:text-slate-800 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+            </a>
+            <h1 class="font-bold text-lg text-slate-800 hidden sm:block">2024年 心理学考研真题模拟</h1>
+        </div>
+        
+        <div class="flex items-center gap-6">
+            <div class="flex items-center gap-2 text-slate-600 bg-slate-100 px-3 py-1.5 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span id="timer" class="font-mono font-medium">03:00:00</span>
+            </div>
+            <button onclick="submitExam()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg text-sm font-medium transition-colors shadow-lg shadow-indigo-200">
+                交卷
+            </button>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-6 py-8">
+        
+        <!-- Progress Bar -->
+        <div class="mb-8">
+            <div class="flex justify-between text-xs text-slate-500 mb-2">
+                <span>答题进度</span>
+                <span id="progress-text">0/5</span>
+            </div>
+            <div class="w-full bg-slate-200 rounded-full h-2">
+                <div id="progress-bar" class="bg-indigo-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Questions Container -->
+        <form id="exam-form" class="space-y-6">
+            <!-- Questions will be injected here by JavaScript -->
+        </form>
+
+    </main>
+
+    <script>
+        // Combine data parts
+        const examData = [...examDataPart1, ...examDataPart2];
+        const examForm = document.getElementById('exam-form');
+        const totalQuestions = examData.length;
+        const answeredQuestions = new Set();
+
+        // Render Questions
+        function renderQuestions() {
+            examForm.innerHTML = '';
+            examData.forEach((item, index) => {
+                const questionCard = document.createElement('div');
+                questionCard.className = 'question-card';
+                questionCard.id = `q${item.id}`;
+                
+                let inputHtml = '';
+                if (item.type === 'single') {
+                    inputHtml = item.options.map((opt, i) => `
+                        <label class="option-label">
+                            <input type="radio" name="q${item.id}" value="${opt.charAt(0)}" class="hidden" onchange="updateProgress('${item.id}')">
+                            <span class="text-slate-600">${opt}</span>
+                        </label>
+                    `).join('');
+                } else if (item.type === 'multi') {
+                    inputHtml = item.options.map((opt, i) => `
+                        <label class="option-label">
+                            <input type="checkbox" name="q${item.id}" value="${opt.charAt(0)}" class="hidden" onchange="updateProgress('${item.id}')">
+                            <span class="text-slate-600">${opt}</span>
+                        </label>
+                    `).join('');
+                } else if (item.type === 'short' || item.type === 'comprehensive') {
+                    inputHtml = `
+                        <div class="mt-4">
+                            <textarea class="w-full p-3 border rounded-lg text-slate-700 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" rows="6" placeholder="在此输入您的答案..." oninput="updateProgress('${item.id}')"></textarea>
+                        </div>
+                    `;
+                }
+
+                // Format question text (handle newlines, bold, tables)
+                let questionText = formatText(item.question);
+
+                questionCard.innerHTML = `
+                    <div class="flex gap-4 mb-4">
+                        <span class="text-indigo-600 font-bold text-lg">${item.id}.</span>
+                        <div class="text-lg font-medium text-slate-800 leading-relaxed w-full">
+                            ${questionText}
+                            ${item.type === 'multi' ? '<span class="text-sm text-indigo-500 font-normal ml-2">(多选题)</span>' : ''}
+                        </div>
+                    </div>
+                    <div class="space-y-3 pl-0 sm:pl-10">
+                        ${inputHtml}
+                    </div>
+                `;
+                examForm.appendChild(questionCard);
+            });
+            
+            // Trigger MathJax typeset
+            if (window.MathJax) {
+                // Wait a tick to ensure DOM is ready
+                setTimeout(() => {
+                    window.MathJax.typesetPromise && window.MathJax.typesetPromise();
+                }, 100);
+            }
+            
+            updateProgressDisplay();
+        }
+
+        // Helper: Format Text (Markdown-like)
+        function formatText(text) {
+            if (!text) return '';
+            
+            let lines = text.split('\n');
+            let formattedHtml = '';
+            let inTable = false;
+            let tableRows = [];
+            
+            for (let i = 0; i < lines.length; i++) {
+                let line = lines[i].trim();
+                
+                // Bold formatting
+                line = line.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+                
+                // Table detection (lines starting and ending with |)
+                if (line.startsWith('|') && line.endsWith('|')) {
+                    if (!inTable) {
+                        inTable = true;
+                        tableRows = [];
+                    }
+                    tableRows.push(line);
+                } else {
+                    if (inTable) {
+                        formattedHtml += renderTable(tableRows);
+                        inTable = false;
+                        tableRows = [];
+                    }
+                    // Only add line break if it's not the last line or empty
+                    formattedHtml += line + '<br>';
+                }
+            }
+            
+            if (inTable) {
+                formattedHtml += renderTable(tableRows);
+            }
+            
+            return formattedHtml;
+        }
+
+        function renderTable(rows) {
+            if (rows.length === 0) return '';
+            
+            let html = '<div class="overflow-x-auto my-4"><table class="min-w-full border-collapse border border-slate-300 text-sm text-left">';
+            
+            // Check for separator
+            let bodyStartIndex = 0;
+            
+            if (rows.length > 1 && rows[1].includes('---')) {
+                // Header row
+                const headerCells = rows[0].split('|').slice(1, -1);
+                html += '<thead class="bg-slate-100"><tr>';
+                headerCells.forEach(cell => {
+                    html += `<th class="border border-slate-300 px-4 py-2 font-semibold text-slate-700">${cell.trim()}</th>`;
+                });
+                html += '</tr></thead>';
+                bodyStartIndex = 2; // Skip header and separator
+            } else {
+                bodyStartIndex = 0; // No header detected/supported this way
+            }
+            
+            html += '<tbody>';
+            for (let i = bodyStartIndex; i < rows.length; i++) {
+                const cells = rows[i].split('|').slice(1, -1);
+                html += '<tr>';
+                cells.forEach(cell => {
+                    html += `<td class="border border-slate-300 px-4 py-2">${cell.trim()}</td>`;
+                });
+                html += '</tr>';
+            }
+            html += '</tbody></table></div>';
+            
+            return html;
+        }
+
+        // Progress Logic
+        function updateProgress(questionId) {
+            if (questionId) {
+                // For textareas, check if not empty
+                const item = examData.find(q => q.id == questionId);
+                if (item.type === 'short' || item.type === 'comprehensive') {
+                    const val = document.querySelector(`#q${questionId} textarea`).value;
+                    if (val.trim()) answeredQuestions.add(questionId);
+                    else answeredQuestions.delete(questionId);
+                } else {
+                    answeredQuestions.add(questionId);
+                }
+            }
+            updateProgressDisplay();
+        }
+
+        function updateProgressDisplay() {
+            const count = answeredQuestions.size;
+            const percent = (count / totalQuestions) * 100;
+            document.getElementById('progress-bar').style.width = `${percent}%`;
+            document.getElementById('progress-text').textContent = `${count}/${totalQuestions}`;
+        }
+
+        // Submit Logic
+        function submitExam() {
+            if (confirm('确定要交卷吗？交卷后将跳转至解析页面。')) {
+                // Save answers to localStorage
+                const answers = {};
+                examData.forEach(item => {
+                    if (item.type === 'single') {
+                        const selected = document.querySelector(`input[name="q${item.id}"]:checked`);
+                        if (selected) answers[item.id] = selected.value;
+                    } else if (item.type === 'multi') {
+                        const selected = document.querySelectorAll(`input[name="q${item.id}"]:checked`);
+                        if (selected.length > 0) {
+                            answers[item.id] = Array.from(selected).map(el => el.value);
+                        }
+                    } else {
+                        const text = document.querySelector(`#q${item.id} textarea`)?.value;
+                        if (text) answers[item.id] = text;
+                    }
+                });
+                localStorage.setItem('2024_exam_answers', JSON.stringify(answers));
+                window.location.href = '2024真题_解析.html';
+            }
+        }
+
+        // Timer Logic
+        let timeLeft = 3 * 60 * 60; // 3 hours in seconds
+        const timerElement = document.getElementById('timer');
+        
+        const timerInterval = setInterval(() => {
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                submitExam(); // Auto submit
+                return;
+            }
+            
+            const hours = Math.floor(timeLeft / 3600);
+            const minutes = Math.floor((timeLeft % 3600) / 60);
+            const seconds = timeLeft % 60;
+            
+            timerElement.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            timeLeft--;
+        }, 1000);
+
+        // Initialize
+        renderQuestions();
+    </script>
+</body>
+</html>
