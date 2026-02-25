@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025年 心理学专业基础综合真题 - 试题解析</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            }
+        };
+    </script>
+    <script src="2025_data.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600&display=swap');
+        
+        body {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            background-color: #F8F7F4;
+            color: #3f3f46;
+        }
+
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f1f5f9;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        /* Correct Answer Style */
+        .option-correct {
+            background-color: #ecfdf5;
+            border-color: #10b981;
+            color: #047857;
+            font-weight: 500;
+        }
+        
+        .option-correct::after {
+            content: "✔";
+            position: absolute;
+            right: 16px;
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        /* Wrong Answer Style (if needed later) */
+        .option-wrong {
+            background-color: #fef2f2;
+            border-color: #ef4444;
+            color: #b91c1c;
+        }
+
+        .analysis-box {
+            background-color: #f8fafc;
+            border-left: 4px solid #6366f1;
+            padding: 16px;
+            margin-top: 16px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="pb-24">
+
+    <!-- Sticky Header -->
+    <header class="sticky-header px-6 py-4 flex justify-between items-center shadow-sm">
+        <div class="flex items-center gap-4">
+            <a href="刷题.html" class="text-slate-500 hover:text-slate-800 transition-colors flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                返回列表
+            </a>
+            <h1 class="font-bold text-lg text-slate-800">2025年真题 - 答案解析</h1>
+        </div>
+        
+        <div class="text-sm text-slate-500">
+            共 <span id="total-questions" class="font-bold text-slate-800">0</span> 题
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-6 py-8" id="analysis-container">
+        <!-- Questions will be injected here by JavaScript -->
+    </main>
+
+    <script>
+        // Use 2025 data
+        const examData = examData2025;
+        const container = document.getElementById('analysis-container');
+        const userAnswers = JSON.parse(localStorage.getItem('2025_exam_answers') || '{}');
+        
+        // Update total count
+        document.getElementById('total-questions').textContent = examData.length;
+
+        examData.forEach(item => {
+            const questionCard = document.createElement('div');
+            questionCard.className = 'question-card';
+            questionCard.id = `q${item.id}`;
+            
+            let userAnswer = userAnswers[item.id];
+            let isCorrect = false;
+            let optionsHtml = '';
+            
+            if (item.type === 'single') {
+                isCorrect = userAnswer === item.answer;
+                optionsHtml = item.options.map(opt => {
+                    const optVal = opt.charAt(0);
+                    let className = 'option-label flex items-center p-3 rounded-lg border border-slate-200 mb-2';
+                    let iconHtml = '';
+                    
+                    // Highlight correct answer
+                    if (optVal === item.answer) {
+                        className = 'option-label flex items-center p-3 rounded-lg border border-emerald-500 bg-emerald-50 mb-2';
+                        iconHtml = '<span class="ml-auto text-emerald-600 font-bold">✔</span>';
+                    }
+                    // Highlight user wrong answer
+                    else if (userAnswer === optVal) {
+                        className = 'option-label flex items-center p-3 rounded-lg border border-red-500 bg-red-50 mb-2';
+                        iconHtml = '<span class="ml-auto text-red-600 font-bold">✘</span>';
+                    }
+                    
+                    return `<div class="${className}">
+                                <span class="text-slate-700 font-medium mr-2">${opt}</span>
+                                ${iconHtml}
+                            </div>`;
+                }).join('');
+                
+            } else if (item.type === 'multi') {
+                // userAnswer is array for multi
+                const userArr = Array.isArray(userAnswer) ? userAnswer : [];
+                const correctArr = item.answer; // Array
+                
+                // Check correctness (arrays must match exactly)
+                const userStr = [...userArr].sort().join('');
+                const correctStr = [...correctArr].sort().join('');
+                isCorrect = userStr === correctStr;
+                
+                optionsHtml = item.options.map(opt => {
+                    const optVal = opt.charAt(0);
+                    let className = 'option-label flex items-center p-3 rounded-lg border border-slate-200 mb-2';
+                    let iconHtml = '';
+                    
+                    if (correctArr.includes(optVal)) {
+                         className = 'option-label flex items-center p-3 rounded-lg border border-emerald-500 bg-emerald-50 mb-2';
+                         iconHtml = '<span class="ml-auto text-emerald-600 font-bold">✔</span>';
+                    } else if (userArr.includes(optVal)) { // Selected but wrong
+                         className = 'option-label flex items-center p-3 rounded-lg border border-red-500 bg-red-50 mb-2';
+                         iconHtml = '<span class="ml-auto text-red-600 font-bold">✘</span>';
+                    }
+                    
+                    return `<div class="${className}">
+                                <span class="text-slate-700 font-medium mr-2">${opt}</span>
+                                ${iconHtml}
+                            </div>`;
+                }).join('');
+            } else {
+                 // Short/Comprehensive
+                 optionsHtml = `
+                    <div class="mt-4 p-4 bg-slate-50 rounded-lg border border-slate-200 mb-4">
+                        <div class="text-xs font-bold text-slate-500 mb-1 uppercase">您的作答 Your Answer</div>
+                        <div class="text-slate-800 whitespace-pre-wrap font-serif">${userAnswer || '<span class="text-slate-400 italic">未作答</span>'}</div>
+                    </div>
+                 `;
+            }
+            
+            // Format text
+            const questionText = formatText(item.question);
+            const analysisText = formatText(item.analysis);
+            
+            // Answer Display String for summary
+            let answerDisplay = '';
+            if (item.type === 'single') answerDisplay = item.answer;
+            else if (item.type === 'multi') answerDisplay = item.answer.join('、');
+            else answerDisplay = '见解析';
+            
+            let userAnswerDisplay = '';
+            if (item.type === 'single') userAnswerDisplay = userAnswer || '未作答';
+            else if (item.type === 'multi') userAnswerDisplay = (userAnswer && userAnswer.join('、')) || '未作答';
+            else userAnswerDisplay = '见上方';
+
+            questionCard.innerHTML = `
+                <div class="flex gap-4 mb-4">
+                    <span class="text-indigo-600 font-bold text-lg">${item.id}.</span>
+                    <div class="text-lg font-medium text-slate-800 leading-relaxed w-full">
+                        ${questionText}
+                        ${item.type === 'multi' ? '<span class="text-sm text-indigo-500 font-normal ml-2">(多选题)</span>' : ''}
+                        ${item.type === 'short' ? '<span class="text-sm text-indigo-500 font-normal ml-2">(简答题)</span>' : ''}
+                        ${item.type === 'comprehensive' ? '<span class="text-sm text-indigo-500 font-normal ml-2">(综合题)</span>' : ''}
+                    </div>
+                </div>
+                
+                <div class="pl-0 sm:pl-10 mb-6">
+                    ${optionsHtml}
+                </div>
+                
+                <div class="pl-0 sm:pl-10">
+                    ${(item.type === 'single' || item.type === 'multi') ? `
+                    <div class="flex flex-wrap gap-4 text-sm mb-4">
+                        <div class="bg-indigo-50 px-3 py-1.5 rounded text-indigo-700 border border-indigo-100">
+                            <span class="font-bold">正确答案：</span> ${answerDisplay}
+                        </div>
+                        <div class="${isCorrect ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' : 'bg-red-50 text-red-700 border border-red-100'} px-3 py-1.5 rounded">
+                            <span class="font-bold">您的答案：</span> ${userAnswerDisplay}
+                        </div>
+                    </div>
+                    ` : ''}
+                    
+                    <div class="analysis-box">
+                        <h4 class="text-sm font-bold text-indigo-600 mb-2 uppercase tracking-wide flex items-center gap-2">
+                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                            </svg>
+                            解析 Analysis
+                        </h4>
+                        <div class="text-sm text-slate-600 leading-relaxed">
+                             ${analysisText}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            container.appendChild(questionCard);
+        });
+
+        // Trigger MathJax
+        if (window.MathJax) {
+            setTimeout(() => {
+                window.MathJax.typesetPromise && window.MathJax.typesetPromise();
+            }, 100);
+        }
+
+        // Helper: Format Text (Markdown-like)
+        function formatText(text) {
+            if (!text) return '';
+            
+            let lines = text.split('\n');
+            let formattedHtml = '';
+            let inTable = false;
+            let tableRows = [];
+            
+            for (let i = 0; i < lines.length; i++) {
+                let line = lines[i].trim();
+                
+                // Bold formatting
+                line = line.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+                
+                // Table detection (lines starting and ending with |)
+                if (line.startsWith('|') && line.endsWith('|')) {
+                    if (!inTable) {
+                        inTable = true;
+                        tableRows = [];
+                    }
+                    tableRows.push(line);
+                } else {
+                    if (inTable) {
+                        formattedHtml += renderTable(tableRows);
+                        inTable = false;
+                        tableRows = [];
+                    }
+                    // Only add line break if it's not the last line or empty
+                    formattedHtml += line + '<br>';
+                }
+            }
+            
+            if (inTable) {
+                formattedHtml += renderTable(tableRows);
+            }
+            
+            return formattedHtml;
+        }
+
+        function renderTable(rows) {
+            if (rows.length === 0) return '';
+            
+            let html = '<div class="overflow-x-auto my-4"><table class="min-w-full border-collapse border border-slate-300 text-sm text-left">';
+            
+            // Check for separator
+            let bodyStartIndex = 0;
+            
+            if (rows.length > 1 && rows[1].includes('---')) {
+                // Header row
+                const headerCells = rows[0].split('|').slice(1, -1);
+                html += '<thead class="bg-slate-100"><tr>';
+                headerCells.forEach(cell => {
+                    html += `<th class="border border-slate-300 px-4 py-2 font-semibold text-slate-700">${cell.trim()}</th>`;
+                });
+                html += '</tr></thead>';
+                bodyStartIndex = 2; // Skip header and separator
+            } else {
+                bodyStartIndex = 0; // No header detected/supported this way
+            }
+            
+            html += '<tbody>';
+            for (let i = bodyStartIndex; i < rows.length; i++) {
+                const cells = rows[i].split('|').slice(1, -1);
+                html += '<tr>';
+                cells.forEach(cell => {
+                    html += `<td class="border border-slate-300 px-4 py-2">${cell.trim()}</td>`;
+                });
+                html += '</tr>';
+            }
+            html += '</tbody></table></div>';
+            
+            return html;
+        }
+    </script>
+
+</body>
+</html>
