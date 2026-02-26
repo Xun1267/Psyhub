@@ -64,19 +64,20 @@ const SplitBrainExp = {
               <ellipse cx="35" cy="25" rx="5" ry="3" fill="#334155"/>
               <ellipse cx="65" cy="25" rx="5" ry="3" fill="#334155"/>
             </svg>
+          </div>
             
-            <!-- 气泡反馈 -->
-            <div id="feedback-bubble" class="absolute -top-16 left-1/2 transform -translate-x-1/2 bg-white border border-slate-200 px-4 py-2 rounded-xl shadow-lg w-48 text-center text-sm font-medium text-slate-700 opacity-0 transition-opacity duration-300">
-              ...
-              <div class="absolute bottom-[-6px] left-1/2 transform -translate-x-1/2 w-3 h-3 bg-white border-b border-r border-slate-200 rotate-45"></div>
-            </div>
+          <!-- 气泡反馈 (Moved out of subject-head to prevent click bubbling issues) -->
+          <div id="feedback-bubble" class="absolute bottom-[130px] left-1/2 transform -translate-x-1/2 bg-white border border-slate-200 px-4 py-2 rounded-xl shadow-lg w-48 text-center text-sm font-medium text-slate-700 opacity-0 transition-opacity duration-300 z-40 pointer-events-auto">
+            <div id="feedback-content"></div>
+            <div class="absolute bottom-[-6px] left-1/2 transform -translate-x-1/2 w-3 h-3 bg-white border-b border-r border-slate-200 rotate-45"></div>
           </div>
 
           <!-- 物品栏 -->
           <div id="palette-zone" class="absolute bottom-4 w-full flex justify-center gap-4 z-30 min-h-[60px] items-center rounded-lg transition-colors border-2 border-transparent">
             ${this.items.map(item => `
-              <div class="draggable-item w-12 h-12 bg-white border border-slate-200 rounded-lg shadow-sm flex items-center justify-center text-2xl cursor-grab active:cursor-grabbing hover:scale-110 transition-transform z-50 select-none" 
+              <div class="draggable-item w-12 h-12 bg-white border border-slate-200 rounded-lg shadow-sm flex items-center justify-center text-2xl cursor-grab active:cursor-grabbing hover:scale-110 transition-transform z-50 select-none touch-none" 
                    draggable="true" 
+                   style="touch-action: none;"
                    data-id="${item.id}">
                 ${item.icon}
               </div>
@@ -94,6 +95,34 @@ const SplitBrainExp = {
     this.attachEvents();
   },
 
+  processDrop(itemEl, zone) {
+    if (!itemEl || !zone) return;
+    
+    zone.appendChild(itemEl);
+    const itemId = itemEl.dataset.id;
+    const draggedItem = this.items.find(i => i.id === itemId);
+    const subject = document.getElementById('subject-head');
+    const bubble = document.getElementById('feedback-bubble');
+    const isPalette = zone.id === 'palette-zone';
+
+    if (isPalette) {
+      if (this.state.leftZone?.id === itemId) this.state.leftZone = null;
+      if (this.state.rightZone?.id === itemId) this.state.rightZone = null;
+      bubble.style.opacity = '0';
+    } else {
+      // Clear previous state for this item if it moved from another zone
+      if (this.state.leftZone?.id === itemId) this.state.leftZone = null;
+      if (this.state.rightZone?.id === itemId) this.state.rightZone = null;
+
+      if (zone.id === 'drop-left') {
+        this.state.leftZone = draggedItem;
+      } else {
+        this.state.rightZone = draggedItem;
+      }
+      this.showFeedback(subject, bubble, zone.id === 'drop-left' ? 'left' : 'right');
+    }
+  },
+
   attachEvents() {
     const draggables = document.querySelectorAll('.draggable-item');
     const leftZone = document.getElementById('drop-left');
@@ -105,12 +134,11 @@ const SplitBrainExp = {
 
     let draggedItem = null;
 
-    // Drag Start
+    // --- Mouse / HTML5 Drag & Drop ---
     draggables.forEach(item => {
       item.addEventListener('dragstart', (e) => {
         draggedItem = this.items.find(i => i.id === item.dataset.id);
         e.dataTransfer.setData('text/plain', item.dataset.id);
-        // Delay to allow drag image generation
         requestAnimationFrame(() => item.classList.add('opacity-50', 'scale-90'));
       });
 
@@ -119,56 +147,100 @@ const SplitBrainExp = {
       });
     });
 
-    // Zone Logic
-    const handleDrop = (zone, isPalette = false) => {
+    const zones = [leftZone, rightZone, paletteZone];
+    
+    zones.forEach(zone => {
       zone.addEventListener('dragover', (e) => {
         e.preventDefault();
-        if(!isPalette) zone.classList.add(zone.id === 'drop-left' ? 'bg-blue-100' : 'bg-green-100');
-        else zone.classList.add('border-slate-300', 'bg-slate-100/50');
+        if (zone === paletteZone) zone.classList.add('border-slate-300', 'bg-slate-100/50');
+        else zone.classList.add(zone.id === 'drop-left' ? 'bg-blue-100' : 'bg-green-100');
       });
 
       zone.addEventListener('dragleave', (e) => {
-        if(!isPalette) zone.classList.remove('bg-blue-100', 'bg-green-100');
-        else zone.classList.remove('border-slate-300', 'bg-slate-100/50');
+        if (zone === paletteZone) zone.classList.remove('border-slate-300', 'bg-slate-100/50');
+        else zone.classList.remove('bg-blue-100', 'bg-green-100');
       });
 
       zone.addEventListener('drop', (e) => {
         e.preventDefault();
-        if(!isPalette) zone.classList.remove('bg-blue-100', 'bg-green-100');
-        else zone.classList.remove('border-slate-300', 'bg-slate-100/50');
+        // Cleanup styles
+        if (zone === paletteZone) zone.classList.remove('border-slate-300', 'bg-slate-100/50');
+        else zone.classList.remove('bg-blue-100', 'bg-green-100');
 
         const itemId = e.dataTransfer.getData('text/plain');
         const itemEl = document.querySelector(`.draggable-item[data-id="${itemId}"]`);
+        this.processDrop(itemEl, zone);
+      });
+    });
+
+    // --- Touch Events for Mobile ---
+    draggables.forEach(item => {
+      item.addEventListener('touchstart', (e) => {
+        e.preventDefault(); // Prevent scroll
+        const touch = e.touches[0];
+        draggedItem = this.items.find(i => i.id === item.dataset.id);
         
-        if (itemEl) {
-          zone.appendChild(itemEl);
-          
-          // Logic Update
-          if (isPalette) {
-            if (this.state.leftZone?.id === itemId) this.state.leftZone = null;
-            if (this.state.rightZone?.id === itemId) this.state.rightZone = null;
-            bubble.style.opacity = '0';
-          } else {
-            // Remove from other zones if needed (visual cleanup only, logic handled below)
-            
-            if (zone.id === 'drop-left') {
-              this.state.leftZone = draggedItem;
-              // If we want to enforce single item per side or total?
-              // Let's allow one item per side for fun, or strict single item?
-              // User prompt implies "items" (plural) could be placed? 
-              // But standard split brain is usually one stimulus at a time.
-              // Let's stick to "Current Focus" for feedback.
-            } else {
-              this.state.rightZone = draggedItem;
-            }
-            this.showFeedback(subject, bubble, zone.id === 'drop-left' ? 'left' : 'right');
-          }
+        // Visual feedback
+        item.classList.add('opacity-50', 'scale-90');
+        
+        // Clone for dragging
+        const clone = item.cloneNode(true);
+        clone.id = 'drag-proxy';
+        clone.style.position = 'fixed';
+        clone.style.zIndex = '9999';
+        clone.style.pointerEvents = 'none';
+        clone.style.left = (touch.clientX - item.offsetWidth/2) + 'px';
+        clone.style.top = (touch.clientY - item.offsetHeight/2) + 'px';
+        clone.style.width = item.offsetWidth + 'px';
+        clone.style.height = item.offsetHeight + 'px';
+        clone.style.opacity = '0.8';
+        document.body.appendChild(clone);
+      }, { passive: false });
+
+      item.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        const touch = e.touches[0];
+        const clone = document.getElementById('drag-proxy');
+        if(clone) {
+          clone.style.left = (touch.clientX - clone.offsetWidth/2) + 'px';
+          clone.style.top = (touch.clientY - clone.offsetHeight/2) + 'px';
+        }
+        
+        // Highlight zones
+        const target = document.elementFromPoint(touch.clientX, touch.clientY);
+        const zone = target?.closest('#drop-left, #drop-right, #palette-zone');
+        
+        zones.forEach(z => {
+           if (z === zone) {
+              if (z === paletteZone) z.classList.add('border-slate-300', 'bg-slate-100/50');
+              else z.classList.add(z.id === 'drop-left' ? 'bg-blue-100' : 'bg-green-100');
+           } else {
+              if (z === paletteZone) z.classList.remove('border-slate-300', 'bg-slate-100/50');
+              else z.classList.remove('bg-blue-100', 'bg-green-100');
+           }
+        });
+      }, { passive: false });
+
+      item.addEventListener('touchend', (e) => {
+        const clone = document.getElementById('drag-proxy');
+        if(clone) clone.remove();
+        item.classList.remove('opacity-50', 'scale-90');
+        
+        // Cleanup zone highlights
+        zones.forEach(z => {
+           if (z === paletteZone) z.classList.remove('border-slate-300', 'bg-slate-100/50');
+           else z.classList.remove('bg-blue-100', 'bg-green-100');
+        });
+
+        const touch = e.changedTouches[0];
+        const target = document.elementFromPoint(touch.clientX, touch.clientY);
+        const zone = target?.closest('#drop-left, #drop-right, #palette-zone');
+        
+        if (zone) {
+          this.processDrop(item, zone);
         }
       });
-    };
-
-    [leftZone, rightZone].forEach(z => handleDrop(z));
-    handleDrop(paletteZone, true);
+    });
 
     // Click Subject
     subject.addEventListener('click', () => {
@@ -178,7 +250,8 @@ const SplitBrainExp = {
       } else if (this.state.leftZone && leftZone.contains(document.querySelector(`[data-id="${this.state.leftZone.id}"]`))) {
          this.showFeedback(subject, bubble, 'left');
       } else {
-         bubble.innerHTML = "请将物品拖入视野区域";
+         const content = document.getElementById('feedback-content');
+         if (content) content.innerHTML = "请将物品拖入视野区域";
          bubble.style.opacity = '1';
          setTimeout(() => bubble.style.opacity = '0', 2000);
       }
@@ -190,7 +263,8 @@ const SplitBrainExp = {
       this.state.leftZone = null;
       this.state.rightZone = null;
       bubble.style.opacity = '0';
-      bubble.innerHTML = '';
+      const content = document.getElementById('feedback-content');
+      if (content) content.innerHTML = '';
       
       // Reset any active classes
       leftZone.classList.remove('bg-blue-50', 'border-blue-400');
@@ -214,12 +288,16 @@ const SplitBrainExp = {
     }
 
     // Show Visual Report
-    bubble.innerHTML = `
-      <div class="mb-2">${visualText}</div>
-      <button id="grab-btn" class="mt-2 px-3 py-1 bg-blue-600 text-white text-xs rounded-full hover:bg-blue-700 transition-colors shadow-sm animate-pulse">
-        抓取
-      </button>
-    `;
+    const content = document.getElementById('feedback-content');
+    if (content) {
+      content.innerHTML = `
+        <div class="mb-2">${visualText}</div>
+        <button id="grab-btn" class="mt-2 px-3 py-1 bg-blue-600 text-white text-xs rounded-full hover:bg-blue-700 transition-colors shadow-sm animate-pulse cursor-pointer select-none" style="pointer-events: auto;">
+          抓取
+        </button>
+      `;
+    }
+    
     bubble.style.opacity = '1';
     
     // Animate head
@@ -228,12 +306,20 @@ const SplitBrainExp = {
     setTimeout(() => svg.style.transform = 'scale(1)', 200);
 
     // Bind Grab Button Event
-    // Use timeout to ensure DOM is ready and prevent instant click
+    // Use timeout to ensure DOM is ready
     setTimeout(() => {
       const grabBtn = document.getElementById('grab-btn');
       if (grabBtn) {
+        // Remove old listeners if any (by replacing element or just overwriting onclick)
         grabBtn.onclick = (e) => {
-          e.stopPropagation(); // Prevent bubbling to subject click
+          e.preventDefault();
+          e.stopPropagation(); // Prevent bubbling
+          this.showGrabFeedback(subject, bubble, activeSide, item);
+        };
+        // Add touchstart for better mobile response
+        grabBtn.ontouchstart = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
           this.showGrabFeedback(subject, bubble, activeSide, item);
         };
       }
@@ -252,10 +338,13 @@ const SplitBrainExp = {
     }
 
     // Update Bubble content with animation
-    bubble.innerHTML = `
-      <div class="mb-2 text-slate-400 text-xs line-through opacity-70">抓取</div>
-      <div class="font-bold text-slate-800 animate-bounce">${grabText}</div>
-    `;
+    const content = document.getElementById('feedback-content');
+    if (content) {
+      content.innerHTML = `
+        <div class="mb-2 text-slate-400 text-xs line-through opacity-70">抓取</div>
+        <div class="font-bold text-slate-800 animate-bounce">${grabText}</div>
+      `;
+    }
 
     // Hide after delay
     setTimeout(() => {
