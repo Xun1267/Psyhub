@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>40项心理学研究 - 目录</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="data.js"></script>
+  <style>
+    body { font-family: 'Inter','Noto Sans SC',sans-serif; background:#F8F7F4; color:#3f3f46; }
+    .ps40-header { position: sticky; top: 0; z-index: 30; background: rgba(255,255,255,0.85); backdrop-filter: blur(10px); border-bottom: 1px solid #e2e8f0; }
+    .ps40-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+    .ps40-card { background:#fff; border:1px solid #e2e8f0; border-radius: 14px; overflow: hidden; transition: transform .3s ease, box-shadow .3s ease; }
+    .ps40-card:hover { transform: scale(1.05); box-shadow: 0 12px 28px rgba(15,23,42,0.08); }
+    .ps40-thumb { width: 100%; height: 150px; object-fit: cover; background:#f1f5f9; }
+    .ps40-mode-btn { border:1px solid #e2e8f0; border-radius: 999px; padding:8px 14px; font-size:14px; background:#fff; transition: all .2s; }
+    .ps40-mode-btn.active { background:#0f172a; color:#fff; border-color:#0f172a; }
+    .ps40-top { position: fixed; right: 20px; bottom: 24px; opacity: 0; pointer-events: none; transition: opacity .25s; }
+    .ps40-top.show { opacity: 1; pointer-events: auto; }
+    .dark body { background:#0b0f19; color:#e5e7eb; }
+  </style>
+</head>
+<body>
+  <header class="ps40-header px-6 py-4 flex justify-between items-center">
+    <div class="flex items-center gap-3">
+      <a href="../index.html" class="text-slate-600 hover:text-slate-900">返回首页</a>
+      <span class="text-slate-400">/</span>
+      <span class="font-semibold">40项心理学研究</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <button id="mode-order" class="ps40-mode-btn active" aria-label="数字序号模式">数字序号</button>
+      <button id="mode-tag" class="ps40-mode-btn" aria-label="分类标签模式">分类标签</button>
+      <button id="mode-time" class="ps40-mode-btn" aria-label="时间线模式">时间线</button>
+      <button id="dark-toggle" class="ps40-mode-btn" aria-label="深色模式">深色</button>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 py-8">
+    <div id="tags" class="flex flex-wrap gap-2 mb-4"></div>
+    <div id="grid" class="ps40-grid" aria-live="polite"></div>
+  </main>
+
+  <button id="toTop" class="ps40-top bg-slate-900 text-white px-4 py-2 rounded-full shadow-md" aria-label="回到顶部">回到顶部</button>
+
+  <script>
+    const grid = document.getElementById('grid');
+    const tagsBar = document.getElementById('tags');
+    const modeBtns = {
+      order: document.getElementById('mode-order'),
+      tag: document.getElementById('mode-tag'),
+      time: document.getElementById('mode-time')
+    };
+    let mode = 'order';
+    let tagFilter = null;
+
+    function uniqueTags(data){ return [...new Set(data.map(d=>d.category))]; }
+    function renderTags(){
+      tagsBar.innerHTML = '';
+      if(mode !== 'tag') return;
+      uniqueTags(psych40Data).forEach(t=>{
+        const b = document.createElement('button');
+        b.className = 'ps40-mode-btn' + (tagFilter===t?' active':'');
+        b.textContent = t;
+        b.onclick = ()=>{ tagFilter = (tagFilter===t?null:t); render(); };
+        tagsBar.appendChild(b);
+      });
+    }
+    function cardHTML(item){
+      const url = `detail.html?id=${item.slug}`;
+      const img = item.thumb || 'https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?w=800&q=60';
+      return `
+        <article class="ps40-card" data-id="${item.slug}">
+          <img class="ps40-thumb" src="${img}" alt="${item.title}">
+          <div class="p-4">
+            <div class="text-xs text-slate-500 mb-1">#${item.slug} · ${item.category} · ${item.year}</div>
+            <h3 class="text-lg font-semibold text-slate-800">${item.title}</h3>
+            <p class="text-sm text-slate-600 mt-1">${item.summary}</p>
+            <a href="${url}" class="mt-3 inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-800" title="${item.title}">
+              进入详情
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </a>
+          </div>
+        </article>
+      `;
+    }
+    function sortedData(){
+      let data = [...psych40Data];
+      if(mode==='order') data.sort((a,b)=>Number(a.slug)-Number(b.slug));
+      if(mode==='time') data.sort((a,b)=>(a.year||9999)-(b.year||9999));
+      if(mode==='tag') data.sort((a,b)=>a.category.localeCompare(b.category) || Number(a.slug)-Number(b.slug));
+      if(tagFilter) data = data.filter(d=>d.category===tagFilter);
+      return data;
+    }
+    function render(){
+      renderTags();
+      grid.innerHTML = sortedData().map(cardHTML).join('');
+      grid.querySelectorAll('a').forEach(a=>{
+        a.addEventListener('click', e=>{
+          e.preventDefault();
+          const href = a.getAttribute('href');
+          const id = a.closest('.ps40-card').dataset.id;
+          history.pushState({id}, '', `/psychology40/${id}`);
+          window.location.href = href;
+        });
+      });
+    }
+    Object.values(modeBtns).forEach(btn=>{
+      btn.onclick = ()=>{
+        Object.values(modeBtns).forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        mode = btn.id.replace('mode-','');
+        tagFilter = null;
+        render();
+      };
+    });
+    const toTop = document.getElementById('toTop');
+    window.addEventListener('scroll', ()=>{
+      if(window.scrollY>300) toTop.classList.add('show'); else toTop.classList.remove('show');
+    });
+    toTop.onclick = ()=>window.scrollTo({top:0,behavior:'smooth'});
+    document.getElementById('dark-toggle').onclick = ()=>{
+      document.body.classList.toggle('dark');
+    };
+    render();
+  </script>
+</body>
+</html>

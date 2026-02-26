@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>40项心理学研究 后台</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="data.js"></script>
+</head>
+<body class="bg-slate-50 text-slate-800">
+  <main class="max-w-5xl mx-auto px-6 py-10">
+    <h1 class="text-2xl font-semibold mb-4">Markdown+短代码编辑器</h1>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-white border border-slate-200 rounded-xl p-4">
+        <label class="block text-sm mb-2">选择实验</label>
+        <select id="sel" class="w-full border rounded px-3 py-2"></select>
+        <label class="block text-sm mt-4 mb-2">标题</label>
+        <input id="title" class="w-full border rounded px-3 py-2" />
+        <label class="block text-sm mt-4 mb-2">摘要</label>
+        <textarea id="summary" class="w-full border rounded px-3 py-2 h-24"></textarea>
+        <label class="block text-sm mt-4 mb-2">分类</label>
+        <input id="category" class="w-full border rounded px-3 py-2" />
+        <label class="block text-sm mt-4 mb-2">年份</label>
+        <input id="year" type="number" class="w-full border rounded px-3 py-2" />
+        <label class="block text-sm mt-4 mb-2">导语 Markdown</label>
+        <textarea id="lead" class="w-full border rounded px-3 py-2 h-32"></textarea>
+      </div>
+      <div class="bg-white border border-slate-200 rounded-xl p-4">
+        <label class="block text-sm mb-2">上传图片（自动压缩+WebP）</label>
+        <input id="img" type="file" accept="image/*" class="mb-3" />
+        <canvas id="canvas" class="hidden"></canvas>
+        <img id="preview" class="w-full rounded" alt="">
+        <div id="sizeInfo" class="text-sm text-slate-600 mt-2"></div>
+      </div>
+    </div>
+    <div class="mt-6 flex gap-3">
+      <button id="save" class="px-4 py-2 rounded bg-slate-900 text-white">保存到本地存储</button>
+      <button id="export" class="px-4 py-2 rounded border">导出 JSON</button>
+    </div>
+    <p class="text-sm text-slate-600 mt-4">说明：图片会压缩到约200KB以内并生成WebP数据URL。保存不会修改源码，只写入浏览器LocalStorage，导出可生成REST风格的JSON以供后续小程序/App调用。</p>
+  </main>
+  <script>
+    const sel = document.getElementById('sel');
+    psych40Data.forEach(it=>{
+      const o = document.createElement('option');
+      o.value = it.slug; o.textContent = `#${it.slug} ${it.title}`;
+      sel.appendChild(o);
+    });
+    function fill(it){
+      document.getElementById('title').value = it.title;
+      document.getElementById('summary').value = it.summary||'';
+      document.getElementById('category').value = it.category||'';
+      document.getElementById('year').value = it.year||'';
+      const ls = JSON.parse(localStorage.getItem('psych40_lead')||'{}');
+      document.getElementById('lead').value = ls[it.slug]||'';
+      if(it.thumb){ document.getElementById('preview').src = it.thumb; }
+    }
+    sel.onchange = ()=>fill(psych40Data.find(x=>x.slug===sel.value));
+    fill(psych40Data[0]);
+    const imgInput = document.getElementById('img');
+    const canvas = document.getElementById('canvas');
+    const preview = document.getElementById('preview');
+    const sizeInfo = document.getElementById('sizeInfo');
+    imgInput.onchange = async ()=>{
+      const file = imgInput.files[0];
+      if(!file) return;
+      const bmp = await createImageBitmap(file);
+      canvas.width = bmp.width; canvas.height = bmp.height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(bmp,0,0);
+      const webp = canvas.toDataURL('image/webp', 0.75);
+      preview.src = webp;
+      const sizeKB = Math.round((webp.length*0.75)/1024);
+      sizeInfo.textContent = `约 ${sizeKB} KB`;
+      const it = psych40Data.find(x=>x.slug===sel.value);
+      it.thumb = webp;
+    };
+    document.getElementById('save').onclick = ()=>{
+      const it = psych40Data.find(x=>x.slug===sel.value);
+      it.title = document.getElementById('title').value;
+      it.summary = document.getElementById('summary').value;
+      it.category = document.getElementById('category').value;
+      it.year = Number(document.getElementById('year').value)||it.year;
+      const ls = JSON.parse(localStorage.getItem('psych40_lead')||'{}');
+      ls[it.slug] = document.getElementById('lead').value;
+      localStorage.setItem('psych40_lead', JSON.stringify(ls));
+      localStorage.setItem('psych40_data_override', JSON.stringify(psych40Data));
+      alert('已保存到本地存储');
+    };
+    document.getElementById('export').onclick = ()=>{
+      const blob = new Blob([JSON.stringify(psych40Data,null,2)],{type:'application/json'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'psychology40.json';
+      a.click();
+    };
+  </script>
+</body>
+</html>

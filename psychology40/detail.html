@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>心理学研究详情</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="data.js"></script>
+  <style>
+    body { font-family: 'Inter','Noto Sans SC',sans-serif; background:#F8F7F4; color:#3f3f46; }
+    .ps40-detail__header { position: sticky; top:0; background: rgba(255,255,255,0.85); backdrop-filter: blur(10px); border-bottom:1px solid #e2e8f0; z-index:40; }
+    .ps40-detail__container { max-width: 900px; margin: 0 auto; padding: 20px; }
+    .ps40-detail__block { background:#fff; border:1px solid #e2e8f0; border-radius: 14px; padding: 20px; margin-bottom: 16px; }
+    .ps40-detail__grid { display:grid; grid-template-columns: 1fr; gap: 12px; }
+    .ps40-detail__img { width:100%; height:auto; border-radius:12px; }
+    .ps40-detail__drag { display:flex; gap:8px; flex-wrap: wrap; }
+    .ps40-detail__chip { border:1px solid #e2e8f0; border-radius:999px; padding:6px 10px; font-size:12px; background:#fff; cursor:grab; }
+    .dark body { background:#0b0f19; color:#e5e7eb; }
+  </style>
+</head>
+<body>
+  <header class="ps40-detail__header px-6 py-4">
+    <div class="max-w-5xl mx-auto flex items-center justify-between">
+      <nav class="text-sm text-slate-600">
+        <a href="../index.html" class="hover:text-slate-900">首页</a>
+        <span class="mx-1 text-slate-400">></span>
+        <a href="index.html" class="hover:text-slate-900">40项心理学研究</a>
+        <span class="mx-1 text-slate-400">></span>
+        <span id="crumb-title"></span>
+      </nav>
+      <div class="flex items-center gap-2">
+        <button id="prevBtn" class="border px-3 py-1.5 rounded">上一篇</button>
+        <button id="nextBtn" class="border px-3 py-1.5 rounded">下一篇</button>
+        <button id="dark-toggle" class="border px-3 py-1.5 rounded">深色</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="ps40-detail__container">
+    <section id="titleBlock" class="ps40-detail__block">
+      <h1 id="title" class="text-2xl font-semibold"></h1>
+      <p id="meta" class="text-sm text-slate-500 mt-1"></p>
+    </section>
+
+    <section id="leadBlock" class="ps40-detail__block">
+      <div id="lead" class="prose max-w-none"></div>
+    </section>
+
+    <section id="processBlock" class="ps40-detail__block">
+      <h2 class="text-lg font-semibold mb-2">实验过程</h2>
+      <div id="process" class="ps40-detail__grid"></div>
+    </section>
+
+    <section id="imageBlock" class="ps40-detail__block">
+      <h2 class="text-lg font-semibold mb-2">高清图片</h2>
+      <img id="imageMain" class="ps40-detail__img" loading="lazy" alt="">
+    </section>
+
+    <section id="svgBlock" class="ps40-detail__block">
+      <h2 class="text-lg font-semibold mb-2">SVG动画</h2>
+      <div id="svgBox"></div>
+    </section>
+
+    <section id="quizBlock" class="ps40-detail__block">
+      <h2 class="text-lg font-semibold mb-2">互动小测试</h2>
+      <div id="quiz"></div>
+    </section>
+
+    <section id="insightBlock" class="ps40-detail__block">
+      <h2 class="text-lg font-semibold mb-2">结论与启示</h2>
+      <div id="insight"></div>
+    </section>
+
+    <section id="refBlock" class="ps40-detail__block">
+      <button id="refToggle" class="border px-3 py-1.5 rounded">参考文献</button>
+      <div id="refList" class="mt-3 hidden"></div>
+    </section>
+  </main>
+
+  <script>
+    function getIdFromUrl(){
+      const q = new URLSearchParams(location.search);
+      if(q.get('id')) return q.get('id');
+      const seg = location.pathname.split('/').filter(Boolean).pop();
+      return /^\d{3}$/.test(seg)?seg:null;
+    }
+    function findItem(slug){ return psych40Data.find(x=>x.slug===slug); }
+    function goTo(slug){ history.pushState({id:slug},'', `/psychology40/${slug}`); location.search = `?id=${slug}`; }
+    const slug = getIdFromUrl();
+    const item = findItem(slug);
+    if(!item){
+      location.href = '404.html';
+    }
+    document.getElementById('crumb-title').textContent = item.title;
+    document.getElementById('title').textContent = item.title;
+    document.getElementById('meta').textContent = `#${item.slug} · ${item.category} · ${item.year}`;
+    document.getElementById('lead').innerHTML = `本页为统一模板示例。可在后台以 Markdown+短代码录入导语。`;
+    document.getElementById('process').innerHTML = `<div>步骤描述区块可按后台配置拆分。</div>`;
+    const ph = 'https://images.unsplash.com/photo-1557672175-1c1e1f2f9f8b?w=1200&q=60';
+    const img = item.thumb || ph;
+    const imageMain = document.getElementById('imageMain');
+    imageMain.src = img;
+    imageMain.alt = item.title;
+    imageMain.srcset = `${img} 1x, ${img} 2x`;
+    document.getElementById('svgBox').innerHTML = `<svg viewBox="0 0 120 40" class="w-full h-24"><circle cx="20" cy="20" r="12" fill="#6366f1"></circle><rect x="50" y="8" width="60" height="24" rx="6" fill="#94a3b8"></rect></svg>`;
+    const quiz = document.getElementById('quiz');
+    quiz.innerHTML = `
+      <div class="space-y-2">
+        <div class="text-sm">该研究主要属于哪一类？</div>
+        <div class="flex gap-2 flex-wrap">
+          ${['行为主义','认知','社会','发展','生理'].map(opt=>`<button class="border px-3 py-1.5 rounded" data-opt="${opt}">${opt}</button>`).join('')}
+        </div>
+        <div id="quizResult" class="text-sm text-slate-600 mt-2"></div>
+      </div>
+    `;
+    quiz.querySelectorAll('button').forEach(b=>{
+      b.onclick = ()=>{
+        const ok = b.dataset.opt===item.category;
+        document.getElementById('quizResult').textContent = ok?'正确':'再想想';
+      };
+    });
+    document.getElementById('insight').innerHTML = `在此总结研究的关键结论与对现实的启示。`;
+    const refList = document.getElementById('refList');
+    document.getElementById('refToggle').onclick = ()=>{
+      refList.classList.toggle('hidden');
+      if(!refList.dataset.loaded){
+        refList.innerHTML = `<ul class="list-disc pl-5"><li>参考条目示例A</li><li>参考条目示例B</li></ul>`;
+        refList.dataset.loaded = '1';
+      }
+    };
+    function prevSlug(s){ const i = psych40Data.findIndex(x=>x.slug===s); return psych40Data[i-1]?.slug || s; }
+    function nextSlug(s){ const i = psych40Data.findIndex(x=>x.slug===s); return psych40Data[i+1]?.slug || s; }
+    document.getElementById('prevBtn').onclick = ()=>goTo(prevSlug(item.slug));
+    document.getElementById('nextBtn').onclick = ()=>goTo(nextSlug(item.slug));
+    document.getElementById('dark-toggle').onclick = ()=>{ document.body.classList.toggle('dark'); };
+    window.onpopstate = (e)=>{ if(e.state?.id) location.search = `?id=${e.state.id}`; };
+  </script>
+</body>
+</html>
