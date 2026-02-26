@@ -52,10 +52,7 @@
       <div id="process" class="ps40-detail__grid"></div>
     </section>
 
-    <section id="imageBlock" class="ps40-detail__block">
-      <h2 class="text-lg font-semibold mb-2">高清图片</h2>
-      <img id="imageMain" class="ps40-detail__img" loading="lazy" alt="">
-    </section>
+
 
     <section id="svgBlock" class="ps40-detail__block">
       <h2 class="text-lg font-semibold mb-2">SVG动画</h2>
@@ -72,10 +69,7 @@
       <div id="insight"></div>
     </section>
 
-    <section id="refBlock" class="ps40-detail__block">
-      <button id="refToggle" class="border px-3 py-1.5 rounded">参考文献</button>
-      <div id="refList" class="mt-3 hidden"></div>
-    </section>
+
   </main>
 
   <script>
@@ -95,17 +89,192 @@
     document.getElementById('crumb-title').textContent = item.title;
     document.getElementById('title').textContent = item.title;
     document.getElementById('meta').textContent = `#${item.slug} · ${item.category} · ${item.year}`;
-    document.getElementById('lead').innerHTML = `本页为统一模板示例。可在后台以 Markdown+短代码录入导语。`;
-    document.getElementById('process').innerHTML = `<div>步骤描述区块可按后台配置拆分。</div>`;
-    const ph = 'https://images.unsplash.com/photo-1557672175-1c1e1f2f9f8b?w=1200&q=60';
-    const img = item.thumb || ph;
-    const imageMain = document.getElementById('imageMain');
-    imageMain.src = img;
-    imageMain.alt = item.title;
-    imageMain.srcset = `${img} 1x, ${img} 2x`;
+    if (item.slug === '001') {
+      // Hide default header for process block to use custom numbered header
+       const processHeader = document.getElementById('processBlock').querySelector('h2');
+       if(processHeader) processHeader.style.display = 'none';
+ 
+       // Rename SVG header to continue numbering
+       const svgHeader = document.getElementById('svgBlock').querySelector('h2');
+       if(svgHeader) {
+         svgHeader.innerHTML = `
+           <h2 class="text-xl font-bold mb-4">3. 重温斯佩里的经典切片</h2>
+           <p class="mb-4 text-base font-normal">现在，轮到你来主导这场著名的实验了。在下方的演示区中，你将面对一位已经接受了胼胝体切断术的“裂脑人”被试。</p>
+           <div class="bg-white p-4 rounded-lg border border-gray-200 text-slate-700 text-sm mb-4">
+             <h4 class="font-bold mb-2">操作步骤：</h4>
+             <ul class="list-disc pl-5 space-y-1">
+               <li><strong>拖拽刺激物：</strong> 从下方的物品栏中选择一个物品（如苹果、锤子、钥匙或书本），将其拖拽并放置在屏幕的 <span class="text-blue-600 font-bold">左视野</span> 或 <span class="text-green-600 font-bold">右视野</span> 区域。</li>
+               <li><strong>观察反应：</strong> 点击“查看反应”按钮。</li>
+               <li><strong>记录矛盾：</strong> 请仔细留意被试的 <span class="font-bold">口头报告</span>（他说看到了什么）以及他的 <span class="font-bold">手部动作</span>（他抓取了什么）。你会发现一些违背常理的现象。</li>
+             </ul>
+           </div>
+         `;
+       }
+
+       document.getElementById('lead').innerHTML = `
+        <h2 class="text-xl font-bold mb-4">1. 裂脑人研究：当大脑的桥梁被切断</h2>
+        <p class="mb-4">想象一下，如果你的左脑不知道右脑在做什么，世界会变成什么样？</p>
+        <p class="mb-4">20世纪中叶，为了治疗极端严重的癫痫患者，神经外科医生采用了一种被称为“胼胝体切断术”的极端疗法。胼胝体是连接人类左右大脑半球的巨大神经纤维束，就像是一座信息交流的桥梁。切断它，虽然有效阻止了癫痫的跨半球蔓延，但也意外地创造出了一群特殊的群体——“裂脑人”。</p>
+        <p class="mb-4">正是通过对这些患者的研究，心理学家罗杰·斯佩里揭开了大脑机能不对称性（偏侧化）的惊人秘密，并因此荣获了1981年的诺贝尔生理学或医学奖。在接下来的实验演示中，我们将重温这个经典的心理学瞬间。</p>
+      `;
+      document.getElementById('process').innerHTML = `
+        <h2 class="text-xl font-bold mb-4">2. 实验前的必备知识：大脑的“交叉”与“分工”</h2>
+        <p class="mb-4">在开始操作下方的演示动画之前，我们需要先了解大脑处理信息的三个基本法则。这是理解裂脑人种种奇特表现的钥匙。</p>
+
+        <div class="bg-white p-4 rounded-lg mb-4 border border-blue-100 text-slate-700">
+            <h3 class="font-bold text-lg mb-2 text-blue-700">法则一：运动与触觉的交叉控制</h3>
+            <p class="mb-2 text-sm text-slate-600">大脑对身体的控制是“交叉”的。</p>
+            <ul class="list-disc pl-5 text-sm space-y-1">
+                <li><strong class="text-slate-900">左半球</strong> 控制身体的 <strong>右侧</strong>（包括右手的运动和触觉）。</li>
+                <li><strong class="text-slate-900">右半球</strong> 控制身体的 <strong>左侧</strong>（包括左手的运动和触觉）。</li>
+            </ul>
+        </div>
+
+        <div class="bg-white p-4 rounded-lg mb-4 border border-green-100 text-slate-700">
+            <h3 class="font-bold text-lg mb-2 text-green-700">法则二：视觉通路的交叉投射</h3>
+            <p class="mb-2 text-sm text-slate-600">这是最容易产生误解的地方：不是左眼对应右脑、右眼对应左脑，而是视野的交叉投射。</p>
+            <ul class="list-disc pl-5 text-sm space-y-1">
+                <li><strong class="text-slate-900">左视野</strong> 投射到 <strong>右侧</strong> 大脑半球。</li>
+                <li><strong class="text-slate-900">右视野</strong> 投射到 <strong>左侧</strong> 大脑半球。</li>
+            </ul>
+            <img src="images/visual-pathway.png" alt="视觉交叉示意图" class="w-full h-auto mt-4 rounded-lg shadow-sm">
+        </div>
+
+        <div class="bg-white p-4 rounded-lg mb-4 border border-purple-100 text-slate-700">
+            <h3 class="font-bold text-lg mb-2 text-purple-700">法则三：大脑皮层的功能偏侧化</h3>
+            <p class="mb-2 text-sm text-slate-600">左右大脑在功能上并非完全对称。在这个实验中，最关键的区别在于语言中枢的位置：</p>
+            <ul class="list-disc pl-5 text-sm space-y-1">
+                <li><strong class="text-slate-900">左半球：</strong> 绝大多数人的语言表达中枢（布洛卡区）位于左半球。这意味着，只有左脑“看到”或“知道”的事情，我们才能用语言说出来。</li>
+                <li><strong class="text-slate-900">右半球：</strong> 虽然右半球也具备一定的语言理解能力，但它无法说话。它更擅长处理空间信息、面部识别和非言语的直觉。</li>
+            </ul>
+        </div>
+      `;
+    } else {
+      document.getElementById('lead').innerHTML = `本页为统一模板示例。可在后台以 Markdown+短代码录入导语。`;
+      document.getElementById('process').innerHTML = `<div>步骤描述区块可按后台配置拆分。</div>`;
+    }
+    
+    // SVG and Split Brain logic
     document.getElementById('svgBox').innerHTML = `<svg viewBox="0 0 120 40" class="w-full h-24"><circle cx="20" cy="20" r="12" fill="#6366f1"></circle><rect x="50" y="8" width="60" height="24" rx="6" fill="#94a3b8"></rect></svg>`;
+    
+    // Load Split Brain Experiment if slug is 001
+    if(item.slug === '001') {
+      const script = document.createElement('script');
+      script.src = 'split-brain-exp.js';
+      script.onload = () => {
+        const container = document.getElementById('svgBox');
+        container.innerHTML = '<div id="split-brain-container"></div>';
+        SplitBrainExp.init('split-brain-container');
+      };
+      document.body.appendChild(script);
+
+      // Insert Principle Explanation Block after SVG Block
+      const principleSection = document.createElement('section');
+      principleSection.id = 'principleBlock';
+      principleSection.className = 'ps40-detail__block';
+      principleSection.innerHTML = `
+        <h2 class="text-xl font-bold mb-4">4. 原理解释</h2>
+        <p class="mb-4 text-base leading-relaxed">在刚才的交互演示中，你可能会发现：当刺激物（如锤子）出现在被试的左视野时，他明明嘴上回答“我什么都没看见”，但如果让他遮住眼睛用左手去摸，却能精准地抓取该物品。</p>
+        <p class="mb-4 text-base leading-relaxed">这种反差主要是因为连接左右脑的桥梁（胼胝体）被切断了，负责说话的左脑确实没收到视觉信号，而看见物品的右脑虽然是个“哑巴”，却掌握着左手的运动控制权。 为了彻底弄懂这个现象，我们结合神经传导通路，对左右视野的两种情境分别进行严谨的机制拆解：</p>
+        
+        <div class="mt-6">
+          <h3 class="text-lg font-bold mb-2 text-indigo-700">情境一：刺激呈现于右视野</h3>
+          <div class="pl-4 border-l-4 border-indigo-200 mb-6">
+            <p class="mb-2 text-base"><strong>现象：</strong> 当物品（例如“苹果”）出现在右视野时，被试的反应如同常人——他既能清晰地说出“我看到了苹果”，也能用右手准确地把它拿起来。</p>
+            <p class="text-base"><strong>原理：</strong> 右视野的视觉刺激经由视神经与视交叉，单侧投射至左侧大脑半球的初级视觉皮层。由于绝大多数人的言语表达中枢（布洛卡区）定位于左半球，且左半球同时支配躯体右侧的运动网络，因此，接收到视觉信号的左脑能够极其顺畅地完成语义提取、言语输出（报告“苹果”），以及对右手的目标抓取指令下达。</p>
+          </div>
+
+          <h3 class="text-lg font-bold mb-2 text-indigo-700">情境二：刺激呈现于左视野</h3>
+          <div class="pl-4 border-l-4 border-indigo-200">
+            <p class="mb-2 text-base"><strong>现象：</strong> 物品呈现在左视野时，言语报告（说没看见）与动作执行（左手抓取）产生了严重的割裂。</p>
+            <p class="mb-2 text-base"><strong>原理：</strong> 左视野的视觉信息单侧投射至右侧大脑半球。在健康大脑中，右半球会通过胼胝体将该视觉信息跨半球传递给左半球的言语中枢。然而，裂脑患者的胼胝体已被切断，跨半球的神经通讯遭到物理阻断。主导言语的左半球对左视野发生的刺激“一无所知”，因此只能依据自身未接收到信号的事实，做出否认的言语报告（“我没看见”）。</p>
+            <p class="text-base">与此同时，接收了视觉信号的右半球虽然缺乏言语表达能力，但它成功完成了对物品的视觉编码，并且右半球支配着躯体左侧（即左手）的运动控制网络。因此，右半球能够完全绕开左脑的意识与言语系统，直接调用自身的短时视觉记忆和触觉加工网络，引导左手准确无误地完成了目标抓取。</p>
+          </div>
+        </div>
+      `;
+      const svgBlock = document.getElementById('svgBlock');
+      svgBlock.parentNode.insertBefore(principleSection, svgBlock.nextSibling);
+
+      // Hide Quiz Block
+      const quizBlock = document.getElementById('quizBlock');
+      if(quizBlock) quizBlock.style.display = 'none';
+
+      // Update Insight Block to "5. Conclusion"
+      const insightBlock = document.getElementById('insightBlock');
+      if(insightBlock) {
+        insightBlock.innerHTML = `
+          <h2 class="text-xl font-bold mb-4">5. 结论</h2>
+          <p class="mb-4 text-base leading-relaxed">通过斯佩里与其学生加扎尼加等人的系列裂脑研究，心理学界和认知神经科学界得出了几个具有里程碑意义的结论，彻底重塑了我们对人类大脑的认知：</p>
+          
+          <div class="space-y-6">
+              <div>
+                  <h3 class="font-bold text-lg text-slate-800 mb-2">1. 大脑机能偏侧化</h3>
+                  <ul class="list-disc pl-5 space-y-2 text-base text-slate-700">
+                      <li><strong class="text-indigo-700">左半球的“逻辑与言语”优势：</strong>在言语表达、句法加工、逻辑推理和分析性思维上占据绝对主导。</li>
+                      <li><strong class="text-indigo-700">右半球的“空间与直觉”优势：</strong>在空间知觉、面部识别、情绪识别以及整体模式的直觉加工上表现得更为出色。</li>
+                  </ul>
+              </div>
+
+              <div>
+                  <h3 class="font-bold text-lg text-slate-800 mb-2">2. 胼胝体的核心“桥梁”作用</h3>
+                  <p class="text-base text-slate-700 leading-relaxed">胼胝体在进行着每秒数亿次的高速信息交互。裂脑实验证明，<strong class="text-slate-900 bg-yellow-100 px-1 rounded">完整的认知体验极其依赖于左右半球的无缝协作</strong>；一旦这条物理神经纤维被切断，左右脑就会退化为两个“相互隔离且独立的信息处理系统”。</p>
+              </div>
+
+              <div>
+                  <h3 class="font-bold text-lg text-slate-800 mb-2">3. 左脑的“解释器”机制</h3>
+                  <p class="text-base text-slate-700 leading-relaxed">在后续的裂脑实验中，研究者发现了一个极其有趣的现象：当右脑（左手）做出某个动作后，由于左脑不知道真正的原因，它会为了掩饰这种认知上的空白，强行编造一个看似合理的理由来解释左手的行为。由此，加扎尼加提出了左脑<strong class="text-indigo-700">“解释器”</strong>的概念——我们的大脑中存在一个致力于为周遭世界和自身行为寻找因果逻辑的机制，即使这个逻辑是虚构的。</p>
+              </div>
+          </div>
+        `;
+
+        // Insert Critique Block after Conclusion (Insight) Block
+        const critiqueSection = document.createElement('section');
+        critiqueSection.className = 'ps40-detail__block';
+        critiqueSection.innerHTML = `
+          <h2 class="text-xl font-bold mb-4">6. 批评与反思</h2>
+          <p class="mb-4 text-base text-slate-700 leading-relaxed">多年来，学术界极少对斯佩里和加扎尼加等人在裂脑研究中得出的“大脑机能偏侧化”硬核生理数据产生质疑。然而，真正的批评与反思，集中在这些科学发现如何向大众文化与传媒传播的过程中。</p>
+          
+          <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-6 rounded-r-lg">
+              <p class="text-base text-red-800 font-medium mb-2">公众语境中的误读</p>
+              <p class="text-sm text-red-700">“左右脑分工”被过度简化和夸大。如今，一种缺乏科学依据的说法被广泛接受：即人们可以被粗暴地划分为“左脑型人”（理智、逻辑）或“右脑型人”（感性、创造），甚至市面上充斥着大量宣称“开发特定半脑以提高某项技能”的伪科学训练法。</p>
+          </div>
+
+          <p class="mb-4 text-base text-slate-700 leading-relaxed">为了纠正这种偏误，美国芝加哥大学的生物心理学家<strong>杰瑞·利维（Jerre Levy）</strong>一直处于消除“人类拥有两个功能独立大脑”这一观念的最前沿。</p>
+          <p class="mb-6 text-base text-slate-700 leading-relaxed">她尖锐地指出：正因为大脑左右半球具有不同的特异性功能，它们在运作时才更加需要高度整合，而不是互相分离。通过胼胝体的跨半球协作，大脑能够展现出远超任何单一半球能力的复杂认知机能。</p>
+
+          <div class="bg-slate-50 p-5 rounded-xl mb-6 border border-slate-200">
+              <h3 class="font-bold text-base text-slate-800 mb-3 flex items-center">
+                  <span class="w-2 h-6 bg-indigo-500 rounded-full mr-2"></span>
+                  利维的“阅读”隐喻：大脑的整合工作模式
+              </h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div class="bg-white p-4 rounded-lg shadow-sm">
+                      <h4 class="font-bold text-indigo-700 mb-2 text-sm">左半球（语言与逻辑的解码）</h4>
+                      <p class="text-sm text-slate-600 leading-relaxed">当你在阅读时，左脑正在努力理解书面语言。它从词句的复杂关系中梳理句法，寻找字面意义，并将视觉文字转换成语音表征，使你能在逻辑层面“读懂”文本。</p>
+                  </div>
+                  <div class="bg-white p-4 rounded-lg shadow-sm">
+                      <h4 class="font-bold text-purple-700 mb-2 text-sm">右半球（情境与艺术的构建）</h4>
+                      <p class="text-sm text-slate-600 leading-relaxed">与此同时，右脑专注于故事的宏观与情感层面。它在体会故事的幽默或悲伤，在大脑中构建视觉化的想象情景，维持对故事整体结构的印象，并欣赏作者运用的隐喻等艺术写作手法。</p>
+                  </div>
+              </div>
+              <p class="mt-4 text-sm font-medium text-slate-700 text-center bg-indigo-50 py-2 rounded-lg">
+                  你能流畅地阅读、理解并被一个故事深深打动，正是因为左右脑作为单一的整合结构在完美配合。
+              </p>
+          </div>
+
+          <p class="text-base text-slate-700 leading-relaxed mb-4">事实上，几乎没有任何一项复杂的人类活动是仅凭大脑的某一个半球就能独立完成的。正如利维（1985）所强调的那样：</p>
+          
+          <blockquote class="text-lg font-serif italic text-slate-600 border-l-4 border-slate-300 pl-4 py-2 my-4 bg-white/50">
+              “那种流行的神话只是一种解释和愿望，并不是科学家的客观发现。正常人不会只有半个脑，也不会有两个脑，有的只是一个分化的大脑，大脑的每个半球都具有特定的功能。”
+          </blockquote>
+        `;
+        insightBlock.parentNode.insertBefore(critiqueSection, insightBlock.nextSibling);
+      }
+    }
+    
     const quiz = document.getElementById('quiz');
-    quiz.innerHTML = `
+    if(quiz) {
+      quiz.innerHTML = `
       <div class="space-y-2">
         <div class="text-sm">该研究主要属于哪一类？</div>
         <div class="flex gap-2 flex-wrap">
@@ -114,21 +283,17 @@
         <div id="quizResult" class="text-sm text-slate-600 mt-2"></div>
       </div>
     `;
-    quiz.querySelectorAll('button').forEach(b=>{
-      b.onclick = ()=>{
-        const ok = b.dataset.opt===item.category;
-        document.getElementById('quizResult').textContent = ok?'正确':'再想想';
-      };
-    });
-    document.getElementById('insight').innerHTML = `在此总结研究的关键结论与对现实的启示。`;
-    const refList = document.getElementById('refList');
-    document.getElementById('refToggle').onclick = ()=>{
-      refList.classList.toggle('hidden');
-      if(!refList.dataset.loaded){
-        refList.innerHTML = `<ul class="list-disc pl-5"><li>参考条目示例A</li><li>参考条目示例B</li></ul>`;
-        refList.dataset.loaded = '1';
-      }
-    };
+      quiz.querySelectorAll('button').forEach(b=>{
+        b.onclick = ()=>{
+          const ok = b.dataset.opt===item.category;
+          document.getElementById('quizResult').textContent = ok?'正确':'再想想';
+        };
+      });
+    }
+
+    const insightDiv = document.getElementById('insight');
+    if(insightDiv) insightDiv.innerHTML = `在此总结研究的关键结论与对现实的启示。`;
+
     function prevSlug(s){ const i = psych40Data.findIndex(x=>x.slug===s); return psych40Data[i-1]?.slug || s; }
     function nextSlug(s){ const i = psych40Data.findIndex(x=>x.slug===s); return psych40Data[i+1]?.slug || s; }
     document.getElementById('prevBtn').onclick = ()=>goTo(prevSlug(item.slug));

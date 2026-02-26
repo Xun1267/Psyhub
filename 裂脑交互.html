@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>裂脑实验演示</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        
+        .experiment-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .items-pool {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            background: #e8f4f8;
+            border-radius: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .item {
+            width: 60px;
+            height: 60px;
+            cursor: move;
+            transition: transform 0.2s;
+        }
+        
+        .item:hover {
+            transform: scale(1.1);
+        }
+        
+        .item.dragging {
+            opacity: 0.5;
+        }
+        
+        #experiment-svg {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: white;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .test-btn {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .test-btn:hover {
+            background: #45a049;
+        }
+        
+        .reset-btn {
+            background: #f44336;
+            color: white;
+        }
+        
+        .reset-btn:hover {
+            background: #da190b;
+        }
+        
+        .response {
+            margin-top: 20px;
+            padding: 20px;
+            background: #fff3cd;
+            border-radius: 8px;
+            min-height: 60px;
+            display: none;
+        }
+        
+        .response.show {
+            display: block;
+        }
+        
+        .response h3 {
+            margin-top: 0;
+            color: #856404;
+        }
+        
+        .instructions {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1976d2;
+        }
+        
+        .drop-zone {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧠 裂脑实验演示</h1>
+        
+        <div class="instructions">
+            <h3>实验说明：</h3>
+            <p>1. 从下方物品池中拖动物品到屏幕的左侧或右侧</p>
+            <p>2. 点击"测试反应"按钮，观察被试的口头报告</p>
+            <p>3. <strong>关键原理</strong>：右视野（屏幕右侧）→ 左脑 → 可以口头报告；左视野（屏幕左侧）→ 右脑 → 无法口头报告</p></div>
+        
+        <div class="experiment-area">
+            <svg id="experiment-svg" width="800" height="500" viewBox="0 0 800 500">
+                <!-- 背景 -->
+                <rect width="800" height="500" fill="#fafafa"/>
+                
+                <!--屏幕区域 -->
+                <rect x="150" y="50" width="500" height="200" fill="white" stroke="#333" stroke-width="3" rx="5"/>
+                
+                <!-- 中央注视点 -->
+                <circle cx="400" cy="150" r="8" fill="red"/>
+                <text x="400" y="185" text-anchor="middle" font-size="14" fill="#666">注视点</text>
+                
+                <!-- 左右视野分界线 -->
+                <line x1="400" y1="50" x2="400" y2="250" stroke="#999" stroke-width="2" stroke-dasharray="5,5"/>
+                
+                <!-- 左视野标签 -->
+                <text x="275" y="35" text-anchor="middle" font-size="16" fill="#666">左视野 → 右脑</text>
+                
+                <!-- 右视野标签 -->
+                <text x="525" y="35" text-anchor="middle" font-size="16" fill="#666">右视野 → 左脑</text>
+                
+                <!-- 左侧放置区-->
+                <rect id="left-drop-zone" x="170" y="70" width="210" height="160" fill="rgba(255,200,200,0.2)" stroke="rgba(255,100,100,0.5)" stroke-width="2" stroke-dasharray="5,5" rx="5" class="drop-zone"/>
+                <text x="275" y="160" text-anchor="middle" font-size="14" fill="#999" opacity="0.7">拖放物品到这里</text>
+                
+                <!-- 右侧放置区 -->
+                <rect id="right-drop-zone" x="420" y="70" width="210" height="160" fill="rgba(200,255,200,0.2)" 
+                      stroke="rgba(100,255,100,0.5)" stroke-width="2" stroke-dasharray="5,5" rx="5" class="drop-zone"/>
+                <text x="525" y="160" text-anchor="middle" font-size="14" fill="#999" opacity="0.7">拖放物品到这里</text>
+                
+                <!-- 被试者头部 -->
+                <ellipse cx="400" cy="380" rx="80" ry="90" fill="#ffd7a8" stroke="#333" stroke-width="2"/>
+                
+                <!-- 大脑分割线 -->
+                <line x1="400" y1="300" x2="400" y2="450" stroke="#666" stroke-width="3"/>
+                
+                <!-- 左脑标签 -->
+                <text x="340" y="380" text-anchor="middle" font-size="14" fill="#333">右脑</text>
+                <text x="340" y="400" text-anchor="middle" font-size="12" fill="#666">(无语言)</text>
+                
+                <!-- 右脑标签 -->
+                <text x="460" y="380" text-anchor="middle" font-size="14" fill="#333">左脑</text>
+                <text x="460" y="400" text-anchor="middle" font-size="12" fill="#666">(语言中枢)</text>
+                
+                <!-- 眼睛 -->
+                <ellipse cx="370" cy="350" rx="12" ry="15" fill="white" stroke="#333" stroke-width="2"/>
+                <circle cx="370" cy="352" r="6" fill="#333"/>
+                <ellipse cx="430" cy="350" rx="12" ry="15" fill="white" stroke="#333" stroke-width="2"/>
+                <circle cx="430" cy="352" r="6" fill="#333"/>
+                
+                <!-- 嘴巴 -->
+                <path d="M 370 420 Q 400 435 430 420" stroke="#333" stroke-width="2" fill="none"/>
+                
+                <!-- 物品容器组 -->
+                <g id="placed-items"></g>
+            </svg>
+            <div class="items-pool">
+                <div class="item" draggable="true" data-item="nut">
+                    <svg width="60" height="60" viewBox="0 0 60 60">
+                        <ellipse cx="30" cy="30" rx="20" ry="25" fill="#8B4513" stroke="#654321" stroke-width="2"/>
+                        <ellipse cx="30" cy="30" rx="12" ry="15" fill="#A0522D"/>
+                        <text x="30" y="52" text-anchor="middle" font-size="10" fill="#333">坚果</text>
+                    </svg>
+                </div>
+                
+                <div class="item" draggable="true" data-item="hat">
+                    <svg width="60" height="60" viewBox="0 0 60 60">
+                        <rect x="15" y="25" width="30" height="15" fill="#4169E1" stroke="#000" stroke-width="1.5"/>
+                        <ellipse cx="30" cy="40" rx="25" ry="5" fill="#4169E1" stroke="#000" stroke-width="1.5"/>
+                        <text x="30" y="52" text-anchor="middle" font-size="10" fill="#333">帽子</text>
+                    </svg>
+                </div>
+                
+                <div class="item" draggable="true" data-item="book">
+                    <svg width="60" height="60" viewBox="0 0 60 60">
+                        <rect x="18" y="20" width="24" height="18" fill="#DC143C" stroke="#000" stroke-width="1.5"/>
+                        <line x1="30" y1="20" x2="30" y2="38" stroke="#000" stroke-width="1"/>
+                        <text x="30" y="52" text-anchor="middle" font-size="10" fill="#333">书</text>
+                    </svg>
+                </div>
+                
+                <div class="item" draggable="true" data-item="cup">
+                    <svg width="60" height="60" viewBox="0 0 60 60">
+                        <path d="M 20 25 L 22 38 L 38 38 L 40 25 Z" fill="#FFD700" stroke="#000" stroke-width="1.5"/>
+                        <rect x="20" y="23" width="20" height="3" fill="#FFD700" stroke="#000" stroke-width="1.5"/>
+                        <path d="M 40 28 Q 48 28 48 33Q 48 38 40 38" stroke="#000" stroke-width="1.5" fill="none"/>
+                        <text x="30" y="52" text-anchor="middle" font-size="10" fill="#333">杯子</text>
+                    </svg>
+                </div>
+                
+                <div class="item" draggable="true" data-item="band">
+                    <svg width="60" height="60" viewBox="0 0 60 60">
+                        <rect x="15" y="28" width="30" height="6" rx="3" fill="#FF69B4" stroke="#000" stroke-width="1.5"/>
+                        <circle cx="20" cy="31" r="2" fill="#FFD700"/>
+                        <circle cx="40" cy="31" r="2" fill="#FFD700"/>
+                        <text x="30" y="52" text-anchor="middle" font-size="10" fill="#333">发带</text>
+                    </svg>
+                </div></div>
+            
+            <div class="controls">
+                <button class="test-btn" onclick="testResponse()">🧪 测试反应</button>
+                <button class="reset-btn" onclick="resetExperiment()">🔄 重置实验</button>
+            </div>
+            
+            <div id="response" class="response">
+                <h3>被试的口头报告：</h3>
+                <p id="response-text"></p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentItem = null;
+        let itemPosition = null; // 'left' or 'right'
+        // 拖拽事件处理
+        document.querySelectorAll('.item').forEach(item => {
+            item.addEventListener('dragstart', (e) => {
+                item.classList.add('dragging');
+                e.dataTransfer.effectAllowed = 'copy';
+                e.dataTransfer.setData('text/plain', item.dataset.item);
+            });
+            
+            item.addEventListener('dragend', (e) => {
+                item.classList.remove('dragging');
+            });
+        });
+        
+        // SVG放置区域处理
+        const svg = document.getElementById('experiment-svg');
+        const leftZone = document.getElementById('left-drop-zone');
+        const rightZone = document.getElementById('right-drop-zone');
+        const placedItems = document.getElementById('placed-items');
+        
+        function setupDropZone(zone, position) {
+            zone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'copy';
+                zone.setAttribute('fill', position === 'left' ? 'rgba(255,200,200,0.5)' : 'rgba(200,255,200,0.5)');
+            });
+            
+            zone.addEventListener('dragleave', (e) => {
+                zone.setAttribute('fill', position === 'left' ? 'rgba(255,200,200,0.2)' : 'rgba(200,255,200,0.2)');
+            });
+            
+            zone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                const itemType = e.dataTransfer.getData('text/plain');
+                placeItem(itemType, position);zone.setAttribute('fill', position === 'left' ? 'rgba(255,200,200,0.2)' : 'rgba(200,255,200,0.2)');
+            });
+        }
+        
+        setupDropZone(leftZone, 'left');
+        setupDropZone(rightZone, 'right');
+        
+        function placeItem(itemType, position) {
+            // 清除之前的物品
+            placedItems.innerHTML = '';
+            
+            currentItem = itemType;
+            itemPosition = position;
+            
+            const x = position === 'left' ? 275 : 525;
+            const y = 130;
+            
+            let itemSVG = '';
+            
+            switch(itemType) {
+                case 'nut':
+                    itemSVG = `
+                        <g transform="translate(${x-30}, ${y-30})">
+                            <ellipse cx="30" cy="30" rx="25" ry="30" fill="#8B4513" stroke="#654321" stroke-width="2"/>
+                            <ellipse cx="30" cy="30" rx="15" ry="20" fill="#A0522D"/></g>
+                    `;
+                    break;
+                case 'hat':
+                    itemSVG = `
+                        <g transform="translate(${x-35}, ${y-25})">
+                            <rect x="15" y="15" width="40" height="20" fill="#4169E1" stroke="#000" stroke-width="2"/>
+                            <ellipse cx="35" cy="35" rx="35" ry="7" fill="#4169E1" stroke="#000" stroke-width="2"/>
+                        </g>
+                    `;
+                    break;
+                case 'book':
+                    itemSVG = `
+                        <g transform="translate(${x-30}, ${y-25})">
+                            <rect x="10" y="10" width="40" height="30" fill="#DC143C" stroke="#000" stroke-width="2"/>
+                            <line x1="30" y1="10" x2="30" y2="40" stroke="#000" stroke-width="1.5"/>
+                            <line x1="15" y1="15" x2="25" y2="15" stroke="#8B0000" stroke-width="1"/></g>
+                    `;
+                    break;
+                case 'cup':
+                    itemSVG = `
+                        <g transform="translate(${x-30}, ${y-30})">
+                            <path d="M 20 20 L 23 40 L 37 40 L 40 20 Z" fill="#FFD700" stroke="#000" stroke-width="2"/>
+                            <rect x="20" y="18" width="20" height="4" fill="#FFD700" stroke="#000" stroke-width="2"/>
+                            <path d="M 40 25 Q 50 25 50 32 Q 50 39 40 39" stroke="#000" stroke-width="2" fill="none"/>
+                        </g>
+                    `;
+                    break;
+                case 'band':
+                    itemSVG = `
+                        <g transform="translate(${x-35}, ${y-15})">
+                            <rect x="10" y="20" width="50" height="10" rx="5" fill="#FF69B4" stroke="#000" stroke-width="2"/>
+                            <circle cx="18" cy="25" r="3" fill="#FFD700"/>
+                            <circle cx="52" cy="25" r="3" fill="#FFD700"/>
+                        </g>
+                    `;
+                    break;
+            }
+            
+            placedItems.innerHTML = itemSVG;
+            
+            // 隐藏提示文字
+            document.querySelectorAll('#experiment-svg text[opacity="0.7"]').forEach(text => {
+                text.style.display = 'none';
+            });
+            // 隐藏之前的响应
+            document.getElementById('response').classList.remove('show');
+        }
+        
+        function testResponse() {
+            if (!currentItem || !itemPosition) {
+                alert('请先将物品放置到屏幕的左侧或右侧！');
+                return;
+            }
+            
+            const itemNames = {
+                'nut': '坚果',
+                'hat': '帽子',
+                'book': '书',
+                'cup': '杯子',
+                'band': '发带'
+            };
+            
+            const responseDiv = document.getElementById('response');
+            const responseText = document.getElementById('response-text');
+            
+            if (itemPosition === 'right') {
+                // 右视野 → 左脑 → 可以口头报告
+                responseText.innerHTML = `
+                    <strong>✅ "我看到了${itemNames[currentItem]}！"</strong><br><br>
+                    <em>解释：物品出现在右视野，信息传递到左脑（语言中枢），被试可以准确地口头报告看到的物品。</em>
+                `;
+            } else {
+                // 左视野 → 右脑 → 无法口头报告
+                responseText.innerHTML = `
+                    <strong>❌ "我什么都没看到..."</strong><br><br>
+                    <em>解释：物品出现在左视野，信息传递到右脑。由于右脑没有语言功能，被试无法口头报告看到的物品。<br>
+                    但如果让被试用左手（由右脑控制）指认物品，他们可以正确选择${itemNames[currentItem]}！</em>
+                `;
+            }
+            
+            responseDiv.classList.add('show');}
+        
+        function resetExperiment() {
+            placedItems.innerHTML = '';
+            currentItem = null;
+            itemPosition = null;
+            document.getElementById('response').classList.remove('show');
+            
+            // 显示提示文字
+            document.querySelectorAll('#experiment-svg text[opacity="0.7"]').forEach(text => {
+                text.style.display = 'block';
+            });
+        }
+    </script>
+</body>
+</html>
