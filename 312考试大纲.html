@@ -807,14 +807,19 @@
             const isCnSection = /^[一二三四五六七八九十]+\s*、/.test(t);
             const isParen = /^（[一二三四五六七八九十]+）/.test(t);
             const isNumeric = /^\d+[\.．]/.test(t);
-            const knownTitles = new Set([
-                '考试性质','考查目标','考试形式和试卷结构','考查内容',
-                '心理学导论','发展与教育心理学','发展心理学','教育心理学',
-                '实验心理学','心理统计与测量','描述统计','推断统计',
-                '心理测量理论','心理测验及其应用'
+            // 顶层：总体章节
+            const topTitles = new Set([
+                '考试性质','考查目标','考试形式和试卷结构','考查内容'
             ]);
-            const isTitle = knownTitles.has(t) || (/^[\u4e00-\u9fa5A-Za-z0-9\s]+$/.test(t) && !isBracket && !isCnSection && !isParen && !isNumeric && t.length <= 18);
-            return { isBracket, isCnSection, isParen, isNumeric, isTitle };
+            // 子层：学科与统计测量的模块，以及“一、…”章标题
+            const subTitles = new Set([
+                '心理学导论','发展与教育心理学','实验心理学','心理统计与测量',
+                '发展心理学','教育心理学',
+                '描述统计','推断统计','心理测量理论','心理测验及其应用'
+            ]);
+            const isTopTitle = topTitles.has(t);
+            const isSubTitle = subTitles.has(t);
+            return { isBracket, isCnSection, isParen, isNumeric, isTopTitle, isSubTitle };
         };
 
         const renderAll = (container, raw) => {
@@ -836,7 +841,7 @@
                     pushSpacer(12);
                     return;
                 }
-                const { isBracket, isCnSection, isParen, isNumeric, isTitle } = classify(line);
+                const { isBracket, isCnSection, isParen, isNumeric, isTopTitle, isSubTitle } = classify(line);
                 if (!isNumeric && list) {
                     frag.appendChild(list);
                     list = null;
@@ -848,7 +853,7 @@
                     frag.appendChild(el);
                     return;
                 }
-                if (isTitle && !isCnSection && !isParen && !isNumeric) {
+                if (isTopTitle && !isCnSection && !isParen && !isNumeric) {
                     const el = document.createElement('h2');
                     el.className = 't-h2';
                     el.textContent = line.trim();
@@ -856,7 +861,7 @@
                     frag.appendChild(el);
                     return;
                 }
-                if (isCnSection) {
+                if (isSubTitle || isCnSection) {
                     const el = document.createElement('h3');
                     el.className = 't-h3';
                     el.textContent = line.trim();
@@ -908,13 +913,6 @@
                 const h2Anchor = makeAnchor(h2.textContent);
                 h2.id = h2Anchor;
                 h2.textContent = h2num + '. ' + h2.textContent;
-                let j = 0;
-                const siblings = [];
-                let el = h2.nextElementSibling;
-                while (el && !el.matches('h2.t-h2')) {
-                    siblings.push(el);
-                    el = el.nextElementSibling;
-                }
                 const li2 = document.createElement('li');
                 li2.className = 't-li';
                 const a2 = document.createElement('a');
@@ -924,32 +922,28 @@
                 a2.style.color = '#1f2937';
                 li2.appendChild(a2);
                 tocFrag.appendChild(li2);
-                siblings.forEach((node) => {
-                    if (node.matches('h3.t-h3')) {
-                        j++;
-                        const h3num = h2num + '.' + j;
-                        const h3Anchor = makeAnchor(node.textContent);
-                        node.id = h3Anchor;
-                        node.textContent = h3num + ' ' + node.textContent;
+                // 添加二级标题到目录（不编号）
+                let el = h2.nextElementSibling;
+                while (el && !el.matches('h2.t-h2')) {
+                    if (el.matches('h3.t-h3')) {
+                        const h3Anchor = makeAnchor(el.textContent);
+                        el.id = h3Anchor;
                         const li3 = document.createElement('li');
                         li3.className = 't-li';
                         li3.style.marginLeft = '18px';
                         const a3 = document.createElement('a');
                         a3.href = '#' + h3Anchor;
-                        a3.textContent = node.textContent;
+                        a3.textContent = el.textContent;
                         a3.style.textDecoration = 'none';
                         a3.style.color = '#374151';
                         li3.appendChild(a3);
                         tocFrag.appendChild(li3);
-                        let k = 0;
-                        let inner = node.nextElementSibling;
+                        // 三级标题（不编号）
+                        let inner = el.nextElementSibling;
                         while (inner && !inner.matches('h3.t-h3') && !inner.matches('h2.t-h2')) {
                             if (inner.matches('h4.t-h4')) {
-                                k++;
-                                const h4num = h3num + '.' + k;
                                 const h4Anchor = makeAnchor(inner.textContent);
                                 inner.id = h4Anchor;
-                                inner.textContent = h4num + ' ' + inner.textContent;
                                 const li4 = document.createElement('li');
                                 li4.className = 't-li';
                                 li4.style.marginLeft = '36px';
@@ -964,7 +958,8 @@
                             inner = inner.nextElementSibling;
                         }
                     }
-                });
+                    el = el.nextElementSibling;
+                }
             });
             tocNav.innerHTML = '';
             tocNav.appendChild(tocFrag);
