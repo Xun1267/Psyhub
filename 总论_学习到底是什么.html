@@ -34,6 +34,10 @@
         }
 
         /* 全局样式 */
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             background-color: var(--bg-paper);
             background-image: url('daolin_texture.svg');
@@ -132,6 +136,12 @@
             display: grid;
             grid-template-columns: 280px 1fr;
             gap: 3rem;
+            width: 100%;
+        }
+
+        /* 防止Grid Item被撑开 */
+        main > * {
+            min-width: 0;
         }
 
         /* 侧边栏（文章列表） */
@@ -257,6 +267,8 @@
         .markdown-body p {
             margin-bottom: 1.5em;
             text-align: justify;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .markdown-body strong {
@@ -304,6 +316,14 @@
                 overflow-x: auto;
                 padding-bottom: 1rem;
                 scroll-snap-type: x mandatory;
+                width: 100%;
+                /* 隐藏滚动条但保留功能 */
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+            
+            .card-list::-webkit-scrollbar {
+                display: none;
             }
             
             .article-card {
@@ -313,6 +333,8 @@
             
             .content-area {
                 padding: 1.5rem;
+                width: 100%;
+                overflow-x: hidden;
             }
         }
     </style>
