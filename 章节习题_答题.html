@@ -133,6 +133,7 @@
                         <div id="dataset-hint" class="text-xs text-slate-500 mt-1">—</div>
                     </div>
                     <div class="flex flex-wrap gap-2 justify-start sm:justify-end">
+                        <div id="chapter-switch" class="flex flex-wrap gap-2"></div>
                         <button id="only-wrong-btn" class="pill-btn" type="button">
                             只看错题
                         </button>
@@ -176,7 +177,7 @@
                 </div>
                 <h2 class="text-xl font-bold text-slate-800 mt-4">请选择题库文件</h2>
                 <p id="state-file-desc" class="text-sm text-slate-500 mt-2 leading-relaxed">
-                    未能自动读取题库。请手动选择文件：普通心理学第一章习题及答案.md
+                    未能自动读取题库。请手动选择对应章节的题库文件。
                 </p>
                 <div class="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
                     <button id="pick-file-btn" class="px-5 py-2.5 rounded-lg bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-200" type="button">
@@ -282,6 +283,7 @@
         const partFiltersEl = document.getElementById('part-filters');
         const sectionFiltersEl = document.getElementById('section-filters');
         const onlyWrongBtn = document.getElementById('only-wrong-btn');
+        const chapterSwitchEl = document.getElementById('chapter-switch');
 
         const stateBox = document.getElementById('state-box');
         const stateLoading = document.getElementById('state-loading');
@@ -380,6 +382,8 @@
             const text = line.replaceAll('*', '').replace(/^\s*#+\s*/, '').trim();
             if (/^Part\s*A\b/i.test(text)) return 'A';
             if (/^Part\s*B\b/i.test(text)) return 'B';
+            if (text.includes('基础题')) return '基础题';
+            if (text.includes('拔高题')) return '拔高题';
             return '';
         }
 
@@ -559,6 +563,175 @@
             return { chapterTitle: detectedChapterTitle || '第一章', questions: merged };
         }
 
+        function parsePuxinCh2Md(mdText) {
+            const lines = normalizeNewlines(mdText).split('\n').map(l => l.trimEnd());
+
+            let detectedChapterTitle = '';
+            for (const rawLine of lines) {
+                const line = rawLine.replaceAll('*', '').replace(/^\s*#+\s*/, '').trim();
+                if (!line) continue;
+                if (line.includes('参考答案与解析')) break;
+                if (!detectedChapterTitle) detectedChapterTitle = line;
+                if (detectedChapterTitle) break;
+            }
+
+            let inAnswers = false;
+            let currentPart = '';
+            let currentSection = '';
+            let currentSectionLabel = '';
+
+            let currentQ = null;
+            const questions = [];
+            const answerMap = new Map();
+            let currentAnswer = null;
+
+            const commitAnswer = () => {
+                if (!currentAnswer) return;
+                const key = `${currentAnswer.part}-${currentAnswer.section}-${currentAnswer.number}`;
+                answerMap.set(key, {
+                    answerText: currentAnswer.answerText,
+                    explanation: (currentAnswer.explanation || '').trim()
+                });
+                currentAnswer = null;
+            };
+
+            const commitQuestion = () => {
+                if (!currentQ) return;
+                const rawStem = currentQ.stemLines.join(currentQ.keepNewlines ? '\n' : ' ').trim();
+                let stem = rawStem;
+                let options = currentQ.options.slice();
+
+                if (!options.length) {
+                    const extracted = extractOptions(rawStem);
+                    stem = extracted.stem;
+                    options = extracted.options;
+                }
+
+                const yearTagMatch = rawStem.match(/[（(]\s*(\d{4}\.\d+)\s*[）)]/);
+                const yearTag = yearTagMatch ? yearTagMatch[1] : '';
+
+                questions.push({
+                    id: `${currentQ.part}-${currentQ.section}-${currentQ.number}`,
+                    part: currentQ.part,
+                    section: currentQ.section,
+                    sectionLabel: currentQ.sectionLabel,
+                    number: currentQ.number,
+                    yearTag,
+                    raw: rawStem,
+                    stem,
+                    options
+                });
+
+                currentQ = null;
+            };
+
+            const isOptionLine = (line) => /^[A-D]\.\s*/.test(line);
+            const optionToText = (line) => {
+                const m = line.match(/^([A-D])\.\s*(.*)$/);
+                if (!m) return '';
+                return `${m[1]}. ${m[2].trim()}`;
+            };
+
+            for (const rawLine of lines) {
+                let line = rawLine.replace(/^\s*>\s?/, '').trim();
+                if (!line) continue;
+
+                if (line.includes('参考答案与解析')) {
+                    inAnswers = true;
+                    commitQuestion();
+                    currentPart = '';
+                    currentSection = '';
+                    currentSectionLabel = '';
+                    commitAnswer();
+                    continue;
+                }
+
+                const partKey = parsePartKey(line);
+                if (partKey) {
+                    if (inAnswers) commitAnswer();
+                    commitQuestion();
+                    currentPart = partKey;
+                    continue;
+                }
+
+                const sectionKey = parseSectionKey(line);
+                if (sectionKey) {
+                    if (inAnswers) commitAnswer();
+                    commitQuestion();
+                    currentSection = sectionKey;
+                    currentSectionLabel = line.replaceAll('*', '').replace(/^\s*#+\s*/, '').trim();
+                    continue;
+                }
+
+                if (inAnswers) {
+                    const m = line.match(/^(\d+)\.\s*【答案】\s*(.*?)\s*【解析】\s*(.*)$/);
+                    if (m) {
+                        commitAnswer();
+                        if (!currentPart || !currentSection) continue;
+                        currentAnswer = {
+                            part: currentPart,
+                            section: currentSection,
+                            number: Number(m[1]),
+                            answerText: (m[2] || '').trim(),
+                            explanation: (m[3] || '').trim()
+                        };
+                        continue;
+                    }
+
+                    if (currentAnswer) {
+                        currentAnswer.explanation = (currentAnswer.explanation ? `${currentAnswer.explanation}\n` : '') + line;
+                    }
+                    continue;
+                }
+
+                const qm = line.match(/^(\d+)\.\s*(.+)?$/);
+                if (qm) {
+                    if (!currentPart || !currentSection) continue;
+                    commitQuestion();
+                    const number = Number(qm[1]);
+                    const rest = (qm[2] || '').trim();
+                    currentQ = {
+                        part: currentPart,
+                        section: currentSection,
+                        sectionLabel: currentSectionLabel,
+                        number,
+                        stemLines: rest ? [rest] : [],
+                        options: [],
+                        keepNewlines: currentSection === 'short' || currentSection === 'comprehensive'
+                    };
+                    continue;
+                }
+
+                if (!currentQ) continue;
+
+                if ((currentQ.section === 'single' || currentQ.section === 'multi') && isOptionLine(line)) {
+                    const opt = optionToText(line);
+                    if (opt) currentQ.options.push(opt);
+                    continue;
+                }
+
+                currentQ.stemLines.push(line);
+            }
+
+            commitQuestion();
+            commitAnswer();
+
+            const merged = questions.map((q) => {
+                const key = `${q.part}-${q.section}-${q.number}`;
+                const ans = answerMap.get(key);
+                const answerKey = ans ? normalizeAnswerKey(ans.answerText, q.section) : '';
+                const explanation = ans ? ans.explanation : '';
+                return {
+                    ...q,
+                    type: q.section,
+                    answerKey,
+                    explanation
+                };
+            });
+
+            return { chapterTitle: detectedChapterTitle || '第二章', questions: merged };
+        }
+
         function saveAnswers() {
             const obj = {};
             for (const [qid, val] of userAnswers.entries()) obj[qid] = val;
@@ -609,7 +782,7 @@
             const parts = Array.from(new Set(allQuestions.map(q => q.part))).sort();
             const partButtons = [
                 { key: PART_ALL, label: '全部' },
-                ...parts.map(p => ({ key: p, label: p === 'A' ? 'A 统考真题' : 'B 基础提高' }))
+                ...parts.map(p => ({ key: p, label: p === 'A' ? 'A 统考真题' : p === 'B' ? 'B 基础提高' : p }))
             ];
 
             if (filterPart !== PART_ALL && !parts.includes(filterPart)) filterPart = PART_ALL;
@@ -662,6 +835,22 @@
                     onlyWrongBtn.classList.remove('active');
                     renderFilters();
                     renderQuestions();
+                });
+            });
+        }
+
+        function renderChapterSwitch() {
+            if (subjectKey !== 'puxin') return;
+            const chapters = ['1', '2'];
+            chapterSwitchEl.innerHTML = chapters.map(ch => {
+                const cls = `pill-btn${String(chapterParam) === String(ch) ? ' active' : ''}`;
+                return `<button type="button" class="${cls}" data-chapter="${escapeHtml(ch)}">第${escapeHtml(ch)}章</button>`;
+            }).join('');
+
+            chapterSwitchEl.querySelectorAll('button[data-chapter]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const ch = btn.dataset.chapter || '1';
+                    window.location.href = `章节习题_答题.html?subject=${encodeURIComponent(subjectKey)}&chapter=${encodeURIComponent(ch)}`;
                 });
             });
         }
@@ -878,8 +1067,14 @@
             return await res.text();
         }
 
-        async function loadPuxinCh1Md() {
-            const mdFileName = '普通心理学第一章习题及答案.md';
+        function getPuxinMdFileName(chapterNo) {
+            if (String(chapterNo) === '1') return '普通心理学第一章习题及答案.md';
+            if (String(chapterNo) === '2') return '普通心理学第二章习题及答案.md';
+            return '';
+        }
+
+        async function loadPuxinChapterMd(chapterNo) {
+            const mdFileName = getPuxinMdFileName(chapterNo);
             const mdUrl = encodeURI(mdFileName);
 
             const cached = localStorage.getItem(`chapter_practice_${datasetKey}_md`);
@@ -898,17 +1093,18 @@
             }
         }
 
-        async function initPuxinCh1() {
+        async function initPuxinChapter() {
             setState('loading');
-            const { mdText, mdFileName } = await loadPuxinCh1Md();
+            const mdFileName = getPuxinMdFileName(chapterParam);
+            const { mdText } = await loadPuxinChapterMd(chapterParam);
 
             if (!mdText) {
                 setState('file', `未能自动读取题库。请手动选择文件：${mdFileName}`);
                 return;
             }
 
-            const parsed = parsePuxinCh1Md(mdText);
-            chapterTitle = parsed.chapterTitle || '第一章';
+            const parsed = String(chapterParam) === '2' ? parsePuxinCh2Md(mdText) : parsePuxinCh1Md(mdText);
+            chapterTitle = parsed.chapterTitle || `第${chapterParam}章`;
             allQuestions = parsed.questions || [];
 
             if (!allQuestions.length) {
@@ -925,6 +1121,7 @@
             showOnlyWrong = false;
             onlyWrongBtn.classList.remove('active');
 
+            renderChapterSwitch();
             renderFilters();
             renderQuestions();
         }
@@ -937,13 +1134,13 @@
             const text = await file.text();
             localStorage.setItem(`chapter_practice_${datasetKey}_md`, text);
             localStorage.setItem(`chapter_practice_${datasetKey}_source`, 'file');
-            initPuxinCh1();
+            initPuxinChapter();
         });
 
         retryBtn.addEventListener('click', () => {
             localStorage.removeItem(`chapter_practice_${datasetKey}_md`);
             localStorage.removeItem(`chapter_practice_${datasetKey}_source`);
-            initPuxinCh1();
+            initPuxinChapter();
         });
 
         onlyWrongBtn.addEventListener('click', () => {
@@ -979,11 +1176,11 @@
             renderQuestions();
         });
 
-        if (subjectKey === 'puxin' && chapterParam === '1') {
-            pageTitle.textContent = `${subjectName} · 第一章`;
-            initPuxinCh1();
+        if (subjectKey === 'puxin' && (chapterParam === '1' || chapterParam === '2')) {
+            pageTitle.textContent = `${subjectName} · 第${chapterParam}章`;
+            initPuxinChapter();
         } else {
-            setState('empty', `当前仅接入：普通心理学 · 第一章（subject=puxin&chapter=1）。`);
+            setState('empty', `当前仅接入：普通心理学 · 第一章/第二章（subject=puxin&chapter=1|2）。`);
         }
     </script>
 </body>
