@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>章节习题 - 答题</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600&display=swap');
+
+        body {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            background-color: #F8F7F4;
+            color: #3f3f46;
+        }
+
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 14px;
+            padding: 24px;
+            margin-bottom: 18px;
+            box-shadow: 0 10px 30px -22px rgba(0, 0, 0, 0.18);
+            border: 1px solid #f1f5f9;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-label:hover {
+            background-color: #f8fafc;
+            border-color: #cbd5e1;
+        }
+
+        input[type="radio"]:checked + span,
+        input[type="checkbox"]:checked + span {
+            color: #047857;
+            font-weight: 600;
+        }
+
+        input[type="radio"]:checked + span::before,
+        input[type="checkbox"]:checked + span::before {
+            content: "";
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background-color: #047857;
+            margin-right: 8px;
+        }
+
+        .liquid-glass {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.72) 0%, rgba(255, 255, 255, 0.30) 100%);
+            backdrop-filter: blur(22px) saturate(160%);
+            -webkit-backdrop-filter: blur(22px) saturate(160%);
+            border: 1px solid rgba(255, 255, 255, 0.55);
+            box-shadow: inset 0 0 16px rgba(255, 255, 255, 0.5),
+                        0 16px 42px -20px rgba(0, 0, 0, 0.10);
+        }
+
+        .pill-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            border: 1px solid rgba(226, 232, 240, 0.95);
+            background: rgba(255, 255, 255, 0.75);
+            color: rgba(15, 23, 42, 0.70);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .pill-btn:hover {
+            background: rgba(255, 255, 255, 0.92);
+            color: rgba(15, 23, 42, 0.85);
+            transform: translateY(-1px);
+        }
+
+        .pill-btn.active {
+            background: rgba(16, 185, 129, 0.12);
+            border-color: rgba(16, 185, 129, 0.22);
+            color: rgba(4, 120, 87, 1);
+        }
+    </style>
+</head>
+<body class="pb-24">
+    <header class="sticky-header px-6 py-4 flex justify-between items-center shadow-sm">
+        <div class="flex items-center gap-4">
+            <a href="章节习题.html" class="text-slate-500 hover:text-slate-900 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+            </a>
+            <div>
+                <div class="text-xs text-slate-500 leading-none">章节习题</div>
+                <h1 id="page-title" class="font-bold text-lg text-slate-800">答题</h1>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <button id="submit-btn" class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-lg text-sm font-semibold transition-colors shadow-lg shadow-emerald-200 disabled:opacity-50 disabled:hover:bg-emerald-600" disabled>
+                交卷
+            </button>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-6 py-8">
+        <div id="toolbar" class="mb-6 hidden">
+            <div class="liquid-glass rounded-2xl p-4 sm:p-5">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div>
+                        <div class="text-xs text-slate-500">章节</div>
+                        <div id="chapter-title" class="text-lg font-bold text-slate-800">—</div>
+                        <div id="dataset-hint" class="text-xs text-slate-500 mt-1">—</div>
+                    </div>
+                    <div class="flex flex-wrap gap-2 justify-start sm:justify-end">
+                        <button id="only-wrong-btn" class="pill-btn" type="button">
+                            只看错题
+                        </button>
+                    </div>
+                </div>
+                <div class="mt-4 flex flex-col gap-3">
+                    <div class="flex flex-wrap gap-2 items-center">
+                        <div class="text-xs font-bold text-slate-600 mr-1">Part</div>
+                        <div id="part-filters" class="flex flex-wrap gap-2"></div>
+                    </div>
+                    <div class="flex flex-wrap gap-2 items-center">
+                        <div class="text-xs font-bold text-slate-600 mr-1">题型</div>
+                        <div id="section-filters" class="flex flex-wrap gap-2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-8">
+            <div class="flex justify-between text-xs text-slate-500 mb-2">
+                <span>答题进度</span>
+                <span id="progress-text">0/0</span>
+            </div>
+            <div class="w-full bg-slate-200 rounded-full h-2">
+                <div id="progress-bar" class="bg-emerald-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <div id="state-box" class="liquid-glass rounded-2xl p-8 text-center">
+            <div id="state-loading">
+                <div class="w-10 h-10 border-2 border-emerald-200 border-t-emerald-600 rounded-full animate-spin mx-auto"></div>
+                <h2 class="text-xl font-bold text-slate-800 mt-4">正在读取题库</h2>
+                <p class="text-sm text-slate-500 mt-2 leading-relaxed">
+                    正在从本地题库文件加载并解析，请稍等。
+                </p>
+            </div>
+
+            <div id="state-file" class="hidden">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 mx-auto flex items-center justify-center border border-emerald-200/70">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 17l4 4 4-4m-4-5v9M20 11a8 8 0 10-16 0"></path></svg>
+                </div>
+                <h2 class="text-xl font-bold text-slate-800 mt-4">请选择题库文件</h2>
+                <p id="state-file-desc" class="text-sm text-slate-500 mt-2 leading-relaxed">
+                    未能自动读取题库。请手动选择文件：普通心理学第一章习题及答案.md
+                </p>
+                <div class="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+                    <button id="pick-file-btn" class="px-5 py-2.5 rounded-lg bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-200" type="button">
+                        选择 .md 文件
+                    </button>
+                    <a href="章节习题.html" class="px-5 py-2.5 rounded-lg bg-white border border-slate-200 text-slate-700 text-sm font-semibold hover:bg-slate-50 transition-colors">
+                        返回选科
+                    </a>
+                </div>
+                <input id="md-file-input" type="file" accept=".md,text/markdown,text/plain" class="hidden">
+            </div>
+
+            <div id="state-empty" class="hidden">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 mx-auto flex items-center justify-center border border-emerald-200/70">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <h2 class="text-xl font-bold text-slate-800 mt-4">没有解析出题目</h2>
+                <p id="state-empty-desc" class="text-sm text-slate-500 mt-2 leading-relaxed"></p>
+                <div class="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+                    <button id="retry-btn" class="px-5 py-2.5 rounded-lg bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-200" type="button">
+                        重新读取
+                    </button>
+                    <a href="章节习题.html" class="px-5 py-2.5 rounded-lg bg-white border border-slate-200 text-slate-700 text-sm font-semibold hover:bg-slate-50 transition-colors">
+                        返回选科
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <form id="exam-form" class="space-y-6 hidden"></form>
+    </main>
+
+    <div id="result-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-6">
+        <div class="absolute inset-0 bg-black/30 backdrop-blur-sm"></div>
+        <div class="relative w-full max-w-lg liquid-glass rounded-3xl p-6 sm:p-7">
+            <div class="flex items-start justify-between gap-4">
+                <div>
+                    <div class="text-xs font-bold text-emerald-700">本次结果</div>
+                    <div id="result-title" class="text-xl font-bold text-slate-800 mt-1">—</div>
+                    <div id="result-sub" class="text-sm text-slate-500 mt-1">—</div>
+                </div>
+                <button id="close-modal" class="text-slate-500 hover:text-slate-800 transition-colors" type="button" aria-label="关闭">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="mt-5 grid grid-cols-3 gap-3">
+                <div class="rounded-2xl bg-white/70 border border-white p-4 text-center">
+                    <div class="text-xs text-slate-500">客观题</div>
+                    <div id="result-obj" class="text-lg font-bold text-slate-800 mt-1">0</div>
+                </div>
+                <div class="rounded-2xl bg-white/70 border border-white p-4 text-center">
+                    <div class="text-xs text-slate-500">答对</div>
+                    <div id="result-correct" class="text-lg font-bold text-emerald-700 mt-1">0</div>
+                </div>
+                <div class="rounded-2xl bg-white/70 border border-white p-4 text-center">
+                    <div class="text-xs text-slate-500">正确率</div>
+                    <div id="result-acc" class="text-lg font-bold text-slate-800 mt-1">0%</div>
+                </div>
+            </div>
+
+            <div class="mt-6 flex flex-col sm:flex-row gap-3">
+                <button id="modal-only-wrong" class="w-full px-5 py-2.5 rounded-lg bg-white border border-slate-200 text-slate-700 text-sm font-semibold hover:bg-slate-50 transition-colors" type="button">
+                    只看错题
+                </button>
+                <button id="modal-continue" class="w-full px-5 py-2.5 rounded-lg bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-200" type="button">
+                    继续刷题
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const subjectMap = {
+            puxin: '普通心理学',
+            faxin: '发展心理学',
+            jiaoxin: '教育心理学',
+            shexin: '社会心理学',
+            shiyan: '实验心理学',
+            tongji: '心理统计学',
+            celiang: '心理测量学'
+        };
+
+        function getSubjectKey() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('subject') || '';
+        }
+
+        const subjectKey = getSubjectKey();
+        const subjectName = subjectMap[subjectKey] || '未知学科';
+
+        const pageTitle = document.getElementById('page-title');
+        pageTitle.textContent = `${subjectName} · 答题`;
+        document.title = `章节习题 - ${subjectName}`;
+
+        const examForm = document.getElementById('exam-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const toolbar = document.getElementById('toolbar');
+        const chapterTitleEl = document.getElementById('chapter-title');
+        const datasetHintEl = document.getElementById('dataset-hint');
+        const partFiltersEl = document.getElementById('part-filters');
+        const sectionFiltersEl = document.getElementById('section-filters');
+        const onlyWrongBtn = document.getElementById('only-wrong-btn');
+
+        const stateBox = document.getElementById('state-box');
+        const stateLoading = document.getElementById('state-loading');
+        const stateFile = document.getElementById('state-file');
+        const stateFileDesc = document.getElementById('state-file-desc');
+        const pickFileBtn = document.getElementById('pick-file-btn');
+        const mdFileInput = document.getElementById('md-file-input');
+        const stateEmpty = document.getElementById('state-empty');
+        const stateEmptyDesc = document.getElementById('state-empty-desc');
+        const retryBtn = document.getElementById('retry-btn');
+
+        const resultModal = document.getElementById('result-modal');
+        const closeModalBtn = document.getElementById('close-modal');
+        const resultTitle = document.getElementById('result-title');
+        const resultSub = document.getElementById('result-sub');
+        const resultObj = document.getElementById('result-obj');
+        const resultCorrect = document.getElementById('result-correct');
+        const resultAcc = document.getElementById('result-acc');
+        const modalOnlyWrong = document.getElementById('modal-only-wrong');
+        const modalContinue = document.getElementById('modal-continue');
+
+        const params = new URLSearchParams(window.location.search);
+        const chapterParam = params.get('chapter') || '1';
+        const datasetKey = `${subjectKey || 'unknown'}_ch${chapterParam}`;
+
+        const PART_ALL = 'ALL';
+        const SECTION_ALL = 'ALL';
+
+        let allQuestions = [];
+        let chapterTitle = '';
+        let filterPart = PART_ALL;
+        let filterSection = SECTION_ALL;
+        let showOnlyWrong = false;
+        let submitted = false;
+        const userAnswers = new Map();
+
+        function escapeHtml(input) {
+            return String(input || '')
+                .replaceAll('&', '&amp;')
+                .replaceAll('<', '&lt;')
+                .replaceAll('>', '&gt;')
+                .replaceAll('"', '&quot;')
+                .replaceAll("'", '&#39;');
+        }
+
+        function normalizeNewlines(text) {
+            return String(text || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+        }
+
+        function formatMultilineHtml(text) {
+            const safe = escapeHtml(text);
+            return safe.replaceAll('\n', '<br>');
+        }
+
+        function setState(mode, message) {
+            stateLoading.classList.add('hidden');
+            stateFile.classList.add('hidden');
+            stateEmpty.classList.add('hidden');
+            stateBox.classList.remove('hidden');
+            examForm.classList.add('hidden');
+            toolbar.classList.add('hidden');
+            submitBtn.disabled = true;
+
+            if (mode === 'loading') {
+                stateLoading.classList.remove('hidden');
+                return;
+            }
+            if (mode === 'file') {
+                stateFile.classList.remove('hidden');
+                if (message) stateFileDesc.textContent = message;
+                return;
+            }
+            if (mode === 'empty') {
+                stateEmpty.classList.remove('hidden');
+                stateEmptyDesc.textContent = message || '未能解析出任何题目。';
+            }
+        }
+
+        function showQuestionsUi() {
+            stateBox.classList.add('hidden');
+            examForm.classList.remove('hidden');
+            toolbar.classList.remove('hidden');
+            submitBtn.disabled = false;
+        }
+
+        function parseSectionKey(line) {
+            const text = line.replaceAll('*', '').trim();
+            if (text.includes('单项选择题')) return 'single';
+            if (text.includes('多项选择题')) return 'multi';
+            if (text.includes('简答题')) return 'short';
+            if (text.includes('综合题')) return 'comprehensive';
+            return '';
+        }
+
+        function parsePartKey(line) {
+            const text = line.replaceAll('*', '').replace(/^\s*#+\s*/, '').trim();
+            if (/^Part\s*A\b/i.test(text)) return 'A';
+            if (/^Part\s*B\b/i.test(text)) return 'B';
+            return '';
+        }
+
+        function extractOptions(raw) {
+            const idxMatch = raw.match(/\sA\.\s*/);
+            if (!idxMatch) return { stem: raw.trim(), options: [] };
+
+            const idx = idxMatch.index ?? -1;
+            if (idx < 0) return { stem: raw.trim(), options: [] };
+
+            const stem = raw.slice(0, idx).trim();
+            const optionsPart = raw.slice(idx).trim();
+            const re = /([A-D])\.\s*/g;
+            const marks = [];
+            let m;
+            while ((m = re.exec(optionsPart)) !== null) {
+                marks.push({ letter: m[1], index: m.index, len: m[0].length });
+            }
+            if (marks.length === 0) return { stem: raw.trim(), options: [] };
+
+            const options = marks.map((mark, i) => {
+                const start = mark.index + mark.len;
+                const end = i + 1 < marks.length ? marks[i + 1].index : optionsPart.length;
+                const txt = optionsPart.slice(start, end).trim();
+                return `${mark.letter}. ${txt}`;
+            });
+
+            return { stem, options };
+        }
+
+        function normalizeAnswerKey(answerText, sectionKey) {
+            const text = String(answerText || '').trim();
+            if (sectionKey === 'single') {
+                const m = text.match(/[A-D]/);
+                return m ? m[0] : '';
+            }
+            if (sectionKey === 'multi') {
+                const letters = (text.match(/[A-D]/g) || []);
+                const unique = Array.from(new Set(letters));
+                unique.sort();
+                return unique.join('');
+            }
+            return text;
+        }
+
+        function parsePuxinCh1Md(mdText) {
+            const lines = normalizeNewlines(mdText).split('\n').map(l => l.trimEnd());
+
+            let detectedChapterTitle = '';
+            for (const rawLine of lines) {
+                const line = rawLine.trim();
+                if (!line) continue;
+                const partKey = parsePartKey(line);
+                if (partKey) break;
+                if (!detectedChapterTitle) detectedChapterTitle = line;
+            }
+
+            let inAnswers = false;
+            let currentPart = '';
+            let currentSection = '';
+            let currentSectionLabel = '';
+            let lastQ = null;
+            const questions = [];
+            const answerMap = new Map();
+            let currentAnswer = null;
+
+            const commitAnswer = () => {
+                if (!currentAnswer) return;
+                const key = `${currentAnswer.part}-${currentAnswer.section}-${currentAnswer.number}`;
+                answerMap.set(key, {
+                    answerText: currentAnswer.answerText,
+                    explanation: (currentAnswer.explanation || '').trim()
+                });
+                currentAnswer = null;
+            };
+
+            for (const rawLine of lines) {
+                let line = rawLine;
+                line = line.replace(/^\s*>\s?/, '').trim();
+                if (!line) continue;
+
+                if (line.includes('参考答案与解析')) {
+                    inAnswers = true;
+                    lastQ = null;
+                    currentPart = '';
+                    currentSection = '';
+                    currentSectionLabel = '';
+                    commitAnswer();
+                    continue;
+                }
+
+                const partKey = parsePartKey(line);
+                if (partKey) {
+                    if (inAnswers) commitAnswer();
+                    currentPart = partKey;
+                    continue;
+                }
+
+                const sectionKey = parseSectionKey(line);
+                if (sectionKey) {
+                    if (inAnswers) commitAnswer();
+                    currentSection = sectionKey;
+                    currentSectionLabel = line.replaceAll('*', '').trim();
+                    continue;
+                }
+
+                if (inAnswers) {
+                    const m = line.match(/^(\d+)\.\s*【答案】\s*(.*?)\s*【解析】\s*(.*)$/);
+                    if (m) {
+                        commitAnswer();
+                        if (!currentPart || !currentSection) continue;
+                        currentAnswer = {
+                            part: currentPart,
+                            section: currentSection,
+                            number: Number(m[1]),
+                            answerText: (m[2] || '').trim(),
+                            explanation: (m[3] || '').trim()
+                        };
+                        continue;
+                    }
+
+                    if (currentAnswer) {
+                        currentAnswer.explanation = (currentAnswer.explanation ? `${currentAnswer.explanation}\n` : '') + line;
+                    }
+                    continue;
+                }
+
+                const qm = line.match(/^(\d+)\.\s*(.+)$/);
+                if (qm) {
+                    if (!currentPart || !currentSection) continue;
+                    const number = Number(qm[1]);
+                    const raw = (qm[2] || '').trim();
+                    const { stem, options } = extractOptions(raw);
+                    const yearMatch = raw.match(/\((\d{4}\.\d+)\)\s*$/);
+                    const yearTag = yearMatch ? yearMatch[1] : '';
+
+                    const id = `${currentPart}-${currentSection}-${number}`;
+                    lastQ = {
+                        id,
+                        part: currentPart,
+                        section: currentSection,
+                        sectionLabel: currentSectionLabel,
+                        number,
+                        yearTag,
+                        raw,
+                        stem,
+                        options
+                    };
+                    questions.push(lastQ);
+                    continue;
+                }
+
+                if (lastQ && currentPart && currentSection) {
+                    lastQ.raw = `${lastQ.raw} ${line}`.trim();
+                    const { stem, options } = extractOptions(lastQ.raw);
+                    lastQ.stem = stem;
+                    if (options.length) lastQ.options = options;
+                }
+            }
+
+            commitAnswer();
+
+            const merged = questions.map((q) => {
+                const key = `${q.part}-${q.section}-${q.number}`;
+                const ans = answerMap.get(key);
+                const answerKey = ans ? normalizeAnswerKey(ans.answerText, q.section) : '';
+                const explanation = ans ? ans.explanation : '';
+                const type = q.section;
+                return {
+                    ...q,
+                    type,
+                    answerKey,
+                    explanation
+                };
+            });
+
+            return { chapterTitle: detectedChapterTitle || '第一章', questions: merged };
+        }
+
+        function saveAnswers() {
+            const obj = {};
+            for (const [qid, val] of userAnswers.entries()) obj[qid] = val;
+            localStorage.setItem(`chapter_practice_${datasetKey}_answers`, JSON.stringify(obj));
+        }
+
+        function loadAnswers() {
+            try {
+                const raw = localStorage.getItem(`chapter_practice_${datasetKey}_answers`);
+                if (!raw) return;
+                const obj = JSON.parse(raw);
+                Object.entries(obj).forEach(([k, v]) => userAnswers.set(k, v));
+            } catch (_) {}
+        }
+
+        function getVisibleQuestions() {
+            let list = allQuestions.slice();
+            if (filterPart !== PART_ALL) list = list.filter(q => q.part === filterPart);
+            if (filterSection !== SECTION_ALL) list = list.filter(q => q.section === filterSection);
+            if (showOnlyWrong && submitted) {
+                list = list.filter(q => (q.type === 'single' || q.type === 'multi') && evaluateObjective(q) === false);
+            }
+            return list;
+        }
+
+        function getScorableQuestions() {
+            let list = allQuestions.slice();
+            if (filterPart !== PART_ALL) list = list.filter(q => q.part === filterPart);
+            if (filterSection !== SECTION_ALL) list = list.filter(q => q.section === filterSection);
+            return list;
+        }
+
+        function updateProgressDisplay() {
+            const visible = getVisibleQuestions();
+            const answered = visible.filter(q => {
+                const val = userAnswers.get(q.id);
+                if (q.type === 'multi') return Array.isArray(val) && val.length > 0;
+                if (q.type === 'single') return typeof val === 'string' && val.length > 0;
+                return typeof val === 'string' && val.trim().length > 0;
+            }).length;
+            const total = visible.length;
+            const percent = total ? (answered / total) * 100 : 0;
+            document.getElementById('progress-bar').style.width = `${percent}%`;
+            document.getElementById('progress-text').textContent = `${answered}/${total}`;
+        }
+
+        function renderFilters() {
+            const parts = Array.from(new Set(allQuestions.map(q => q.part))).sort();
+            const partButtons = [
+                { key: PART_ALL, label: '全部' },
+                ...parts.map(p => ({ key: p, label: p === 'A' ? 'A 统考真题' : 'B 基础提高' }))
+            ];
+
+            if (filterPart !== PART_ALL && !parts.includes(filterPart)) filterPart = PART_ALL;
+
+            partFiltersEl.innerHTML = partButtons.map(({ key, label }) => {
+                const cls = `pill-btn${key === filterPart ? ' active' : ''}`;
+                return `<button type="button" class="${cls}" data-part="${escapeHtml(key)}">${escapeHtml(label)}</button>`;
+            }).join('');
+
+            const sourceForSections = filterPart === PART_ALL ? allQuestions : allQuestions.filter(q => q.part === filterPart);
+            const sections = Array.from(new Set(sourceForSections.map(q => q.section)));
+            const sectionOrder = ['single', 'multi', 'short', 'comprehensive'];
+            sections.sort((a, b) => sectionOrder.indexOf(a) - sectionOrder.indexOf(b));
+
+            const labels = {
+                single: '单选',
+                multi: '多选',
+                short: '简答',
+                comprehensive: '综合'
+            };
+
+            const sectionButtons = [
+                { key: SECTION_ALL, label: '全部' },
+                ...sections.map(s => ({ key: s, label: labels[s] || s }))
+            ];
+
+            if (filterSection !== SECTION_ALL && !sections.includes(filterSection)) filterSection = SECTION_ALL;
+
+            sectionFiltersEl.innerHTML = sectionButtons.map(({ key, label }) => {
+                const cls = `pill-btn${key === filterSection ? ' active' : ''}`;
+                return `<button type="button" class="${cls}" data-section="${escapeHtml(key)}">${escapeHtml(label)}</button>`;
+            }).join('');
+
+            partFiltersEl.querySelectorAll('button[data-part]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterPart = btn.dataset.part || PART_ALL;
+                    submitted = false;
+                    showOnlyWrong = false;
+                    onlyWrongBtn.classList.remove('active');
+                    renderFilters();
+                    renderQuestions();
+                });
+            });
+
+            sectionFiltersEl.querySelectorAll('button[data-section]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterSection = btn.dataset.section || SECTION_ALL;
+                    submitted = false;
+                    showOnlyWrong = false;
+                    onlyWrongBtn.classList.remove('active');
+                    renderFilters();
+                    renderQuestions();
+                });
+            });
+        }
+
+        function getOptionLetters(options) {
+            return options.map(o => (String(o).match(/^([A-D])\./) || [])[1]).filter(Boolean);
+        }
+
+        function evaluateObjective(q) {
+            if (q.type !== 'single' && q.type !== 'multi') return null;
+            if (!q.answerKey) return null;
+
+            if (q.type === 'single') {
+                const user = userAnswers.get(q.id) || '';
+                return user === q.answerKey;
+            }
+
+            const userArr = userAnswers.get(q.id);
+            const userLetters = Array.isArray(userArr) ? userArr.slice().sort().join('') : '';
+            return userLetters === q.answerKey;
+        }
+
+        function renderQuestions() {
+            const visible = getVisibleQuestions();
+            if (visible.length === 0) {
+                setState('empty', '当前筛选下没有题目。');
+                return;
+            }
+
+            showQuestionsUi();
+            submitBtn.textContent = submitted ? '继续作答' : '交卷';
+
+            const withEval = visible.map((q) => {
+                const isObjective = q.type === 'single' || q.type === 'multi';
+                const isCorrect = submitted ? evaluateObjective(q) : null;
+                return { ...q, _isObjective: isObjective, _isCorrect: isCorrect };
+            });
+
+            examForm.innerHTML = withEval.map((q) => {
+                const baseBorder = 'border border-slate-100';
+                const resultBorder = submitted && q._isObjective && q._isCorrect === true
+                    ? 'border border-emerald-200'
+                    : submitted && q._isObjective && q._isCorrect === false
+                        ? 'border border-rose-200'
+                        : baseBorder;
+
+                const headerBadge = q.yearTag
+                    ? `<span class="text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-1 rounded-full">(${escapeHtml(q.yearTag)})</span>`
+                    : '';
+
+                let inputHtml = '';
+                if (q.type === 'single') {
+                    const selected = userAnswers.get(q.id) || '';
+                    const letters = getOptionLetters(q.options);
+                    inputHtml = q.options.map((opt, idx) => {
+                        const letter = letters[idx] || (String(opt).match(/^([A-D])\./) || [])[1] || '';
+                        const checked = selected === letter ? 'checked' : '';
+                        const disabled = submitted ? 'disabled' : '';
+                        return `
+                            <label class="option-label ${submitted ? 'opacity-95' : ''}">
+                                <input type="radio" name="${q.id}" value="${escapeHtml(letter)}" class="hidden" ${checked} ${disabled}>
+                                <span class="text-slate-600">${escapeHtml(opt)}</span>
+                            </label>
+                        `;
+                    }).join('');
+                } else if (q.type === 'multi') {
+                    const selected = userAnswers.get(q.id);
+                    const selectedSet = new Set(Array.isArray(selected) ? selected : []);
+                    const letters = getOptionLetters(q.options);
+                    inputHtml = q.options.map((opt, idx) => {
+                        const letter = letters[idx] || (String(opt).match(/^([A-D])\./) || [])[1] || '';
+                        const checked = selectedSet.has(letter) ? 'checked' : '';
+                        const disabled = submitted ? 'disabled' : '';
+                        return `
+                            <label class="option-label ${submitted ? 'opacity-95' : ''}">
+                                <input type="checkbox" name="${q.id}" value="${escapeHtml(letter)}" class="hidden" ${checked} ${disabled}>
+                                <span class="text-slate-600">${escapeHtml(opt)}</span>
+                            </label>
+                        `;
+                    }).join('');
+                } else {
+                    const val = userAnswers.get(q.id) || '';
+                    const disabled = submitted ? 'disabled' : '';
+                    inputHtml = `
+                        <div class="mt-4">
+                            <textarea class="w-full p-3 border rounded-lg text-slate-700 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" rows="6" placeholder="在此输入您的答案..." ${disabled}>${escapeHtml(val)}</textarea>
+                        </div>
+                    `;
+                }
+
+                const explainHtml = submitted
+                    ? `
+                        <div class="mt-5 rounded-2xl ${q._isObjective && q._isCorrect === false ? 'bg-rose-50 border border-rose-100' : 'bg-emerald-50 border border-emerald-100'} p-4">
+                            ${q._isObjective ? `
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <span class="text-xs font-bold ${q._isCorrect ? 'text-emerald-700' : 'text-rose-700'}">${q._isCorrect ? '正确' : '错误'}</span>
+                                    <span class="text-xs text-slate-600">参考答案：</span>
+                                    <span class="text-xs font-bold text-slate-800">${escapeHtml(q.answerKey || '—')}</span>
+                                </div>
+                            ` : `
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <span class="text-xs font-bold text-emerald-700">参考</span>
+                                    <span class="text-xs text-slate-600">答案/提示：</span>
+                                    <span class="text-xs font-bold text-slate-800">${escapeHtml(q.answerKey || '—')}</span>
+                                </div>
+                            `}
+                            ${q.explanation ? `<div class="text-sm text-slate-700 leading-relaxed mt-3">${formatMultilineHtml(q.explanation)}</div>` : `<div class="text-sm text-slate-500 mt-3">暂无解析文本</div>`}
+                        </div>
+                    `
+                    : '';
+
+                return `
+                    <div class="question-card ${resultBorder}" id="q-${escapeHtml(q.id)}">
+                        <div class="flex items-start justify-between gap-4 mb-4">
+                            <div class="flex gap-3">
+                                <span class="text-emerald-700 font-bold text-lg">${escapeHtml(q.number)}.</span>
+                                <div class="text-lg font-medium text-slate-800 leading-relaxed w-full">${escapeHtml(q.stem || q.raw || '')}</div>
+                            </div>
+                            ${headerBadge}
+                        </div>
+                        <div class="space-y-3 pl-0 sm:pl-10">
+                            ${inputHtml}
+                        </div>
+                        ${explainHtml}
+                    </div>
+                `;
+            }).join('');
+
+            examForm.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(input => {
+                input.addEventListener('change', () => {
+                    if (submitted) return;
+                    const qid = input.name;
+                    const q = allQuestions.find(x => x.id === qid);
+                    if (!q) return;
+                    if (q.type === 'single') {
+                        userAnswers.set(qid, input.value);
+                    } else if (q.type === 'multi') {
+                        const checked = Array.from(examForm.querySelectorAll(`input[name="${CSS.escape(qid)}"]:checked`)).map(el => el.value);
+                        checked.sort();
+                        userAnswers.set(qid, checked);
+                    }
+                    saveAnswers();
+                    updateProgressDisplay();
+                });
+            });
+
+            examForm.querySelectorAll('textarea').forEach(textarea => {
+                textarea.addEventListener('input', () => {
+                    if (submitted) return;
+                    const qid = textarea.closest('.question-card')?.id?.replace('q-', '') || '';
+                    if (!qid) return;
+                    userAnswers.set(qid, textarea.value);
+                    saveAnswers();
+                    updateProgressDisplay();
+                });
+            });
+
+            updateProgressDisplay();
+        }
+
+        function openModal() {
+            resultModal.classList.remove('hidden');
+            resultModal.classList.add('flex');
+        }
+
+        function closeModal() {
+            resultModal.classList.add('hidden');
+            resultModal.classList.remove('flex');
+        }
+
+        function submitAndScore() {
+            const scorable = getScorableQuestions();
+            const objQuestions = scorable.filter(q => q.type === 'single' || q.type === 'multi');
+            const totalObj = objQuestions.filter(q => q.answerKey).length;
+            let correct = 0;
+
+            objQuestions.forEach((q) => {
+                const res = evaluateObjective(q);
+                if (res === true) correct += 1;
+            });
+
+            submitted = true;
+
+            const acc = totalObj ? Math.round((correct / totalObj) * 100) : 0;
+            resultTitle.textContent = `${subjectName} · ${chapterTitle || '第一章'}`;
+            const partLabel = filterPart === PART_ALL ? '全部' : filterPart;
+            const sectionLabel = filterSection === SECTION_ALL
+                ? '全部'
+                : filterSection === 'single'
+                    ? '单选'
+                    : filterSection === 'multi'
+                        ? '多选'
+                        : filterSection === 'short'
+                            ? '简答'
+                            : '综合';
+            resultSub.textContent = `当前：Part ${partLabel} · ${sectionLabel}`;
+            resultObj.textContent = String(totalObj);
+            resultCorrect.textContent = String(correct);
+            resultAcc.textContent = `${acc}%`;
+
+            renderQuestions();
+            openModal();
+        }
+
+        function buildDatasetHint(mdFileName) {
+            const src = localStorage.getItem(`chapter_practice_${datasetKey}_source`) || '';
+            const srcLabel = src === 'file' ? '手动选择' : src === 'fetch' ? '自动读取' : src === 'cache' ? '本地缓存' : '未知来源';
+            return `题库来源：${srcLabel} · ${mdFileName}`;
+        }
+
+        async function tryFetchText(url) {
+            const res = await fetch(url, { cache: 'no-store' });
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            return await res.text();
+        }
+
+        async function loadPuxinCh1Md() {
+            const mdFileName = '普通心理学第一章习题及答案.md';
+            const mdUrl = encodeURI(mdFileName);
+
+            const cached = localStorage.getItem(`chapter_practice_${datasetKey}_md`);
+            if (cached) {
+                localStorage.setItem(`chapter_practice_${datasetKey}_source`, 'cache');
+                return { mdText: cached, mdFileName };
+            }
+
+            try {
+                const text = await tryFetchText(mdUrl);
+                localStorage.setItem(`chapter_practice_${datasetKey}_md`, text);
+                localStorage.setItem(`chapter_practice_${datasetKey}_source`, 'fetch');
+                return { mdText: text, mdFileName };
+            } catch (_) {
+                return { mdText: '', mdFileName };
+            }
+        }
+
+        async function initPuxinCh1() {
+            setState('loading');
+            const { mdText, mdFileName } = await loadPuxinCh1Md();
+
+            if (!mdText) {
+                setState('file', `未能自动读取题库。请手动选择文件：${mdFileName}`);
+                return;
+            }
+
+            const parsed = parsePuxinCh1Md(mdText);
+            chapterTitle = parsed.chapterTitle || '第一章';
+            allQuestions = parsed.questions || [];
+
+            if (!allQuestions.length) {
+                setState('empty', `已读取题库文件但未解析出题目：${mdFileName}`);
+                return;
+            }
+
+            chapterTitleEl.textContent = chapterTitle;
+            datasetHintEl.textContent = buildDatasetHint(mdFileName);
+            loadAnswers();
+            filterPart = PART_ALL;
+            filterSection = SECTION_ALL;
+            submitted = false;
+            showOnlyWrong = false;
+            onlyWrongBtn.classList.remove('active');
+
+            renderFilters();
+            renderQuestions();
+        }
+
+        pickFileBtn.addEventListener('click', () => mdFileInput.click());
+        mdFileInput.addEventListener('change', async () => {
+            const file = mdFileInput.files && mdFileInput.files[0];
+            if (!file) return;
+            setState('loading');
+            const text = await file.text();
+            localStorage.setItem(`chapter_practice_${datasetKey}_md`, text);
+            localStorage.setItem(`chapter_practice_${datasetKey}_source`, 'file');
+            initPuxinCh1();
+        });
+
+        retryBtn.addEventListener('click', () => {
+            localStorage.removeItem(`chapter_practice_${datasetKey}_md`);
+            localStorage.removeItem(`chapter_practice_${datasetKey}_source`);
+            initPuxinCh1();
+        });
+
+        onlyWrongBtn.addEventListener('click', () => {
+            if (!submitted) return;
+            showOnlyWrong = !showOnlyWrong;
+            onlyWrongBtn.classList.toggle('active', showOnlyWrong);
+            renderQuestions();
+        });
+
+        submitBtn.addEventListener('click', () => {
+            if (submitted) {
+                submitted = false;
+                showOnlyWrong = false;
+                onlyWrongBtn.classList.remove('active');
+                renderQuestions();
+                return;
+            }
+            submitAndScore();
+        });
+
+        closeModalBtn.addEventListener('click', closeModal);
+        resultModal.addEventListener('click', (e) => {
+            if (e.target === resultModal) closeModal();
+        });
+        modalContinue.addEventListener('click', () => {
+            closeModal();
+        });
+        modalOnlyWrong.addEventListener('click', () => {
+            closeModal();
+            if (!submitted) return;
+            showOnlyWrong = true;
+            onlyWrongBtn.classList.add('active');
+            renderQuestions();
+        });
+
+        if (subjectKey === 'puxin' && chapterParam === '1') {
+            pageTitle.textContent = `${subjectName} · 第一章`;
+            initPuxinCh1();
+        } else {
+            setState('empty', `当前仅接入：普通心理学 · 第一章（subject=puxin&chapter=1）。`);
+        }
+    </script>
+</body>
+</html>
