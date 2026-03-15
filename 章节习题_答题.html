@@ -841,7 +841,7 @@
 
         function renderChapterSwitch() {
             if (subjectKey !== 'puxin') return;
-            const chapters = ['1', '2', '3'];
+            const chapters = ['1', '2', '3', '4'];
             chapterSwitchEl.innerHTML = chapters.map(ch => {
                 const cls = `pill-btn${String(chapterParam) === String(ch) ? ' active' : ''}`;
                 return `<button type="button" class="${cls}" data-chapter="${escapeHtml(ch)}">第${escapeHtml(ch)}章</button>`;
@@ -1071,6 +1071,7 @@
             if (String(chapterNo) === '1') return '普通心理学第一章习题及答案.md';
             if (String(chapterNo) === '2') return '普通心理学第二章习题及答案.md';
             if (String(chapterNo) === '3') return '普通心理学第三章习题及答案.md';
+            if (String(chapterNo) === '4') return '普通心理学第四章习题及答案.md';
             return '';
         }
 
@@ -1177,11 +1178,11 @@
             renderQuestions();
         });
 
-        if (subjectKey === 'puxin' && (chapterParam === '1' || chapterParam === '2' || chapterParam === '3')) {
+        if (subjectKey === 'puxin' && (chapterParam === '1' || chapterParam === '2' || chapterParam === '3' || chapterParam === '4')) {
             pageTitle.textContent = `${subjectName} · 第${chapterParam}章`;
             initPuxinChapter();
         } else {
-            setState('empty', `当前仅接入：普通心理学 · 第一章/第二章/第三章（subject=puxin&chapter=1|2|3）。`);
+            setState('empty', `当前仅接入：普通心理学 · 第一章/第二章/第三章/第四章（subject=puxin&chapter=1|2|3|4）。`);
         }
     </script>
 </body>
