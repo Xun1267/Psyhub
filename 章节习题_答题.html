@@ -117,6 +117,9 @@
         </div>
 
         <div class="flex items-center gap-3">
+            <button id="reset-btn" class="border border-slate-200 bg-white/70 hover:bg-white text-slate-700 px-4 py-2 rounded-lg text-sm font-semibold transition-colors shadow-lg shadow-slate-200 disabled:opacity-50 disabled:hover:bg-white/70" disabled>
+                重新答题
+            </button>
             <button id="submit-btn" class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-lg text-sm font-semibold transition-colors shadow-lg shadow-emerald-200 disabled:opacity-50 disabled:hover:bg-emerald-600" disabled>
                 交卷
             </button>
@@ -276,6 +279,7 @@
         document.title = `章节习题 - ${subjectName}`;
 
         const examForm = document.getElementById('exam-form');
+        const resetBtn = document.getElementById('reset-btn');
         const submitBtn = document.getElementById('submit-btn');
         const toolbar = document.getElementById('toolbar');
         const chapterTitleEl = document.getElementById('chapter-title');
@@ -345,6 +349,7 @@
             stateBox.classList.remove('hidden');
             examForm.classList.add('hidden');
             toolbar.classList.add('hidden');
+            resetBtn.disabled = true;
             submitBtn.disabled = true;
 
             if (mode === 'loading') {
@@ -366,6 +371,7 @@
             stateBox.classList.add('hidden');
             examForm.classList.remove('hidden');
             toolbar.classList.remove('hidden');
+            resetBtn.disabled = false;
             submitBtn.disabled = false;
         }
 
@@ -752,7 +758,10 @@
             if (filterPart !== PART_ALL) list = list.filter(q => q.part === filterPart);
             if (filterSection !== SECTION_ALL) list = list.filter(q => q.section === filterSection);
             if (showOnlyWrong && submitted) {
-                list = list.filter(q => (q.type === 'single' || q.type === 'multi') && evaluateObjective(q) === false);
+                list = list.filter(q => {
+                    if (q.type === 'single' || q.type === 'multi') return evaluateObjective(q) === false;
+                    return q.type === 'short' || q.type === 'comprehensive';
+                });
             }
             return list;
         }
@@ -841,7 +850,7 @@
 
         function renderChapterSwitch() {
             if (subjectKey !== 'puxin') return;
-            const chapters = ['1', '2', '3', '4'];
+            const chapters = ['1', '2', '3', '4', '5'];
             chapterSwitchEl.innerHTML = chapters.map(ch => {
                 const cls = `pill-btn${String(chapterParam) === String(ch) ? ' active' : ''}`;
                 return `<button type="button" class="${cls}" data-chapter="${escapeHtml(ch)}">第${escapeHtml(ch)}章</button>`;
@@ -1072,6 +1081,7 @@
             if (String(chapterNo) === '2') return '普通心理学第二章习题及答案.md';
             if (String(chapterNo) === '3') return '普通心理学第三章习题及答案.md';
             if (String(chapterNo) === '4') return '普通心理学第四章习题及答案.md';
+            if (String(chapterNo) === '5') return '普通心理学第五章习题及答案.md';
             return '';
         }
 
@@ -1145,6 +1155,19 @@
             initPuxinChapter();
         });
 
+        resetBtn.addEventListener('click', () => {
+            if (!allQuestions.length) return;
+            const ok = window.confirm('确定要清空本章作答记录并重新答题吗？');
+            if (!ok) return;
+            localStorage.removeItem(`chapter_practice_${datasetKey}_answers`);
+            userAnswers.clear();
+            submitted = false;
+            showOnlyWrong = false;
+            onlyWrongBtn.classList.remove('active');
+            renderFilters();
+            renderQuestions();
+        });
+
         onlyWrongBtn.addEventListener('click', () => {
             if (!submitted) return;
             showOnlyWrong = !showOnlyWrong;
@@ -1178,11 +1201,11 @@
             renderQuestions();
         });
 
-        if (subjectKey === 'puxin' && (chapterParam === '1' || chapterParam === '2' || chapterParam === '3' || chapterParam === '4')) {
+        if (subjectKey === 'puxin' && (chapterParam === '1' || chapterParam === '2' || chapterParam === '3' || chapterParam === '4' || chapterParam === '5')) {
             pageTitle.textContent = `${subjectName} · 第${chapterParam}章`;
             initPuxinChapter();
         } else {
-            setState('empty', `当前仅接入：普通心理学 · 第一章/第二章/第三章/第四章（subject=puxin&chapter=1|2|3|4）。`);
+            setState('empty', `当前仅接入：普通心理学 · 第一章/第二章/第三章/第四章/第五章（subject=puxin&chapter=1|2|3|4|5）。`);
         }
     </script>
 </body>
