@@ -246,6 +246,10 @@
             transform: translateY(0);
         }
 
+        .article-title {
+            line-height: 1.3;
+        }
+
         .markdown-body h1, .markdown-body h2, .markdown-body h3 {
             font-family: var(--font-hand);
             color: var(--text-ink);
@@ -399,6 +403,15 @@
                     <span style="margin-left: 10px;">⏱️ 8 min read</span>
                 </div>
             </div>
+
+            <div class="article-card" data-id="mindmap">
+                <div class="card-tag">Methodology</div>
+                <h3 class="card-title">Vol 2. 思维？思维导图？</h3>
+                <div class="card-meta">
+                    <span>📅 2026.03.29</span>
+                    <span style="margin-left: 10px;">⏱️ 9 min read</span>
+                </div>
+            </div>
             
             <!-- 占位卡片 -->
             <div class="article-card" style="opacity: 0.6; cursor: default;">
@@ -435,6 +448,118 @@
     const contentDiv = document.getElementById('markdown-content');
     const loadingState = document.getElementById('loading-state');
     const cards = document.querySelectorAll('.article-card[data-id]');
+    let renderToken = 0;
+
+    function escapeHtml(text) {
+        return String(text)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function findTextNode(root, phrase) {
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+        let node = walker.nextNode();
+        while (node) {
+            const value = node.nodeValue;
+            const parent = node.parentElement;
+            if (value && value.includes(phrase) && parent && !parent.closest('pre, code, a, strong, u, mark')) {
+                return node;
+            }
+            node = walker.nextNode();
+        }
+        return null;
+    }
+
+    function wrapFirstOccurrence(textNode, phrase, tagName) {
+        const text = textNode.nodeValue || '';
+        const index = text.indexOf(phrase);
+        if (index < 0) return null;
+
+        const parent = textNode.parentNode;
+        const before = text.slice(0, index);
+        const match = text.slice(index, index + phrase.length);
+        const after = text.slice(index + phrase.length);
+
+        if (before) parent.insertBefore(document.createTextNode(before), textNode);
+
+        const wrapper = document.createElement(tagName);
+        wrapper.textContent = match;
+        parent.insertBefore(wrapper, textNode);
+
+        let afterNode = null;
+        if (after) {
+            afterNode = document.createTextNode(after);
+            parent.insertBefore(afterNode, textNode);
+        }
+
+        parent.removeChild(textNode);
+        return afterNode;
+    }
+
+    function highlightListPrefixes(root) {
+        const items = root.querySelectorAll('li');
+        items.forEach(li => {
+            if (li.closest('pre, code, a')) return;
+            const walker = document.createTreeWalker(li, NodeFilter.SHOW_TEXT);
+            let node = walker.nextNode();
+            while (node && !(node.nodeValue || '').trim()) node = walker.nextNode();
+            if (!node) return;
+
+            const text = node.nodeValue || '';
+            const match = text.match(/^(\s*)([^：:\n]{2,18})([：:])(.*)$/);
+            if (!match) return;
+
+            const leading = match[1];
+            const label = match[2];
+            const colon = match[3];
+            const rest = match[4];
+
+            const parent = node.parentNode;
+            if (!parent || parent.closest('strong, u')) return;
+
+            if (leading) parent.insertBefore(document.createTextNode(leading), node);
+
+            const wrapper = document.createElement('strong');
+            wrapper.textContent = label;
+            parent.insertBefore(wrapper, node);
+
+            parent.insertBefore(document.createTextNode(colon), node);
+
+            if (rest) parent.insertBefore(document.createTextNode(rest), node);
+
+            parent.removeChild(node);
+        });
+    }
+
+    function applyHighlights(root, rules) {
+        if (!Array.isArray(rules)) return;
+        for (const rule of rules) {
+            if (!rule || typeof rule.text !== 'string' || !rule.text) continue;
+            const style = rule.style === 'underline' ? 'u' : 'strong';
+            const maxWraps = rule.once === false ? 999 : 1;
+            for (let i = 0; i < maxWraps; i++) {
+                const node = findTextNode(root, rule.text);
+                if (!node) break;
+                wrapFirstOccurrence(node, rule.text, style);
+            }
+        }
+    }
+
+    async function getArticleContent(data) {
+        if (typeof data.content === 'string' && data.content.length) return data.content;
+        if (typeof data._content === 'string' && data._content.length) return data._content;
+        if (typeof data.contentFile === 'string' && data.contentFile.length) {
+            const res = await fetch(encodeURIComponent(data.contentFile));
+            if (!res.ok) throw new Error('Content fetch failed');
+            const text = await res.text();
+            data._content = text;
+            return text;
+        }
+        return '';
+    }
 
     // 获取 URL 参数
     function getArticleId() {
@@ -443,7 +568,8 @@
     }
 
     // 渲染文章
-    function renderArticle(id) {
+    async function renderArticle(id) {
+        const token = ++renderToken;
         const data = articlesData[id];
         
         if (!data) {
@@ -470,22 +596,32 @@
         }
 
         // 渲染 Markdown
-        // 先淡出
         contentDiv.classList.remove('visible');
+        loadingState.style.display = 'block';
+        contentDiv.innerHTML = '';
         
-        setTimeout(() => {
-            // 模拟极短的加载时间，确保动画流畅
-            contentDiv.innerHTML = marked.parse(data.content);
-            hljs.highlightAll();
-            
-            // 淡入
+        try {
+            const markdown = await getArticleContent(data);
+            setTimeout(() => {
+                if (token !== renderToken) return;
+                const titleHtml = data.showTitle ? `<h1 class="article-title">${escapeHtml(data.title)}</h1>` : '';
+                contentDiv.innerHTML = titleHtml + marked.parse(markdown);
+                hljs.highlightAll();
+                if (data.highlightListPrefixes) highlightListPrefixes(contentDiv);
+                applyHighlights(contentDiv, data.highlights);
+                loadingState.style.display = 'none';
+                contentDiv.classList.add('visible');
+            }, 300);
+        } catch (e) {
+            loadingState.style.display = 'none';
+            contentDiv.innerHTML = '<h2>加载失败</h2><p>文章内容加载失败，请稍后重试。</p>';
             contentDiv.classList.add('visible');
-        }, 300);
+        }
     }
 
     // 点击事件处理
     cards.forEach(card => {
-        card.addEventListener('click', (e) => {
+        card.addEventListener('click', async (e) => {
             const id = card.dataset.id;
             
             // 如果已经是当前文章，只需滚动到顶部
@@ -499,14 +635,14 @@
             const newUrl = `?id=${id}`;
             window.history.pushState({id: id}, '', newUrl);
             
-            renderArticle(id);
+            await renderArticle(id);
         });
     });
 
     // 处理浏览器后退/前进按钮
-    window.addEventListener('popstate', (e) => {
+    window.addEventListener('popstate', async (e) => {
         const id = getArticleId();
-        renderArticle(id);
+        await renderArticle(id);
     });
 
     // 初始加载

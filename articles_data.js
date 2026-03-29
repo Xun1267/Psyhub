@@ -259,5 +259,28 @@ const articlesData = {
 
 让每一页笔记，都成为你主动学习的起点、检验学习的工具、练习表达的舞台。行动起来，从下一页笔记开始，让学习真正发生。
 `
+    },
+    "mindmap": {
+        title: "Vol 2. 思维？思维导图？",
+        tag: "Methodology",
+        date: "2026.03.29",
+        readTime: "9 min read",
+        contentFile: "思维？思维导图？.md",
+        showTitle: true,
+        highlightListPrefixes: true,
+        highlights: [
+            { text: "结构化不是把内容排整齐", style: "strong", once: true },
+            { text: "不是每一部分内容都需要思维导图", style: "underline", once: true },
+            { text: "Ctrl+C", style: "underline", once: true },
+            { text: "Ctrl+V", style: "underline", once: true },
+            { text: "留痕", style: "strong", once: true },
+            { text: "脱离导图回忆", style: "strong", once: true },
+            { text: "把节点转成题目", style: "strong", once: true },
+            { text: "不是终点，也不是装饰", style: "strong", once: true },
+            { text: "判断含混", style: "strong", once: true },
+            { text: "方法的意义，始终要放回任务里去看", style: "strong", once: true },
+            { text: "学习从来不是不断给材料换样子", style: "strong", once: true },
+            { text: "总结:试着摆脱学习的含混", style: "underline", once: true }
+        ]
     }
 };
