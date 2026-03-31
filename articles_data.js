@@ -282,5 +282,15 @@ const articlesData = {
             { text: "学习从来不是不断给材料换样子", style: "strong", once: true },
             { text: "总结:试着摆脱学习的含混", style: "underline", once: true }
         ]
+    },
+    "review": {
+        title: "Vol 3. 今天你复习了吗？",
+        tag: "Methodology",
+        date: "2026.03.31",
+        readTime: "12 min read",
+        contentFile: "今天你复习了吗.md",
+        showTitle: true,
+        highlightListPrefixes: true,
+        highlights: []
     }
 };
