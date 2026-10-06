@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="心理学本科课程笔记、模拟试题与记忆闪卡。">
+  <title>本科课程笔记及模拟试题 | PsyHub</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, "Noto Sans SC", system-ui, sans-serif;
+      color: #3f3f46;
+      background:
+        radial-gradient(circle at 8% 8%, rgba(204,227,222,.85), transparent 34rem),
+        radial-gradient(circle at 92% 82%, rgba(226,217,243,.8), transparent 38rem),
+        linear-gradient(rgba(0,0,0,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,.025) 1px, transparent 1px),
+        #f8f7f4;
+      background-size: auto, auto, 32px 32px, 32px 32px, auto;
+      background-attachment: fixed;
+    }
+    .glass {
+      background: linear-gradient(135deg, rgba(255,255,255,.78), rgba(255,255,255,.42));
+      border: 1px solid rgba(255,255,255,.9);
+      box-shadow: 0 18px 50px rgba(15,23,42,.08);
+      backdrop-filter: blur(22px) saturate(150%);
+      -webkit-backdrop-filter: blur(22px) saturate(150%);
+    }
+    .course-card { transition: transform .3s cubic-bezier(.16,1,.3,1), box-shadow .3s ease; }
+    .course-card:hover { transform: translateY(-4px); box-shadow: 0 24px 60px rgba(15,23,42,.12); }
+  </style>
+</head>
+<body>
+  <nav class="fixed z-50 top-4 left-1/2 -translate-x-1/2 w-[min(1080px,calc(100%-28px))] glass rounded-2xl px-4 py-3 flex items-center justify-between">
+    <a href="../index.html" class="font-bold tracking-tight text-zinc-900">PsyHub</a>
+    <div class="flex items-center gap-2 text-sm font-medium">
+      <a href="#notes" class="hidden sm:block px-3 py-2 rounded-xl hover:bg-white/70">课程笔记</a>
+      <a href="#tests" class="hidden sm:block px-3 py-2 rounded-xl hover:bg-white/70">模拟试题</a>
+      <a href="../index.html" class="px-3 py-2 rounded-xl bg-zinc-900 text-white">返回主站</a>
+    </div>
+  </nav>
+
+  <header class="max-w-6xl mx-auto px-6 pt-36 pb-16">
+    <div class="max-w-3xl">
+      <p class="text-sm font-semibold tracking-[.18em] text-slate-500 mb-5">UNDERGRADUATE PSYCHOLOGY</p>
+      <h1 class="text-4xl sm:text-6xl font-bold tracking-tight text-zinc-900 leading-[1.12]">本科课程笔记<br>及模拟试题</h1>
+      <p class="mt-6 text-base sm:text-lg leading-8 text-slate-600">把课程笔记、章节题库和记忆闪卡放在一个入口里。按科目进入，适合期末复习和日常回顾。</p>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 pb-24 space-y-16">
+    <section id="notes">
+      <div class="flex items-end justify-between gap-4 mb-6">
+        <div>
+          <p class="text-xs font-bold tracking-[.16em] text-emerald-700 mb-2">NOTES</p>
+          <h2 class="text-2xl font-bold text-zinc-900">课程笔记</h2>
+        </div>
+        <span class="text-sm text-slate-500">7 门课程</span>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <a class="course-card glass rounded-2xl p-6 no-underline text-inherit" href="教育心理学.html"><h3 class="font-semibold text-lg text-zinc-900">教育心理学</h3><p class="text-sm text-slate-500 mt-2">学习理论、动机与教学心理。</p></a>
+        <a class="course-card glass rounded-2xl p-6 no-underline text-inherit" href="心理测量学.html"><h3 class="font-semibold text-lg text-zinc-900">心理测量学</h3><p class="text-sm text-slate-500 mt-2">信效度、常模与测验编制。</p></a>
+        <a class="course-card glass rounded-2xl p-6 no-underline text-inherit" href="实验心理学.html"><h3 class="font-semibold text-lg text-zinc-900">实验心理学</h3><p class="text-sm text-slate-500 mt-2">实验设计、变量与经典范式。</p></a>
+        <a class="course-card glass rounded-2xl p-6 no-underline text-inherit" href="心理学研究方法.html"><h3 class="font-semibold text-lg text-zinc-900">心理学研究方法</h3><p class="text-sm text-slate-500 mt-2">研究设计、数据与论文方法。</p></a>
+        <a class="course-card glass rounded-2xl p-6 no-underline text-inherit" href="心理学史.html"><h3 class="font-semibold text-lg text-zinc-900">心理学史</h3><p class="text-sm text-slate-500 mt-2">学派脉络与重要人物。</p></a>
+        <a class="course-card glass rounded-2xl p-6 no-underline text-inherit" href="咨询心理学.html"><h3 class="font-semibold text-lg text-zinc-900">咨询心理学</h3><p class="text-sm text-slate-500 mt-2">咨询理论、过程与技术。</p></a>
+        <a class="course-card glass rounded-2xl p-6 no-underline text-inherit sm:col-span-2 lg:col-span-1" href="心理健康教育概论.html"><h3 class="font-semibold text-lg text-zinc-900">心理健康教育概论</h3><p class="text-sm text-slate-500 mt-2">心理健康教育的基础与实践。</p></a>
+      </div>
+    </section>
+
+    <section id="tests">
+      <div class="flex items-end justify-between gap-4 mb-6">
+        <div>
+          <p class="text-xs font-bold tracking-[.16em] text-indigo-700 mb-2">PRACTICE</p>
+          <h2 class="text-2xl font-bold text-zinc-900">模拟试题</h2>
+        </div>
+        <span class="text-sm text-slate-500">答题后即时反馈</span>
+      </div>
+      <div class="grid sm:grid-cols-2 gap-5">
+        <a class="course-card glass rounded-2xl p-6 no-underline text-inherit" href="咨询心理学题库.html"><h3 class="font-semibold text-lg text-zinc-900">咨询心理学模拟试题</h3><p class="text-sm text-slate-500 mt-2">配套题目与答案解析。</p></a>
+        <a class="course-card glass rounded-2xl p-6 no-underline text-inherit" href="实验心理学题库.html"><h3 class="font-semibold text-lg text-zinc-900">实验心理学模拟试题</h3><p class="text-sm text-slate-500 mt-2">完整题库与进度记录。</p></a>
+        <a class="course-card glass rounded-2xl p-6 no-underline text-inherit" href="心理学研究方法题库.html"><h3 class="font-semibold text-lg text-zinc-900">研究方法模拟试题</h3><p class="text-sm text-slate-500 mt-2">研究方法专项练习。</p></a>
+        <a class="course-card glass rounded-2xl p-6 no-underline text-inherit" href="心理健康教育题库.html"><h3 class="font-semibold text-lg text-zinc-900">心理健康教育模拟试题</h3><p class="text-sm text-slate-500 mt-2">课程重点与综合练习。</p></a>
+      </div>
+    </section>
+
+    <section id="flashcards">
+      <div class="mb-6">
+        <p class="text-xs font-bold tracking-[.16em] text-amber-700 mb-2">FLASHCARDS</p>
+        <h2 class="text-2xl font-bold text-zinc-900">记忆闪卡</h2>
+      </div>
+      <div class="grid sm:grid-cols-3 gap-5">
+        <a class="course-card glass rounded-2xl p-6 no-underline text-inherit" href="咨询心理学闪卡.html"><h3 class="font-semibold text-zinc-900">咨询心理学</h3></a>
+        <a class="course-card glass rounded-2xl p-6 no-underline text-inherit" href="心理学研究方法闪卡.html"><h3 class="font-semibold text-zinc-900">心理学研究方法</h3></a>
+        <a class="course-card glass rounded-2xl p-6 no-underline text-inherit" href="心理健康教育概论闪卡.html"><h3 class="font-semibold text-zinc-900">心理健康教育概论</h3></a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>实验心理学习题库 (完整版 1-388)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* * 核心样式系统 - 玻璃拟态与莫兰迪色系 */
+        :root {
+            --morandi-blue: #93a2a9;
+            --morandi-blue-light: #cdd5d8;
+            --morandi-green: #9caf98;
+            --morandi-green-light: #dbe4d9;
+            --morandi-pink: #dcc7c4;
+            --text-main: #4a4a4a;
+            --text-light: #6e6e6e;
+            --success-color: #7b9e89;
+            --error-color: #c98a86;
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #e0e8eb 0%, #b5c4b1 50%, #dcc7c4 100%);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            line-height: 1.6;
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-bottom: 100px;
+        }
+
+        /* Glassmorphism Components */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            box-shadow: var(--glass-shadow);
+            padding: 24px;
+            margin-bottom: 24px;
+            transition: transform 0.3s ease;
+        }
+
+        .glass-button {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 12px;
+            color: var(--text-main);
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .glass-button:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.7);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+
+        .glass-button:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .glass-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background: rgba(200, 200, 200, 0.2);
+        }
+
+        .back-home-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+
+        /* Header */
+        header h1 {
+            font-family: 'Noto Serif SC', serif;
+            color: var(--text-main);
+            margin: 0 0 10px 0;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .progress-container {
+            margin-top: 15px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            height: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--morandi-blue);
+            width: 0%;
+            transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* Tags */
+        .chapter-tag, .type-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            margin-right: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(4px);
+        }
+
+        .chapter-tag {
+            background: rgba(147, 162, 169, 0.15);
+            color: var(--text-main);
+        }
+
+        .type-tag.single {
+            background: rgba(156, 175, 152, 0.2);
+            color: #5a7058;
+        }
+
+        .type-tag.multi {
+            background: rgba(220, 199, 196, 0.3);
+            color: #8a6a66;
+        }
+
+        /* Question Area */
+        .question-text {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            line-height: 1.7;
+        }
+
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .option-item {
+            background: rgba(255, 255, 255, 0.4);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .option-item:hover {
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .option-item.selected {
+            background: var(--morandi-blue-light);
+            border-color: var(--morandi-blue);
+        }
+
+        .question-card.multi .option-item.selected {
+            background: var(--morandi-pink);
+            border-color: #bfa5a1;
+        }
+
+        .option-item.correct {
+            background: rgba(123, 158, 137, 0.2) !important;
+            border-color: var(--success-color) !important;
+        }
+
+        .option-item.wrong {
+            background: rgba(201, 138, 134, 0.2) !important;
+            border-color: var(--error-color) !important;
+        }
+
+        .option-marker {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+            margin-right: 16px;
+            border: 2px solid #a0a0a0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: #888;
+            margin-top: 2px;
+        }
+
+        .question-card.multi .option-marker {
+            border-radius: 6px;
+        }
+
+        .option-item.selected .option-marker {
+            border-color: var(--text-main);
+            color: var(--text-main);
+            background: rgba(255,255,255,0.5);
+        }
+
+        .option-item.correct .option-marker {
+            border-color: var(--success-color);
+            background: var(--success-color);
+            color: white;
+            content: '✓';
+        }
+
+        .option-item.wrong .option-marker {
+            border-color: var(--error-color);
+            background: var(--error-color);
+            color: white;
+            content: '✕';
+        }
+
+        .feedback-section {
+            margin-top: 24px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
+            border-left: 4px solid var(--morandi-blue);
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .feedback-section.show {
+            display: block;
+        }
+
+        .feedback-title {
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-main);
+            font-family: 'Noto Serif SC', serif;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 800px;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(16px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .question-navigator {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 4px 10px;
+            flex: 1;
+            margin: 0 15px;
+            scrollbar-width: none;
+        }
+        .question-navigator::-webkit-scrollbar { display: none; }
+
+        .nav-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 4px;
+            background: rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .nav-dot.active {
+            width: 24px;
+            background: var(--morandi-blue);
+        }
+
+        .nav-dot.correct {
+            background: var(--success-color);
+            opacity: 0.8;
+        }
+
+        .nav-dot.wrong {
+            background: var(--error-color);
+            opacity: 0.8;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-card {
+            display: none;
+        }
+        
+        .question-card.active {
+            display: block;
+            animation: fadeIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .score-circle {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--morandi-blue), #7a8b92);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 2.5rem;
+            font-weight: 700;
+            box-shadow: 0 10px 20px rgba(147, 162, 169, 0.4);
+            font-family: 'Noto Serif SC', serif;
+        }
+
+        .score-label {
+            font-size: 0.9rem;
+            font-weight: 400;
+            opacity: 0.9;
+            font-family: 'Inter', sans-serif;
+        }
+
+        @media (max-width: 600px) {
+            .back-home-btn {
+                position: static;
+                margin-bottom: 20px;
+                display: inline-block;
+            }
+            .bottom-nav {
+                width: 95%;
+                bottom: 10px;
+            }
+        }
+    </style>
+  <link rel="stylesheet" href="psyhub-theme.css">
+</head>
+<body>
+
+<nav class="psyhub-course-shell" aria-label="课程导航">
+  <a class="psyhub-course-brand" href="../index.html">PsyHub</a>
+  <div class="psyhub-course-links">
+    <a href="index.html">本科课程首页</a>
+    <a href="../index.html">返回主站</a>
+  </div>
+</nav>
+
+<a class="glass-button back-home-btn" href="#">🏠 实验心理学</a>
+
+<div class="container">
+    <header class="glass-card">
+        <h1>实验心理学习题 (1-388)</h1>
+        <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--text-light); margin-top: 10px;">
+            <span>进度: <span id="current-index">1</span> / <span id="total-count">388</span></span>
+            <span>正确率: <span id="current-accuracy">0%</span></span>
+        </div>
+        <div class="progress-container">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+    </header>
+
+    <div id="quiz-area" class="quiz-content">
+        <!-- 题目将通过 JS 渲染 -->
+    </div>
+
+    <div id="result-area" class="glass-card" style="display: none; text-align: center;">
+        <div class="stats-card">
+            <div class="score-circle">
+                <span id="final-score">0</span>
+                <span class="score-label">最终得分</span>
+            </div>
+            <h2 style="font-family: 'Noto Serif SC', serif; color: var(--text-main); margin-bottom: 10px;">练习完成</h2>
+            <p style="color: var(--text-light); margin-bottom: 30px;">
+                你完成了所有题目。<br>
+                <span id="accuracy-text"></span>
+            </p>
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <button class="glass-button" onclick="resetQuiz()">↺ 重新练习</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bottom-nav">
+    <button class="glass-button" style="padding: 8px 16px;" id="prev-btn" onclick="prevQuestion()">❮</button>
+    <div class="question-navigator" id="nav-dots">
+        <!-- 导航点 -->
+    </div>
+    <button class="glass-button" style="padding: 8px 16px;" id="next-btn" onclick="nextQuestion()">❯</button>
+</div>
+
+<script>
+    // 题目数据整合 (1-200)
+    const questions = [
+        { id: 1, chapter: "抽样方法", type: "single", question: "“目标总体”最准确的定义是：", options: ["A. 研究对象中方便抽取的总体", "B. 研究对象的全体", "C. 研究者能实际调查的总体", "D. 抽样后剩余的总体"], answer: -1, analysis: "" },
+        { id: 2, chapter: "抽样方法", type: "single", question: "“可得总体”指的是：", options: ["A. 研究对象的全体", "B. 研究对象中方便抽取的总体", "C. 与研究无关的总体", "D. 采用分层抽样后的总体"], answer: -1, analysis: "" },
+        { id: 3, chapter: "抽样方法", type: "single", question: "“代表性样本”应满足的要求是：", options: ["A. 与可得总体保持一致", "B. 与目标总体保持一致", "C. 任意选择，只要数量足够即可", "D. 研究者主观判断即可"], answer: -1, analysis: "" },
+        { id: 4, chapter: "抽样方法", type: "single", question: "下列哪项属于“有偏样本”的特征？", options: ["A. 样本特征与总体研究特征高度一致", "B. 样本特征与总体研究特征差异甚远", "C. 抽样方法随机，机会均等", "D. 样本容量很大"], answer: -1, analysis: "" },
+        { id: 5, chapter: "抽样方法", type: "single", question: "“简单随机抽样”最重要的特点是：", options: ["A. 每个个体被选中的机会相同", "B. 按总体特征分层后再抽样", "C. 按群组随机选择部分群组", "D. 根据方便程度选择"], answer: -1, analysis: "" },
+        { id: 6, chapter: "抽样方法", type: "single", question: "“分层随机抽样”适用于以下哪种情况？", options: ["A. 总体内各单位特征完全相同", "B. 总体内存在明显异质性，需要分层", "C. 无法获取总体特征信息", "D. 只需便捷地获取样本"], answer: -1, analysis: "" },
+        { id: 7, chapter: "抽样方法", type: "single", question: "“整群抽样”是指：", options: ["A. 把总体分层后，各层内随机抽样", "B. 随机选取若干完整的群组进行调查", "C. 从总体中随机抽取若干个体", "D. 根据便利程度选择群组"], answer: -1, analysis: "" },
+        { id: 8, chapter: "抽样方法", type: "single", question: "下列哪种方法最缺乏随机性且代表性最差？", options: ["A. 简单随机抽样", "B. 分层随机抽样", "C. 整群抽样", "D. 便利取样"], answer: -1, analysis: "" },
+        { id: 9, chapter: "抽样方法", type: "single", question: "要保证样本具有最佳代表性，应首选：", options: ["A. 便利取样", "B. 整群抽样", "C. 简单随机抽样", "D. 有偏样本"], answer: -1, analysis: "" },
+        { id: 10, chapter: "抽样方法", type: "single", question: "下列哪项不属于概率抽样方法？", options: ["A. 简单随机抽样", "B. 分层随机抽样", "C. 整群抽样", "D. 便利取样"], answer: -1, analysis: "" },
+        { id: 11, chapter: "抽样方法", type: "single", question: "关于“可得总体”的描述，以下哪项错误？", options: ["A. 是研究对象中可方便抽取的那部分", "B. 必定能够完全代表目标总体", "C. 与目标总体有一定差异风险", "D. 往往受实际条件限制"], answer: -1, analysis: "" },
+        { id: 12, chapter: "抽样方法", type: "single", question: "以下哪种情形属于“有偏样本”？", options: ["A. 按性别、年龄分层后抽取", "B. 从全国随机抽取各地居民", "C. 网络问卷仅收集团队成员回答", "D. 按群组随机选取若干小区"], answer: -1, analysis: "" },
+        { id: 13, chapter: "抽样方法", type: "single", question: "如果总体具有明显的地域／行业差异，研究者应采用：", options: ["A. 简单随机抽样", "B. 分层随机抽样", "C. 便利取样", "D. 有偏样本"], answer: -1, analysis: "" },
+        { id: 14, chapter: "抽样方法", type: "single", question: "当总体难以分层且地域分布广时，常用：", options: ["A. 简单随机抽样", "B. 分层随机抽样", "C. 整群抽样", "D. 便利取样"], answer: -1, analysis: "" },
+        { id: 15, chapter: "抽样方法", type: "single", question: "研究者选择门诊时间内首10位来访患者，属于：", options: ["A. 简单随机抽样", "B. 分层随机抽样", "C. 整群抽样", "D. 便利取样"], answer: -1, analysis: "" },
+        { id: 16, chapter: "抽样方法", type: "single", question: "在分层随机抽样中，常用的分层依据不包括：", options: ["A. 性别", "B. 年龄", "C. 星座", "D. 区域"], answer: -1, analysis: "" },
+        { id: 17, chapter: "抽样方法", type: "single", question: "当群组数量较少且组内差异大时，优先考虑：", options: ["A. 简单随机抽样", "B. 分层随机抽样", "C. 整群抽样", "D. 便利取样"], answer: -1, analysis: "" },
+        { id: 18, chapter: "抽样方法", type: "single", question: "下列哪项能有效降低抽样误差？", options: ["A. 缩小样本容量", "B. 增加样本容量", "C. 使用便利取样", "D. 使用有偏样本"], answer: -1, analysis: "" },
+        { id: 19, chapter: "抽样方法", type: "single", question: "若要确保每位研究对象被选中的机会相等，应采用：", options: ["A. 分层随机抽样", "B. 整群抽样", "C. 简单随机抽样", "D. 便利取样"], answer: -1, analysis: "" },
+        { id: 20, chapter: "抽样方法", type: "single", question: "在整群抽样中，错误的做法是：", options: ["A. 把总体划分为若干互不重叠的群组", "B. 随机选取部分群组进行全面调查", "C. 先从每个群组中随机抽取个体再调查", "D. 对所选群组中的每个单位全部调查"], answer: -1, analysis: "" },
+        { id: 21, chapter: "抽样方法", type: "single", question: "研究者只能获得A市三家医院的患者名单，则这三家医院构成：", options: ["A. 目标总体", "B. 可得总体", "C. 代表性样本", "D. 有偏样本"], answer: -1, analysis: "" },
+        { id: 22, chapter: "抽样方法", type: "single", question: "下列哪项不是“确定样本”时的考虑因素？", options: ["A. 样本容量", "B. 抽样方法", "C. 数据分析软件", "D. 样本代表性"], answer: -1, analysis: "" },
+        { id: 23, chapter: "抽样方法", type: "single", question: "在大规模社会调查中，为节省人力物力，常用：", options: ["A. 简单随机抽样", "B. 分层随机抽样", "C. 整群抽样", "D. 便利取样"], answer: -1, analysis: "" },
+        { id: 24, chapter: "抽样方法", type: "single", question: "研究者想研究不同学历人群的态度，应采用：", options: ["A. 简单随机抽样", "B. 分层随机抽样", "C. 整群抽样", "D. 便利取样"], answer: -1, analysis: "" },
+        { id: 25, chapter: "抽样方法", type: "single", question: "某市有1000人，研究者通过随机号码表抽取100人，属于：", options: ["A. 简单随机抽样", "B. 分层随机抽样", "C. 整群抽样", "D. 便利取样"], answer: -1, analysis: "" },
+        { id: 26, chapter: "抽样方法", type: "single", question: "将总体按教育程度分层，再在各层随机抽取，属于：", options: ["A. 简单随机抽样", "B. 分层随机抽样", "C. 整群抽样", "D. 便利取样"], answer: -1, analysis: "" },
+        { id: 27, chapter: "抽样方法", type: "single", question: "把城市划分为20个社区，随机选取5个社区进行全面调查，属于：", options: ["A. 简单随机抽样", "B. 分层随机抽样", "C. 整群抽样", "D. 便利取样"], answer: -1, analysis: "" },
+        { id: 28, chapter: "抽样方法", type: "single", question: "研究者从自己同事中选取样本进行问卷调查，属于：", options: ["A. 简单随机抽样", "B. 分层随机抽样", "C. 整群抽样", "D. 便利取样"], answer: -1, analysis: "" },
+        { id: 29, chapter: "抽样方法", type: "single", question: "代表性样本的主要优点在于：", options: ["A. 成本最低", "B. 随机误差最大", "C. 结果可推广到总体", "D. 调查速度最快"], answer: -1, analysis: "" },
+        { id: 30, chapter: "抽样方法", type: "single", question: "关于有偏样本，下列说法错误的是：", options: ["A. 往往容易获得", "B. 难以推广结论", "C. 样本特征与总体一致", "D. 抽样过程缺乏随机性"], answer: -1, analysis: "" },
+        { id: 31, chapter: "变量类型", type: "single", question: "下列哪个属于定量变量？", options: ["A. 刺激呈现时间", "B. 性别", "C. 药品种类", "D. 心理疗法类型"], answer: -1, analysis: "" },
+        { id: 32, chapter: "变量类型", type: "single", question: "下列哪个属于定性变量？", options: ["A. 反应时", "B. IQ值", "C. 态度的7点量表分数", "D. 教学方法类型"], answer: -1, analysis: "" },
+        { id: 33, chapter: "变量类型", type: "single", question: "“刺激持续时间”属于哪种来源的变量？", options: ["A. 刺激变量", "B. 环境变量", "C. 被试变量", "D. 操作性变量"], answer: -1, analysis: "" },
+        { id: 34, chapter: "变量类型", type: "single", question: "“照度”属于哪种来源的变量？", options: ["A. 刺激变量", "B. 环境变量", "C. 被试变量", "D. 操作性变量"], answer: -1, analysis: "" },
+        { id: 35, chapter: "变量类型", type: "single", question: "“性别”属于哪种来源的变量？", options: ["A. 刺激变量", "B. 环境变量", "C. 被试变量", "D. 操作性变量"], answer: -1, analysis: "" },
+        { id: 36, chapter: "变量类型", type: "single", question: "下列哪项不属于被试的固有特征？", options: ["A. 年龄", "B. 气质", "C. 家庭背景", "D. 单眼辨别刺激"], answer: -1, analysis: "" },
+        { id: 37, chapter: "变量类型", type: "single", question: "使用双耳分听法时，所操纵的是哪种被试变量？", options: ["A. 刺激变量", "B. 环境变量", "C. 固有被试变量", "D. 暂时被试变量"], answer: -1, analysis: "" },
+        { id: 38, chapter: "变量类型", type: "single", question: "下列哪项属于环境变量？", options: ["A. 噪声水平", "B. 婚姻状况", "C. IQ值", "D. 配对联想词表"], answer: -1, analysis: "" },
+        { id: 39, chapter: "变量类型", type: "single", question: "“学习条件”在操作程度上属于哪类变量？", options: ["A. 操作性变量", "B. 非操作性变量", "C. 定性变量", "D. 环境变量"], answer: -1, analysis: "" },
+        { id: 40, chapter: "变量类型", type: "single", question: "“年龄”在操作程度上属于哪类变量？", options: ["A. 操作性变量", "B. 非操作性变量", "C. 定量变量", "D. 定性变量"], answer: -1, analysis: "" },
+        { id: 41, chapter: "变量类型", type: "single", question: "下列哪项不属于操作性变量？", options: ["A. 刺激呈现时间", "B. 奖赏次数", "C. 学习条件", "D. 性别"], answer: -1, analysis: "" },
+        { id: 42, chapter: "变量类型", type: "single", question: "下列哪种变量是研究者主动操纵的？", options: ["A. 操作性变量", "B. 非操作性变量", "C. 定性变量", "D. 环境变量"], answer: -1, analysis: "" },
+        { id: 43, chapter: "变量类型", type: "single", question: "下列哪项是定量变量的示例？", options: ["A. 正确率", "B. 药品种类", "C. 不同教法", "D. 心理疗法类型"], answer: -1, analysis: "" },
+        { id: 44, chapter: "变量类型", type: "single", question: "“用药量”应归为以下哪种变量？", options: ["A. 定性变量", "B. 定量变量", "C. 环境变量", "D. 刺激变量"], answer: -1, analysis: "" },
+        { id: 45, chapter: "变量类型", type: "single", question: "“配对联想词表”属于哪种来源的变量？", options: ["A. 刺激变量", "B. 环境变量", "C. 被试变量", "D. 操作性变量"], answer: -1, analysis: "" },
+        { id: 46, chapter: "变量类型", type: "single", question: "“家庭背景”在变量来源上属于哪类？", options: ["A. 刺激变量", "B. 环境变量", "C. 被试变量", "D. 操作性变量"], answer: -1, analysis: "" },
+        { id: 47, chapter: "变量类型", type: "single", question: "“刺激强度”在变量性质上属于哪类？", options: ["A. 定量变量", "B. 定性变量", "C. 非操作性变量", "D. 环境变量"], answer: -1, analysis: "" },
+        { id: 48, chapter: "变量类型", type: "single", question: "“白天/晚上”作为实验条件是一种什么变量？", options: ["A. 刺激变量", "B. 环境变量", "C. 被试变量", "D. 操作性变量"], answer: -1, analysis: "" },
+        { id: 49, chapter: "变量类型", type: "single", question: "“IQ值”应归类为哪种变量？", options: ["A. 刺激变量", "B. 环境变量", "C. 定量变量", "D. 定性变量"], answer: -1, analysis: "" },
+        { id: 50, chapter: "变量类型", type: "single", question: "“父母职业”在操作程度上属于哪类变量？", options: ["A. 操作性变量", "B. 非操作性变量", "C. 刺激变量", "D. 环境变量"], answer: -1, analysis: "" },
+        { id: 51, chapter: "实验者效应", type: "single", question: "下列哪项属于“实验者效应”中的实验者特质？", options: ["A. 被试的智力水平", "B. 主试的性别", "C. 刺激呈现顺序", "D. 实验室温度"], answer: -1, analysis: "" },
+        { id: 52, chapter: "实验者效应", type: "single", question: "罗森塔尔效应指的是实验者的哪种影响？", options: ["A. 实验者的生理特质", "B. 实验者的期望效应", "C. 被试的假设效应", "D. 环境的噪声干扰"], answer: -1, analysis: "" },
+        { id: 53, chapter: "实验者效应", type: "single", question: "哪种方法可以用来控制实验者期望？", options: ["A. 恒定法", "B. 双盲控制", "C. 拉丁方设计", "D. 匹配法"], answer: -1, analysis: "" },
+        { id: 54, chapter: "实验者效应", type: "single", question: "下列哪项不属于控制实验者效应的方法？", options: ["A. 标准化培训主试", "B. 使用电脑主试", "C. 提高噪声水平", "D. 双盲设计"], answer: -1, analysis: "" },
+        { id: 55, chapter: "被试效应", type: "single", question: "“好被试现象”是指：", options: ["A. 被试努力猜测并符合实验者假设", "B. 被试对实验室环境的额外关注", "C. 被试根据指导语完成任务", "D. 被试的生理状态变化"], answer: -1, analysis: "" },
+        { id: 56, chapter: "被试效应", type: "single", question: "霍桑效应主要强调的是：", options: ["A. 被试的智力水平", "B. 被试受到关注后动机增强", "C. 实验者的期望影响", "D. 实验室温度控制"], answer: -1, analysis: "" },
+        { id: 57, chapter: "被试效应", type: "single", question: "安慰剂效应属于哪类额外变量？", options: ["A. 实验者变量", "B. 被试效应", "C. 环境变量", "D. 设计变量"], answer: -1, analysis: "" },
+        { id: 58, chapter: "被试效应", type: "single", question: "约翰·亨利效应是指：", options: ["A. 控制组被试在竞争中超常发挥", "B. 实验者期望导致结果偏倚", "C. 被试对噪声敏感", "D. 仪器测量误差"], answer: -1, analysis: "" },
+        { id: 59, chapter: "变量类型", type: "single", question: "下列哪项是“刺激变量”的例子？", options: ["A. 实验室照度", "B. 刺激持续时间", "C. 被试的年龄", "D. 数据分析方法"], answer: -1, analysis: "" },
+        { id: 60, chapter: "变量类型", type: "single", question: "“环境变量”不包括：", options: ["A. 温度", "B. 照度", "C. 刺激强度", "D. 噪声水平"], answer: -1, analysis: "" },
+        { id: 61, chapter: "变量类型", type: "single", question: "下列哪种属于“被试的固有特征”？", options: ["A. 临时分心状态", "B. 双耳分听法操作", "C. 气质类型", "D. 刺激材料类别"], answer: -1, analysis: "" },
+        { id: 62, chapter: "变量类型", type: "single", question: "使用单眼辨别刺激以改变被试状态，属于哪种变量？", options: ["A. 固有被试变量", "B. 暂时被试变量", "C. 环境变量", "D. 操作性变量"], answer: -1, analysis: "" },
+        { id: 63, chapter: "实验控制", type: "single", question: "下列哪项属于“实验仪器性能与技术参数”的控制？", options: ["A. 广播指导语内容", "B. 仪器的采样频率设置", "C. 被试的性别配比", "D. 刺激材料的随机化"], answer: -1, analysis: "" },
+        { id: 64, chapter: "实验控制", type: "single", question: "在实验环境方面，研究者最不需要关注的是：", options: ["A. 室内温度", "B. 噪声干扰", "C. 被试期望", "D. 空间大小"], answer: -1, analysis: "" },
+        { id: 65, chapter: "实验控制", type: "single", question: "下列哪项属于“实验设计和过程控制”？", options: ["A. 采用双盲法", "B. 设置仪器增益", "C. 统计方差齐性检验", "D. 保持照度恒定"], answer: -1, analysis: "" },
+        { id: 66, chapter: "实验控制", type: "single", question: "在数据整理和统计分析中，哪一项可以降低系统误差？", options: ["A. 随机化", "B. 提高样本量", "C. 使用协变量分析", "D. 增加被试激励"], answer: -1, analysis: "" },
+        { id: 67, chapter: "控制方法", type: "single", question: "“消除法”控制额外变量的做法是：", options: ["A. 在实验中完全剔除该变量", "B. 将该变量保持恒定", "C. 随机分配被试", "D. 采用ABBA平衡"], answer: -1, analysis: "" },
+        { id: 68, chapter: "控制方法", type: "single", question: "下列哪项属于“恒定法”？", options: ["A. 所有被试均在25℃环境下测试", "B. 随机将被试分配到各组", "C. 拉丁方设计", "D. 作为协变量纳入分析"], answer: -1, analysis: "" },
+        { id: 69, chapter: "控制方法", type: "single", question: "使用随机化法控制额外变量的基本原理是：", options: ["A. 将变量完全去除", "B. 在各组间均匀分布", "C. 对比所有可能序列", "D. 保持变量恒定"], answer: -1, analysis: "" },
+        { id: 70, chapter: "控制方法", type: "single", question: "“匹配法”最常用的操作是：", options: ["A. 随机分配被试", "B. 在各组按年龄配对", "C. 剔除某些被试", "D. 随机抵消平衡"], answer: -1, analysis: "" },
+        { id: 71, chapter: "实验设计", type: "single", question: "“兼作组法”又称为：", options: ["A. 被试间设计", "B. 重复测量设计", "C. 拉丁方设计", "D. 分层随机抽样"], answer: -1, analysis: "" },
+        { id: 72, chapter: "控制方法", type: "single", question: "下列哪种是“完全抵消平衡”？", options: ["A. 列出所有处理顺序并随机分配", "B. 随机抵消平衡", "C. ABBA法", "D. 将变量保持不变"], answer: -1, analysis: "" },
+        { id: 73, chapter: "控制方法", type: "single", question: "ABBA法最主要用来控制：", options: ["A. 仪器漂移", "B. 顺序效应", "C. 被试期望", "D. 环境温度"], answer: -1, analysis: "" },
+        { id: 74, chapter: "控制方法", type: "single", question: "拉丁方设计的主要目的是：", options: ["A. 消除所有额外变量", "B. 部分抵消顺序或练习效应", "C. 增加被试动机", "D. 随机剔除异常值"], answer: -1, analysis: "" },
+        { id: 75, chapter: "控制方法", type: "single", question: "将额外变量作为协变量直接纳入模型，属于：", options: ["A. 消除法", "B. 恒定法", "C. 纳入额外变量法", "D. 匹配法"], answer: -1, analysis: "" },
+        { id: 76, chapter: "控制方法", type: "single", question: "在控制练习效应时，研究者采用了多种条件顺序，属于哪种方法？", options: ["A. 消除法", "B. 部分抵消平衡", "C. 恒定法", "D. 纳入协变量"], answer: -1, analysis: "" },
+        { id: 77, chapter: "控制方法", type: "single", question: "若要完全消除被试的年龄影响，应采用：", options: ["A. 随机化法", "B. 消除法（排除所有非目标年龄被试）", "C. 匹配法", "D. 兼作组法"], answer: -1, analysis: "" },
+        { id: 78, chapter: "控制方法", type: "single", question: "将被试按智力水平分为高、中、低组，分别再随机分配，属于：", options: ["A. 随机化法", "B. 匹配法", "C. 恒定法", "D. 纳入协变量"], answer: -1, analysis: "" },
+        { id: 79, chapter: "控制方法", type: "single", question: "“纳入额外变量法”常用于下列哪种分析？", options: ["A. 方差分析(ANOVA)", "B. 协方差分析(ANCOVA)", "C. 描述性统计", "D. 频数分析"], answer: -1, analysis: "" },
+        { id: 80, chapter: "控制方法", type: "single", question: "在双盲设计中，研究者和被试都不知道分组信息，这主要是为了控制：", options: ["A. 实验者效应", "B. 环境变量", "C. 仪器误差", "D. 设计缺陷"], answer: -1, analysis: "" },
+        { id: 81, chapter: "实验设计", type: "single", question: "关于被试间设计，下列说法正确的是：", options: ["A. 每个被试接受所有实验条件", "B. 不同被试分别接受不同实验条件", "C. 同时对被试进行前测和后测", "D. 需要对被试进行匹配"], answer: -1, analysis: "" },
+        { id: 82, chapter: "实验设计", type: "single", question: "在随机实验组–控制组后测设计中，下列步骤不包括：", options: ["A. 对实验组进行干预", "B. 对控制组不进行干预", "C. 对两组进行前测", "D. 对两组进行后测"], answer: -1, analysis: "" },
+        { id: 83, chapter: "实验设计", type: "single", question: "在随机实验组–控制组前后测设计中，常用的统计方法是：", options: ["A. 配对样本t检验", "B. 独立样本t检验", "C. 单因素方差分析", "D. 卡方检验"], answer: -1, analysis: "" },
+        { id: 84, chapter: "实验设计", type: "single", question: "下列哪种设计用于控制被试个体差异？", options: ["A. 随机实验组–控制组后测设计", "B. 随机实验组–控制组前后测设计", "C. 匹配组设计", "D. 完全随机多组实验设计"], answer: -1, analysis: "" },
+        { id: 85, chapter: "实验设计", type: "single", question: "完全随机多组实验设计的特点是：", options: ["A. 只包含一个实验组和一个控制组", "B. 被试按特征配对后随机分配", "C. 将被试随机分配到多个处理组", "D. 同一被试接受所有处理"], answer: -1, analysis: "" },
+        { id: 86, chapter: "实验设计", type: "single", question: "下列哪种属于被试内设计？", options: ["A. 随机实验组–控制组后测设计", "B. 两水平被试内设计", "C. 匹配组设计", "D. 完全随机多组实验设计"], answer: -1, analysis: "" },
+        { id: 87, chapter: "实验设计", type: "single", question: "两水平被试内设计的含义是：", options: ["A. 每位被试经历两个实验条件", "B. 被试被分为两组", "C. 被试根据两个水平进行匹配", "D. 只有两名被试"], answer: -1, analysis: "" },
+        { id: 88, chapter: "实验设计", type: "single", question: "多水平被试内设计的主要优点是：", options: ["A. 排除顺序效应", "B. 节省被试数量", "C. 排除被试间差异", "D. 易于控制分组偏差"], answer: -1, analysis: "" },
+        { id: 89, chapter: "实验设计", type: "single", question: "被试间设计的主要优点不包括：", options: ["A. 排除被试间差异", "B. 排除条件间干扰", "C. 被试实验任务少", "D. 易于实施"], answer: -1, analysis: "" },
+        { id: 90, chapter: "实验设计", type: "single", question: "被试间设计的主要缺点包括：", options: ["A. 易出现顺序效应", "B. 需要较多被试", "C. 能消除被试个体差异", "D. 易发生条件干扰"], answer: -1, analysis: "" },
+        { id: 91, chapter: "实验设计", type: "single", question: "被试内设计的主要缺点是：", options: ["A. 需要更多被试", "B. 易出现分组偏差", "C. 易出现顺序效应", "D. 难以节省成本"], answer: -1, analysis: "" },
+        { id: 92, chapter: "实验设计", type: "single", question: "被试内设计的主要优点包括：", options: ["A. 排除顺序效应", "B. 消除被试间差异", "C. 避免条件干扰", "D. 被试任务少"], answer: -1, analysis: "" },
+        { id: 93, chapter: "实验设计", type: "single", question: "在随机实验组–控制组前后测设计中，前测的主要作用是：", options: ["A. 检验处理效果", "B. 测量基线差异", "C. 随机分组", "D. 配对被试"], answer: -1, analysis: "" },
+        { id: 94, chapter: "实验设计", type: "single", question: "在随机实验组–控制组后测设计中，若要比较两组差异，应进行：", options: ["A. 前测", "B. 后测", "C. 前后测", "D. 配对测"], answer: -1, analysis: "" },
+        { id: 95, chapter: "实验设计", type: "single", question: "匹配组设计中，常用的匹配变量包括：", options: ["A. 刺激持续时间", "B. 被试年龄", "C. 实验条件", "D. 实验效果"], answer: -1, analysis: "" },
+        { id: 96, chapter: "实验设计", type: "single", question: "完全随机多组设计中，为控制误差变异，应采用：", options: ["A. 匹配法", "B. 随机化", "C. 双盲法", "D. 配对抽样"], answer: -1, analysis: "" },
+        { id: 97, chapter: "实验设计", type: "single", question: "关于被试间设计，下列说法正确的是：", options: ["A. 同一被试接受所有实验条件", "B. 可以消除被试差异", "C. 条件间不会相互干扰", "D. 容易出现练习效应"], answer: -1, analysis: "" },
+        { id: 98, chapter: "实验设计", type: "single", question: "下列哪种设计最能节省被试数量？", options: ["A. 随机实验组–控制组后测设计", "B. 前后测设计", "C. 被试内设计", "D. 完全随机多组设计"], answer: -1, analysis: "" },
+        { id: 99, chapter: "实验设计", type: "single", question: "以下哪种情况更易出现顺序效应？", options: ["A. 被试间设计", "B. 被试内设计", "C. 完全随机多组设计", "D. 匹配组设计"], answer: -1, analysis: "" },
+        { id: 100, chapter: "实验设计", type: "single", question: "若研究需要完全消除先前处理的影响，应避免使用：", options: ["A. 被试间设计", "B. 被试内设计", "C. 完全随机设计", "D. 匹配设计"], answer: -1, analysis: "" },
+        { id: 101, chapter: "交互作用", type: "single", question: "在两水平被试内设计中，每位被试经历的条件数为：", options: ["A. 1", "B. 2", "C. 多于2", "D. 0"], answer: -1, analysis: "" },
+        { id: 102, chapter: "交互作用", type: "single", question: "在多水平被试内设计中，被试至少接受多少个条件？", options: ["A. 2", "B. 3", "C. 1", "D. 0"], answer: -1, analysis: "" },
+        { id: 103, chapter: "交互作用", type: "single", question: "随机实验组–控制组前后测设计与后测设计的根本区别在于：", options: ["A. 是否进行前测", "B. 是否使用随机分配", "C. 是否进行后测", "D. 是否包含控制组"], answer: -1, analysis: "" },
+        { id: 104, chapter: "交互作用", type: "single", question: "在被试内设计中，“顺序效应”主要指：", options: ["A. 条件之间的相互影响", "B. 被试个体差异", "C. 组间差异", "D. 随机误差"], answer: -1, analysis: "" },
+        { id: 105, chapter: "交互作用", type: "single", question: "哪种设计最容易出现被试疲劳的风险？", options: ["A. 被试间设计", "B. 被试内设计", "C. 完全随机设计", "D. 匹配设计"], answer: -1, analysis: "" },
+        { id: 106, chapter: "交互作用", type: "single", question: "如果担心分组偏差，最适合采用的设计是：", options: ["A. 随机实验组–控制组后测设计", "B. 随机实验组–控制组前后测设计", "C. 匹配组设计", "D. 完全随机多组设计"], answer: -1, analysis: "" },
+        { id: 107, chapter: "交互作用", type: "single", question: "在完全随机多组设计中，当组数增加时，对误差控制的要求是：", options: ["A. 降低", "B. 不变", "C. 增加", "D. 消除"], answer: -1, analysis: "" },
+        { id: 108, chapter: "交互作用", type: "single", question: "在随机实验组–控制组前后测设计中，独立样本t检验检验的内容是：", options: ["A. 两组后测均值差异", "B. 两组前测均值差异", "C. 前后差异之差", "D. 单组前后差异"], answer: -1, analysis: "" },
+        { id: 109, chapter: "交互作用", type: "single", question: "下列哪种设计最能避免被试间差异对结果的影响？", options: ["A. 被试间设计", "B. 被试内设计", "C. 前后测设计", "D. 完全随机多组设计"], answer: -1, analysis: "" },
+        { id: 110, chapter: "交互作用", type: "single", question: "哪种设计需要特别关注分组均衡性？", options: ["A. 被试内设计", "B. 随机实验组–控制组后测设计", "C. 完全随机多组设计", "D. 随机实验组–控制组前后测设计"], answer: -1, analysis: "" },
+        { id: 111, chapter: "单被试设计", type: "single", question: "两个因素组合的交互作用数量是多少？", options: ["A. 1", "B. 2", "C. 3", "D. 4"], answer: -1, analysis: "" },
+        { id: 112, chapter: "单被试设计", type: "single", question: "如果有三个因素，交互作用数量是多少？", options: ["A. 3", "B. 4", "C. 5", "D. 6"], answer: -1, analysis: "" },
+        { id: 113, chapter: "单被试设计", type: "single", question: "简单效应的定义是什么？", options: ["A. 自变量对因变量的独立影响", "B. 在没有交互作用情况下的效应", "C. 在交互作用存在的前提下，固定一个自变量水平，考察另一个自变量的效应", "D. 只有两个因素之间的影响"], answer: -1, analysis: "" },
+        { id: 114, chapter: "单被试设计", type: "single", question: "简单效应在什么时候使用？", options: ["A. 交互作用不存在", "B. 任何情况下", "C. 存在交互作用时", "D. 有三个因素时"], answer: -1, analysis: "" },
+        { id: 115, chapter: "单被试设计", type: "single", question: "以下哪项最准确地描述了主效应？", options: ["A. 一个自变量在不同水平之间的差异对因变量的总体影响", "B. 两个自变量共同作用下对因变量的影响", "C. 固定一个自变量水平后，另一个自变量的影响", "D. 因变量对自变量的反馈作用"], answer: -1, analysis: "" },
+        { id: 116, chapter: "单被试设计", type: "single", question: "下列对交互作用的描述，哪一项是正确的？", options: ["A. 一个自变量对因变量的影响不受其他自变量水平的影响", "B. 两个自变量对因变量的影响之和", "C. 一个自变量对因变量的影响依赖于另一个自变量的水平", "D. 因变量对自变量的双向作用"], answer: -1, analysis: "" },
+        { id: 117, chapter: "单被试设计", type: "single", question: "以下哪项最准确地描述了简单效应？", options: ["A. 自变量对因变量的总体平均影响", "B. 固定一个自变量水平后，考察另一个自变量对因变量的影响", "C. 两个自变量共同作用的效应", "D. 因变量在不同水平下的变化"], answer: -1, analysis: "" },
+        { id: 118, chapter: "单被试设计", type: "single", question: "何时需要进行简单效应分析？", options: ["A. 当主效应显著时", "B. 当交互作用显著时", "C. 当因变量为连续变量时", "D. 在被试内设计中总是需要"], answer: -1, analysis: "" },
+        { id: 119, chapter: "单被试设计", type: "single", question: "简单效应与主效应的主要区别在于：", options: ["A. 简单效应是平均效应，主效应是固定水平效应", "B. 简单效应只研究单一自变量，主效应研究多个自变量", "C. 简单效应是在某一水平下的效应，主效应是跨水平的平均效应", "D. 二者无本质区别"], answer: -1, analysis: "" },
+        { id: 120, chapter: "单被试设计", type: "single", question: "在二因素实验中，如果只想知道 A 因素在 B 因素某一水平下的效应，应采用：", options: ["A. 主效应检验", "B. 简单效应检验", "C. 效应量估计", "D. 方差齐性检验"], answer: -1, analysis: "" },
+        { id: 121, chapter: "单被试设计", type: "single", question: "A-B设计相比其他单被试设计的因果推断为何较弱？", options: ["A. 缺少基线测量", "B. 没有撤销处理阶段", "C. 不进行后测", "D. 样本量过大"], answer: -1, analysis: "" },
+        { id: 122, chapter: "单被试设计", type: "single", question: "以下哪个案例最符合A-B设计？", options: ["A. 斯金纳箱实验", "B. 指导对新教师课堂管理的影响", "C. 积极关注对自我伤害行为的影响", "D. 多重基线提高足球技能"], answer: -1, analysis: "" },
+        { id: 123, chapter: "单被试设计", type: "single", question: "A-B设计中，成熟效应指的是什么？", options: ["A. 被试因多次测量而疲劳", "B. 被试因时间推移自然改变", "C. 处理效果短暂", "D. 处理无法撤销"], answer: -1, analysis: "" },
+        { id: 124, chapter: "单被试设计", type: "single", question: "A-B-A设计要求自变量必须具备什么特性？", options: ["A. 随机性", "B. 可逆性", "C. 持续性", "D. 无偏性"], answer: -1, analysis: "" },
+        { id: 125, chapter: "单被试设计", type: "single", question: "下面哪个例子最典型地使用了A-B-A设计？", options: ["A. 指导对新教师课堂管理干预", "B. 斯金纳箱里的刺激—撤去—刺激", "C. 多重基线中的多项技能训练", "D. ABAB设计的自我伤害干预"], answer: -1, analysis: "" },
+        { id: 126, chapter: "单被试设计", type: "single", question: "A-B-A设计的局限之一是：", options: ["A. 处理效果必须短暂且可逆", "B. 需要多个被试", "C. 难以绘制直观图示", "D. 无法控制个体差异"], answer: -1, analysis: "" },
+        { id: 127, chapter: "单被试设计", type: "single", question: "A-B-A-B设计相比A-B-A设计增加了哪个阶段？", options: ["A. 初始基线", "B. 第二次处理", "C. 多重基线", "D. 随机分配"], answer: -1, analysis: "" },
+        { id: 128, chapter: "单被试设计", type: "single", question: "以下哪种情况不适合使用A-B-A-B设计？", options: ["A. 药物剂量短期改变", "B. 情绪诱发实验", "C. 长期持续效果的教学方法", "D. 可逆性视觉刺激"], answer: -1, analysis: "" },
+        { id: 129, chapter: "单被试设计", type: "single", question: "积极关注对自我伤害行为的影响属于哪种设计？", options: ["A. A-B", "B. A-B-A", "C. A-B-A-B", "D. 多重基线"], answer: -1, analysis: "" },
+        { id: 130, chapter: "单被试设计", type: "single", question: "多重基线设计的核心特点是：", options: ["A. 针对同一被试多次撤销处理", "B. 对不同行为或设置逐一引入处理", "C. 将基线阶段重复多次", "D. 同时在多个被试上进行撤销"], answer: -1, analysis: "" },
+        { id: 131, chapter: "单被试设计", type: "single", question: "以下哪个案例最符合多重基线设计？", options: ["A. 斯金纳箱实验", "B. 新训练方法对不同足球技能的影响依次测量", "C. 自我伤害行为的ABAB设计", "D. 教师指导对课堂管理的AB设计"], answer: -1, analysis: "" },
+        { id: 132, chapter: "单被试设计", type: "single", question: "多重基线设计相比撤销设计的一个优点是：", options: ["A. 可以评估长期持续效果", "B. 不需要撤销处理就可显示因果关系", "C. 随机分配被试", "D. 降低伦理问题"], answer: -1, analysis: "" },
+        { id: 133, chapter: "单被试设计", type: "single", question: "多重基线设计的局限在于：", options: ["A. 需要多个可变行为或设置", "B. 处理效果无法重复", "C. 基线测量次数过少", "D. 样本量过大"], answer: -1, analysis: "" },
+        { id: 134, chapter: "单被试设计", type: "single", question: "单被试设计相比传统被试组设计的主要优点不包括：", options: ["A. 更好地控制个体差异", "B. 只需一个被试即可", "C. 结果易于概括推广", "D. 灵活性高"], answer: -1, analysis: "" },
+        { id: 135, chapter: "单被试设计", type: "single", question: "单被试设计的主要缺点不包括：", options: ["A. 缺乏外部效度", "B. 易出现顺序效应", "C. 需要大量被试", "D. 重复测量可能产生疲劳"], answer: -1, analysis: "" },
+        { id: 136, chapter: "单被试设计", type: "single", question: "以下哪项最能减少单被试设计中的顺序效应？", options: ["A. 增加被试数量", "B. 使用ABAB设计", "C. 缩短基线阶段", "D. 全随机多组设计"], answer: -1, analysis: "" },
+        { id: 137, chapter: "单被试设计", type: "single", question: "当处理效应无法撤销时，哪种单被试设计更合适？", options: ["A. A-B", "B. A-B-A", "C. A-B-A-B", "D. 多重基线"], answer: -1, analysis: "" },
+        { id: 138, chapter: "单被试设计", type: "single", question: "如果想在单一被试中全面了解行为变化，以下哪项是主要优势？", options: ["A. 外部效度高", "B. 控制组多", "C. 个体行为轨迹清晰", "D. 样本代表性好"], answer: -1, analysis: "" },
+        { id: 139, chapter: "单被试设计", type: "single", question: "在ABAB设计中，第二个“A”阶段用于：", options: ["A. 再次引入处理", "B. 再次测量基线", "C. 绘制交互图", "D. 随机化分组"], answer: -1, analysis: "" },
+        { id: 140, chapter: "准实验设计", type: "single", question: "对新教师课堂管理的影响研究，应避免使用哪种设计？", options: ["A. A-B", "B. A-B-A", "C. A-B-A-B", "D. 多重基线"], answer: -1, analysis: "" },
+        { id: 141, chapter: "准实验设计", type: "single", question: "如果被试在第一个处理后行为没有回到基线水平，哪种设计会受影响？", options: ["A. A-B", "B. A-B-A", "C. 多重基线", "D. ABAB"], answer: -1, analysis: "" },
+        { id: 142, chapter: "准实验设计", type: "single", question: "单被试设计中，“可塑性”指的是：", options: ["A. 被试易受疲劳影响", "B. 设计对个体差异的适应性", "C. 数据易于量化", "D. 样本量可变"], answer: -1, analysis: "" },
+        { id: 143, chapter: "准实验设计", type: "single", question: "哪种设计最能避免因撤销处理造成的伦理问题？", options: ["A. A-B", "B. A-B-A", "C. ABAB", "D. 多重基线"], answer: -1, analysis: "" },
+        { id: 144, chapter: "准实验设计", type: "single", question: "若研究者只对一个被试的行为变化感兴趣，应优先选择：", options: ["A. 传统被试组设计", "B. 单被试设计", "C. 调查研究", "D. 减少测量设计"], answer: -1, analysis: "" },
+        { id: 145, chapter: "准实验设计", type: "single", question: "绘制单被试设计结果时，通常使用的图示是：", options: ["A. 条形图", "B. 折线图", "C. 饼图", "D. 散点图"], answer: -1, analysis: "" },
+        { id: 146, chapter: "准实验设计", type: "single", question: "A-B设计若想增强因果推断，可增加哪一环节？", options: ["A. 提高基线测量次数", "B. 随机化多被试", "C. 改用折线图", "D. 调查问卷"], answer: -1, analysis: "" },
+        { id: 147, chapter: "准实验设计", type: "single", question: "在多重基线设计中，如果行为没有在基线阶段保持稳定，应如何处理？", options: ["A. 增加处理强度", "B. 延长基线测量", "C. 忽略基线数据", "D. 立即撤销处理"], answer: -1, analysis: "" },
+        { id: 148, chapter: "准实验设计", type: "single", question: "单被试设计的灵活性体现在：", options: ["A. 可以随时终止实验", "B. 固定组间条件", "C. 只能用于可逆自变量", "D. 无需任何基线"], answer: -1, analysis: "" },
+        { id: 149, chapter: "准实验设计", type: "single", question: "关于单被试设计，下列说法正确的有一项是：", options: ["A. 它完全不受伦理限制", "B. 结果可直接推广到群体", "C. 可清楚展示个体变化趋势", "D. 不需要后测"], answer: -1, analysis: "" },
+        { id: 150, chapter: "准实验设计", type: "single", question: "准实验设计的核心特征不包括以下哪项？", options: ["A. 无法对被试进行完全随机分配", "B. 可以操纵自变量", "C. 可以充分控制无关变量", "D. 实验在自然情境中进行"], answer: -1, analysis: "" },
+        { id: 151, chapter: "实验心理学", type: "single", question: "下列哪种设计属于准实验设计中的单组设计？", options: ["A. 单组前后测设计", "B. 固定组比较设计", "C. 不相等处理组对照组前后测设计", "D. 不相等实验组前后测时间序列设计"], answer: -1, analysis: "" },
+        { id: 152, chapter: "实验心理学", type: "single", question: "单组前后测设计的主要特点是：", options: ["A. 只有一次后测，无前测", "B. 有前测和后测，但只有一次处理", "C. 多次前测与多次后测", "D. 同时有实验组和对照组"], answer: -1, analysis: "" },
+        { id: 153, chapter: "实验心理学", type: "single", question: "单组前后测设计最难控制的额外变量是：", options: ["A. 历史因素", "B. 处理效应", "C. 前测效应", "D. 统计回归"], answer: -1, analysis: "" },
+        { id: 154, chapter: "实验心理学", type: "single", question: "单组时间序列设计“前测”和“后测”的测量次数要求是：", options: ["A. 前测多于后测", "B. 后测多于前测", "C. 前测和后测次数相等", "D. 无需进行测量"], answer: -1, analysis: "" },
+        { id: 155, chapter: "实验心理学", type: "single", question: "单组时间序列设计相比单组前后测设计的一个显著优势是：", options: ["A. 更易实施", "B. 更能控制历史因素", "C. 不需要任何前测", "D. 可随机分配被试"], answer: -1, analysis: "" },
+        { id: 156, chapter: "实验心理学", type: "single", question: "单组相等时间样本设计中，处理与测量的时间间隔要求是：", options: ["A. 不同且不规则", "B. 不同但相等", "C. 相同且等间隔", "D. 不需要时间间隔"], answer: -1, analysis: "" },
+        { id: 157, chapter: "实验心理学", type: "single", question: "单组相等时间样本设计的一个主要缺点是：", options: ["A. 难以控制测验效应", "B. 难以控制统计回归", "C. 处理间断会暴露实验目的", "D. 无法测量因变量"], answer: -1, analysis: "" },
+        { id: 158, chapter: "实验心理学", type: "single", question: "固定组比较设计的特点是：", options: ["A. 只有实验组，无对照组", "B. 两组都有后测，但只实验组有前测", "C. 两组都有后测，且只有实验组接受处理", "D. 两组都有前后测，且有随机分配"], answer: -1, analysis: "" },
+        { id: 159, chapter: "实验心理学", type: "single", question: "固定组比较设计最主要的局限是：", options: ["A. 无法测量前测差异", "B. 无法比较后测差异", "C. 选择偏差无法通过随机化消除", "D. 历史效应无法控制"], answer: -1, analysis: "" },
+        { id: 160, chapter: "实验心理学", type: "single", question: "不相等处理组对照组前后测设计中，“不相等”指的是：", options: ["A. 前测成绩不相等", "B. 处理次数不相等", "C. 测量次数不相等", "D. 自变量水平不相等"], answer: -1, analysis: "" },
+        { id: 161, chapter: "实验心理学", type: "single", question: "“不相等处理组对照组前后测设计”适用于以下哪种场景？", options: ["A. 可以随机分配被试", "B. 处理效应可完全撤销", "C. 无法进行随机分组的现实场景", "D. 样本量极大"], answer: -1, analysis: "" },
+        { id: 162, chapter: "实验心理学", type: "single", question: "不相等实验组前后测时间序列设计与单组时间序列设计的主要差异是：", options: ["A. 只有一个时间序列", "B. 增加了对照组", "C. 只有一次前测", "D. 不需要后测"], answer: -1, analysis: "" },
+        { id: 163, chapter: "实验心理学", type: "single", question: "在不相等实验组前后测时间序列设计中，对照组的测量特点是：", options: ["A. 只进行一次后测", "B. 与实验组测量次数相同但不接受处理", "C. 只进行前测", "D. 不进行任何测量"], answer: -1, analysis: "" },
+        { id: 164, chapter: "实验心理学", type: "single", question: "以下哪种设计最能部分克服“历史因素”的影响？", options: ["A. 单组前后测设计", "B. 单组时间序列设计", "C. 固定组比较设计", "D. 单组相等时间样本设计"], answer: -1, analysis: "" },
+        { id: 165, chapter: "实验心理学", type: "single", question: "准实验设计的外部效度一般比真实验设计：", options: ["A. 更高", "B. 更低", "C. 相同", "D. 不可比较"], answer: -1, analysis: "" },
+        { id: 166, chapter: "实验心理学", type: "single", question: "单组前后测设计中，若在前后测之间还存在其他重大事件影响，最难控制的是：", options: ["A. 测验效应", "B. 历史效应", "C. 统计回归", "D. 成熟效应"], answer: -1, analysis: "" },
+        { id: 167, chapter: "实验心理学", type: "single", question: "关于单组时间序列设计，下列说法正确的是：", options: ["A. 测量次数可任意", "B. 时间间隔应不等", "C. 处理前后测量次数相等且等间隔", "D. 只要有对照组即可"], answer: -1, analysis: "" },
+        { id: 168, chapter: "实验心理学", type: "single", question: "固定组比较设计最适合用于：", options: ["A. 没有对照条件时", "B. 实验组和对照组前测完全相同时", "C. 只能测后测，无前测", "D. 需要前后测且无法随机分组"], answer: -1, analysis: "" },
+        { id: 169, chapter: "实验心理学", type: "single", question: "在不相等处理组对照组前后测设计中，若实验组前测均值高于对照组，则需要采用：", options: ["A. 直接比较后测均值", "B. 使用差分值进行比较", "C. 增加更多被试", "D. 放弃实验"], answer: -1, analysis: "" },
+        { id: 170, chapter: "实验心理学", type: "single", question: "若想在准实验中控制“统计回归”效应，可采取的做法是：", options: ["A. 增加样本量", "B. 随机分组", "C. 使用多次前后测", "D. 只做一次测量"], answer: -1, analysis: "" },
+        { id: 171, chapter: "实验心理学", type: "single", question: "单组相等时间样本设计主要用来控制哪种误差？", options: ["A. 测验效应", "B. 成熟效应", "C. 历史效应", "D. 实验者效应"], answer: -1, analysis: "" },
+        { id: 172, chapter: "实验心理学", type: "single", question: "下列哪种方法不是准实验设计中常用的？", options: ["A. ABAB 设计", "B. 单组时间序列", "C. 固定组比较", "D. 不相等实验组前后测时间序列"], answer: -1, analysis: "" },
+        { id: 173, chapter: "实验心理学", type: "single", question: "对于无法随机分组且仅能测后测的场景，最合适的准实验设计是：", options: ["A. 单组前后测设计", "B. 固定组比较设计", "C. 单组时间序列设计", "D. 单组相等时间样本设计"], answer: -1, analysis: "" },
+        { id: 174, chapter: "实验心理学", type: "single", question: "在单组时间序列设计中，为了进一步控制历史因素，研究者可：", options: ["A. 增加对照组", "B. 减少测量次数", "C. 增加处理水平", "D. 随机抽样"], answer: -1, analysis: "" },
+        { id: 175, chapter: "实验心理学", type: "single", question: "以下关于不相等实验组前后测时间序列设计的表述，哪项正确？", options: ["A. 处理组与对照组前测数目不同", "B. 只有对照组进行时间序列测量", "C. 实验组和对照组测量次数相等但对照组不接受处理", "D. 对照组接受不同水平的处理"], answer: -1, analysis: "" },
+        { id: 176, chapter: "实验心理学", type: "single", question: "单组相等时间样本设计和单组时间序列设计的共同点是：", options: ["A. 都有多个测量点且等间隔", "B. 都有对照组", "C. 都仅测一次后测", "D. 都可以完全随机分组"], answer: -1, analysis: "" },
+        { id: 177, chapter: "实验心理学", type: "single", question: "以下哪种设计在准实验中具有最高的外部效度？", options: ["A. 单组前后测设计", "B. 固定组比较设计", "C. 不相等处理组对照组前后测设计", "D. 自然观察设计（非实验）"], answer: -1, analysis: "" },
+        { id: 178, chapter: "实验心理学", type: "single", question: "准实验设计相对于真实验设计的一个优势是：", options: ["A. 更强的内部效度", "B. 更强的因果推断能力", "C. 更高的外部效度", "D. 更严格的被试控制"], answer: -1, analysis: "" },
+        { id: 179, chapter: "实验心理学", type: "single", question: "对于无法消除的选择偏差，最推荐的准实验控制策略是：", options: ["A. 恒定法", "B. 随机化法", "C. 匹配法", "D. 纳入额外变量法"], answer: -1, analysis: "" },
+        { id: 180, chapter: "实验心理学", type: "single", question: "下列哪一项最准确地描述了内部效度？", options: ["A. 实验结果能推广到其他情境的程度", "B. 自变量与因变量之间因果关系的明确程度", "C. 实验对样本代表性的要求", "D. 实验在自然情境中的进行方式"], answer: -1, analysis: "" },
+        { id: 181, chapter: "实验心理学", type: "single", question: "哪一项不是内部效度的主要威胁？", options: ["A. 历史因素", "B. 成熟因素", "C. 外部效度", "D. 测验经验的增长"], answer: -1, analysis: "" },
+        { id: 182, chapter: "实验心理学", type: "single", question: "如果在实验期间发生了与处理无关的重大社会事件，这属于哪种威胁？", options: ["A. 选择偏差", "B. 测验效应", "C. 历史因素", "D. 仪器变化"], answer: -1, analysis: "" },
+        { id: 183, chapter: "实验心理学", type: "single", question: "被试在实验过程中因年龄或生理变化而表现发生变化，这属于哪种威胁？", options: ["A. 成熟因素", "B. 统计回归", "C. 测验效应", "D. 选择—成熟交互作用"], answer: -1, analysis: "" },
+        { id: 184, chapter: "实验心理学", type: "single", question: "若实验中高分组和低分组在前测时分数极端，后测时平均都回归到总体均值，这体现了哪种威胁？", options: ["A. 统计回归", "B. 被试流失", "C. 仪器误差", "D. 历史因素"], answer: -1, analysis: "" },
+        { id: 185, chapter: "实验心理学", type: "single", question: "被试在前后测中因熟悉测验内容而得分提高，这属于哪种威胁？", options: ["A. 测验经验的增长", "B. 成熟因素", "C. 选择偏差", "D. 选择—成熟交互作用"], answer: -1, analysis: "" },
+        { id: 186, chapter: "实验心理学", type: "single", question: "如果实验使用的测量仪器在实验中途校准不当导致测量偏差，这属于哪种效度威胁？", options: ["A. 仪器变化", "B. 测验效应", "C. 被试流失", "D. 历史因素"], answer: -1, analysis: "" },
+        { id: 187, chapter: "实验心理学", type: "single", question: "在不同组间无法保证某些被试特征均匀分布，从而影响因果推断，这是哪种威胁？", options: ["A. 选择偏差", "B. 统计回归", "C. 测验经验的增长", "D. 仪器变化"], answer: -1, analysis: "" },
+        { id: 188, chapter: "实验心理学", type: "single", question: "下列哪种交互作用属于内部效度的威胁？", options: ["A. 自变量×自变量交互", "B. 选择偏差×成熟因素交互", "C. 测验×统计回归交互", "D. 外部情境×设计类型交互"], answer: -1, analysis: "" },
+        { id: 189, chapter: "实验心理学", type: "single", question: "若在实验中有被试中途退出，剩余样本发生系统性变化，这属于哪种威胁？", options: ["A. 被试的亡失", "B. 成熟因素", "C. 历史因素", "D. 测验经验的增长"], answer: -1, analysis: "" },
+        { id: 190, chapter: "实验心理学", type: "single", question: "下列哪一措施不能有效提高内部效度？", options: ["A. 随机分组", "B. 使用对照组", "C. 使用多种样本来源", "D. 双盲设计"], answer: -1, analysis: "" },
+        { id: 191, chapter: "实验心理学", type: "single", question: "在何种情况下“双盲控制”能有效消除内部效度的威胁？", options: ["A. 仪器误差", "B. 实验者期望效应", "C. 历史因素", "D. 成熟因素"], answer: -1, analysis: "" },
+        { id: 192, chapter: "实验心理学", type: "single", question: "下列哪一项最符合外部效度的含义？", options: ["A. 自变量与因变量的因果关系明确", "B. 研究结果能推广到实验条件以外的程度", "C. 能排除无关变量的干扰", "D. 实验对测量工具的依赖程度"], answer: -1, analysis: "" },
+        { id: 193, chapter: "实验心理学", type: "single", question: "下列哪一项设计通常具有最高的外部效度？", options: ["A. 实验室实验", "B. 自然实验", "C. 单因素实验", "D. 多因素实验"], answer: -1, analysis: "" },
+        { id: 194, chapter: "实验心理学", type: "single", question: "多因素实验相对于单因素实验的效度特点是：", options: ["A. 内部效度高、外部效度低", "B. 内部效度低、外部效度高", "C. 内部效度高、外部效度高", "D. 内部效度低、外部效度低"], answer: -1, analysis: "" },
+        { id: 195, chapter: "实验心理学", type: "single", question: "准实验设计的内部效度和外部效度通常是：", options: ["A. 都较高", "B. 内部效度高、外部效度低", "C. 内部效度低、外部效度高", "D. 都较低"], answer: -1, analysis: "" },
+        { id: 196, chapter: "实验心理学", type: "single", question: "若研究者希望在自然情境中最大化外部效度，应选用哪种设计？", options: ["A. 实验室实验", "B. 准实验设计", "C. 完全随机多组实验", "D. 被试内设计"], answer: -1, analysis: "" },
+        { id: 197, chapter: "实验心理学", type: "single", question: "以下哪种情况最可能削弱外部效度？", options: ["A. 严格控制实验环境", "B. 增加样本量", "C. 多中心、多地点进行实验", "D. 使用多样化的被试"], answer: -1, analysis: "" },
+        { id: 198, chapter: "实验心理学", type: "single", question: "如果实验只在高校女生中进行，那么结果外推到成年男性时可能存在：", options: ["A. 内部效度威胁", "B. 测验效应", "C. 外部效度欠缺", "D. 仪器变化"], answer: -1, analysis: "" },
+        { id: 199, chapter: "实验心理学", type: "single", question: "下列哪种做法可以增强外部效度？", options: ["A. 将样本限制在单一人群", "B. 在多种环境条件下重复实验", "C. 严格剔除所有额外变量", "D. 使用统一的实验者"], answer: -1, analysis: "" },
+        { id: 200, chapter: "实验心理学", type: "single", question: "如果实验结果只能应用于特定时段或地点，这主要说明：", options: ["A. 内部效度高", "B. 外部效度低", "C. 仪器效度低", "D. 随机误差大"], answer: -1, analysis: "" },
+        { id: 201, chapter: "实验心理学", type: "single", question: "在实验设计中，通过增加自变量水平的多样性主要是为了：", options: ["A. 提高内部效度", "B. 提高外部效度", "C. 控制测验效应", "D. 控制历史因素"], answer: -1, analysis: "" },
+        { id: 202, chapter: "实验心理学", type: "single", question: "若研究者在实验中纳入了环境变量作为协变量进行统计分析，这属于何种控制策略？", options: ["A. 随机化法", "B. 纳入额外变量法", "C. 恒定法", "D. 抵消平衡法"], answer: -1, analysis: "" },
+        { id: 203, chapter: "实验心理学", type: "single", question: "当实验在多种文化背景下重复进行并得到相似结果，说明了实验的：", options: ["A. 内部效度", "B. 外部效度", "C. 测验效应控制", "D. 仪器校准"], answer: -1, analysis: "" },
+        { id: 204, chapter: "实验心理学", type: "single", question: "以下哪种设计在内部效度和外部效度之间取得了最佳平衡？", options: ["A. 实验室实验", "B. 自然实验", "C. 准实验设计", "D. 单因素实验"], answer: -1, analysis: "" },
+        { id: 205, chapter: "实验心理学", type: "single", question: "在评估外部效度时，下列哪个维度最重要？", options: ["A. 生态效度", "B. 内容效度", "C. 同质性效度", "D. 判别效度"], answer: -1, analysis: "" },
+        { id: 206, chapter: "实验心理学", type: "single", question: "“实验结果在不同样本群体中均能重复出现”主要反映了什么？", options: ["A. 内部效度", "B. 统计结论效度", "C. 外部效度", "D. 内容效度"], answer: -1, analysis: "" },
+        { id: 207, chapter: "实验心理学", type: "single", question: "如果一项研究对自变量操作过于人工化，可能会损害：", options: ["A. 内部效度", "B. 外部效度", "C. 仪器效度", "D. 测验效度"], answer: -1, analysis: "" },
+        { id: 208, chapter: "实验心理学", type: "single", question: "下列哪种威胁同时影响内部效度和外部效度？", options: ["A. 测验经验的增长", "B. 选择偏差", "C. 仪器变化", "D. 统计回归"], answer: -1, analysis: "" },
+        { id: 209, chapter: "实验心理学", type: "single", question: "实验者在设计中加入“时间×自变量”交互项，主要是为了：", options: ["A. 控制统计回归", "B. 检验历史因素影响", "C. 增强外部效度", "D. 控制测验效应"], answer: -1, analysis: "" },
+        { id: 210, chapter: "实验心理学", type: "single", question: "若要控制选择—成熟交互作用，可采用的最有效手段是：", options: ["A. 随机分组", "B. 使用待测前后测", "C. 增加样本量", "D. 双盲法"], answer: -1, analysis: "" },
+        { id: 211, chapter: "实验心理学", type: "single", question: "使用对照组并与实验组同时测量，可降低哪种威胁？", options: ["A. 历史因素", "B. 成熟因素", "C. 仪器变化", "D. 测验效应"], answer: -1, analysis: "" },
+        { id: 212, chapter: "实验心理学", type: "single", question: "在内部效度威胁中，“测验经验的增长”主要通过哪种设计控制？", options: ["A. 单次测量设计", "B. 增加测量次数", "C. 对照组设计", "D. 随机抽样"], answer: -1, analysis: "" },
+        { id: 213, chapter: "实验心理学", type: "single", question: "若想同时考察自变量对不同人群的效果，需要优先关注的效度是：", options: ["A. 内部效度", "B. 外部效度", "C. 内容效度", "D. 结构效度"], answer: -1, analysis: "" },
+        { id: 214, chapter: "实验心理学", type: "single", question: "在准实验设计中，由于无法随机分组，主要依赖于哪种方法来增强内部效度？", options: ["A. 纳入协变量", "B. 经典ABAB设计", "C. 多因素混合设计", "D. 完全抵消平衡"], answer: -1, analysis: "" },
+        { id: 215, chapter: "实验心理学", type: "single", question: "当被试在实验前已知研究假设并改变行为，这属于哪种威胁？", options: ["A. 霍桑效应", "B. 安慰剂效应", "C. 好被试现象", "D. 实验者效应"], answer: -1, analysis: "" },
+        { id: 216, chapter: "实验心理学", type: "single", question: "下列哪种效度主要通过事后检验（如事后比较）来评估？", options: ["A. 内部效度", "B. 外部效度", "C. 统计结论效度", "D. 构念效度"], answer: -1, analysis: "" },
+        { id: 217, chapter: "实验心理学", type: "single", question: "如果研究者在不同实验条件下使用不同的实验者，可能会削弱：", options: ["A. 内部效度", "B. 外部效度", "C. 内容效度", "D. 判别效度"], answer: -1, analysis: "" },
+        { id: 218, chapter: "实验心理学", type: "single", question: "在报告实验结果时，清晰说明样本来源和实验条件，有助于评估：", options: ["A. 内部效度", "B. 统计效度", "C. 外部效度", "D. 内容效度"], answer: -1, analysis: "" },
+        { id: 219, chapter: "实验心理学", type: "single", question: "下列哪种情境最可能提高实验的生态效度？", options: ["A. 在受控实验室进行", "B. 在真实工作环境中进行", "C. 使用模拟任务", "D. 增加测量精度"], answer: -1, analysis: "" },
+        { id: 220, chapter: "实验心理学", type: "single", question: "研究者在实验报告中对可能的历史影响进行了讨论，这主要是为了说明：", options: ["A. 内部效度", "B. 外部效度", "C. 仪器效度", "D. 测验效度"], answer: -1, analysis: "" },
+        { id: 221, chapter: "实验心理学", type: "single", question: "若实验结果在不同时间段重复出现，则最能说明：", options: ["A. 内部效度", "B. 外部效度", "C. 测验效度", "D. 仪器效度"], answer: -1, analysis: "" },
+        { id: 222, chapter: "实验心理学", type: "single", question: "“选择—成熟交互作用”意味着：", options: ["A. 被试选择和实验处理同时发生", "B. 组间差异随成熟进程而扩大", "C. 自变量水平相互作用", "D. 测验次数与成熟同步"], answer: -1, analysis: "" },
+        { id: 223, chapter: "实验心理学", type: "single", question: "为了检验仪器漂移的影响，研究者在实验前后使用标准样本进行校准，这属于哪种控制？", options: ["A. 恒定法", "B. 消除法", "C. 抵消平衡法", "D. 随机化法"], answer: -1, analysis: "" },
+        { id: 224, chapter: "实验心理学", type: "single", question: "在自然实验中，通常面临的主要挑战是：", options: ["A. 控制无关变量", "B. 达到高外部效度", "C. 随机分组", "D. 操作定义"], answer: -1, analysis: "" },
+        { id: 225, chapter: "实验心理学", type: "single", question: "在多因素设计中，外部效度的增强主要依赖于：", options: ["A. 增加自变量水平", "B. 增加被试内测量", "C. 使用单一实验场所", "D. 减少因变量类型"], answer: -1, analysis: "" },
+        { id: 226, chapter: "实验心理学", type: "single", question: "若实验中使用了拉丁方设计来平衡顺序效应，这主要增强了哪种效度？", options: ["A. 内部效度", "B. 外部效度", "C. 内容效度", "D. 构念效度"], answer: -1, analysis: "" },
+        { id: 227, chapter: "实验心理学", type: "single", question: "对重复测量设计而言，哪种威胁最突出？", options: ["A. 测验效应", "B. 历史因素", "C. 选择偏差", "D. 仪器变化"], answer: -1, analysis: "" },
+        { id: 228, chapter: "实验心理学", type: "single", question: "在实验报告中提供详细的实验过程和测量工具信息，有助于哪种效度？", options: ["A. 内部效度", "B. 外部效度", "C. 重复性与可复制性", "D. 判别效度"], answer: -1, analysis: "" },
+        { id: 229, chapter: "实验心理学", type: "single", question: "若研究者在报告中说明样本与总体特征高度一致，这主要是为了提高：", options: ["A. 内部效度", "B. 外部效度", "C. 测验效度", "D. 构念效度"], answer: -1, analysis: "" },
+        { id: 230, chapter: "实验心理学", type: "single", question: "最小变化法中，用于测量绝对感觉阈限的刺激呈现序列是：", options: ["A. 仅递增序列", "B. 仅递减序列", "C. 递增和递减交替的ABBA序列", "D. 随机序列"], answer: -1, analysis: "" },
+        { id: 231, chapter: "实验心理学", type: "single", question: "在最小变化法中，习惯误差最容易出现在：", options: ["A. 仅递增序列中坚持报告“无”", "B. 仅递减序列中坚持报告“有”", "C. ABBA序列中随机报告", "D. 两种序列都不会出现"], answer: -1, analysis: "" },
+        { id: 232, chapter: "实验心理学", type: "single", question: "为控制最小变化法中的期望误差，应采用：", options: ["A. 固定起点的递增序列", "B. 固定起点的递减序列", "C. 随机选择各系列起点", "D. 提前告知被试阈限范围"], answer: -1, analysis: "" },
+        { id: 233, chapter: "实验心理学", type: "single", question: "差别阈限测量中，不肯定间距指的是：", options: ["A. 上限与下限之和", "B. 上限与下限之差", "C. 上限与标准刺激的差值", "D. 下限与标准刺激的差值"], answer: -1, analysis: "" },
+        { id: 234, chapter: "实验心理学", type: "single", question: "在差别阈限的ABBA控制中，空间误差可通过以下哪种方法减少？", options: ["A. 仅使用递增序列", "B. 同时呈现标准和比较刺激", "C. 改用恒定刺激法", "D. 增加被试个数"], answer: -1, analysis: "" },
+        { id: 235, chapter: "实验心理学", type: "single", question: "恒定刺激法测量绝对阈限时，每个刺激至少呈现的次数通常是：", options: ["A. 50 次", "B. 20 次", "C. 50 次及以上", "D. 任意次数"], answer: -1, analysis: "" },
+        { id: 236, chapter: "实验心理学", type: "single", question: "恒定刺激法中，用于确定差别阈限的直线内插法，横坐标通常是：", options: ["A. 刺激强度等级", "B. 频率", "C. 时间顺序", "D. 刺激位置"], answer: -1, analysis: "" },
+        { id: 237, chapter: "实验心理学", type: "single", question: "恒定刺激法相比最小变化法的主要优点是：", options: ["A. 能精确测量非连续刺激", "B. 刺激数目少、效率高且可随机呈现", "C. 对主观态度影响敏感", "D. 结果不受被试个性影响"], answer: -1, analysis: "" },
+        { id: 238, chapter: "实验心理学", type: "single", question: "平均差误法的核心思想是：", options: ["A. 累积被试错误反应次数", "B. 计算所有差值的平均数", "C. 结合恒定刺激与最小变化法", "D. 使用ABBA序列多层次平衡"], answer: -1, analysis: "" },
+        { id: 239, chapter: "实验心理学", type: "single", question: "平均差误法的主要缺点之一是：", options: ["A. 刺激数目过多导致疲劳", "B. 容易产生动作、时间、空间误差", "C. 无法激发被试兴趣", "D. 只适用于二类反应"], answer: -1, analysis: "" },
+        { id: 240, chapter: "实验心理学", type: "single", question: "以下哪种心理物理阈限测定方法最适合用于会产生后效应的刺激？", options: ["A. 最小变化法", "B. 恒定刺激法", "C. 平均差误法", "D. Weber–Fechner结合法"], answer: -1, analysis: "" },
+        { id: 241, chapter: "实验心理学", type: "single", question: "在对比三种传统方法时，哪种方法对被试的学习或适应影响最小？", options: ["A. 最小变化法", "B. 恒定刺激法", "C. 平均差误法", "D. 三者影响相同"], answer: -1, analysis: "" },
+        { id: 242, chapter: "实验心理学", type: "single", question: "Weber定律描述了：", options: ["A. 绝对阈限与刺激强度的线性关系", "B. 差别阈限与标准刺激强度的比值保持恒定", "C. 感觉强度与物理强度的幂函数关系", "D. 命中率与误报率的对角线关系"], answer: -1, analysis: "" },
+        { id: 243, chapter: "实验心理学", type: "single", question: "Fechner定律的公式形式是：", options: ["A. S = k I", "B. S = k log I", "C. I = k Sⁿ", "D. d' = z(H) – z(F)"], answer: -1, analysis: "" },
+        { id: 244, chapter: "实验心理学", type: "single", question: "Stevens定律最主要的创新在于：", options: ["A. 提出感觉数量化的对数关系", "B. 强调主观等距感受", "C. 用幂函数描述刺激与感觉之间关系", "D. 引入ROC曲线分析"], answer: -1, analysis: "" },
+        { id: 245, chapter: "实验心理学", type: "single", question: "在Stevens定律中的指数n，表示的是：", options: ["A. 刺激强度级别", "B. 感觉-物理函数的斜率", "C. 被试的反应标准", "D. 命中率"], answer: -1, analysis: "" },
+        { id: 246, chapter: "实验心理学", type: "single", question: "信号检测论中，d′（感受性指数）反映：", options: ["A. 被试的反应速度", "B. 噪音分布与信号分布的分离程度", "C. 反应标准的宽松或严格", "D. ROC曲线下面积"], answer: -1, analysis: "" },
+        { id: 247, chapter: "实验心理学", type: "single", question: "在信号检测中，虚报率(F)增大时，对应的判定标准会：", options: ["A. 变得更严格", "B. 变得更宽松", "C. 无变化", "D. 随机变化"], answer: -1, analysis: "" },
+        { id: 248, chapter: "实验心理学", type: "single", question: "ROC曲线上，位于机遇线（对角线）上的点表示：", options: ["A. 最高的辨别力", "B. 最低的反应标准", "C. 辨别力为零", "D. 最佳灵敏度"], answer: -1, analysis: "" },
+        { id: 249, chapter: "实验心理学", type: "single", question: "在Yes/No检测方法中，被试只做“有信号/无信号”判断，这种方法的主要局限是：", options: ["A. 无法计算虚报率", "B. 不能绘制ROC曲线", "C. 难以区分辨别力和反应标准", "D. 需要过多试次"], answer: -1, analysis: "" },
+        { id: 250, chapter: "实验心理学", type: "single", question: "评价法（rating method）相较于Yes/No方法最显著的优点是：", options: ["A. 刺激呈现次数减少", "B. 可以获得多组命中/虚报率，用于绘制完整ROC曲线", "C. 被试负担更轻", "D. 不需要信号分布假设"], answer: -1, analysis: "" },
+        { id: 251, chapter: "实验心理学", type: "single", question: "在信号检测论中，如果O (似然比) 接近1，说明：", options: ["A. 判定标准非常严格", "B. 判定标准非常宽松", "C. 判定标准适中", "D. 无法判断标准"], answer: -1, analysis: "" },
+        { id: 252, chapter: "实验心理学", type: "single", question: "ROC曲线下面积(AUC)越大，表示：", options: ["A. 辨别力越强", "B. 判定标准越严格", "C. 总试次越多", "D. 虚报率越高"], answer: -1, analysis: "" },
+        { id: 253, chapter: "实验心理学", type: "single", question: "绘制ROC曲线时，横轴为虚报率(F)，纵轴为：", options: ["A. 漏失率", "B. 命中率(H)", "C. d′", "D. β"], answer: -1, analysis: "" },
+        { id: 254, chapter: "实验心理学", type: "single", question: "若两被试的虚报率相同，但一人命中率更高，则其d′：", options: ["A. 更小", "B. 更大", "C. 相同", "D. 无法比较"], answer: -1, analysis: "" },
+        { id: 255, chapter: "实验心理学", type: "single", question: "为了估计信号检测中的β（反应标准），可以使用：", options: ["A. 命中率与漏失率", "B. 虚报率与背景噪声", "C. 似然比公式", "D. Fechner定律"], answer: -1, analysis: "" },
+        { id: 256, chapter: "实验心理学", type: "single", question: "在心理量表的制作方法中，以下哪项属于顺序量表？", options: ["A. 等级排列法", "B. 二分法", "C. 数量估计法", "D. 分段法"], answer: -1, analysis: "" },
+        { id: 257, chapter: "实验心理学", type: "single", question: "感觉等距法属于哪种量表制作技术？", options: ["A. 顺序量表", "B. 等距量表", "C. 比例量表", "D. 对偶比较法"], answer: -1, analysis: "" },
+        { id: 258, chapter: "实验心理学", type: "single", question: "比例量表中常用的“数量估计法”最突出的特点是：", options: ["A. 只能做有/无判断", "B. 能测量绝对感受强度", "C. 结果仅反映顺序关系", "D. 依赖于差别阈限"], answer: -1, analysis: "" },
+        { id: 259, chapter: "实验心理学", type: "single", question: "在对偶比较法中，被试主要完成的任务是：", options: ["A. 排列一系列刺激", "B. 比较成对刺激并判断大小", "C. 给刺激打分", "D. 估计刺激数量"], answer: -1, analysis: "" },
+        { id: 260, chapter: "实验心理学", type: "single", question: "最小变化法适用于多种感觉通道阈限测定，但以下哪种情况不宜使用？", options: ["A. 易适应的感觉", "B. 具有后效应的刺激", "C. 刺激强度可精确控制", "D. 被试注意波动大"], answer: -1, analysis: "" },
+        { id: 261, chapter: "实验心理学", type: "single", question: "恒定刺激法的效率优势体现在：", options: ["A. 可省去前期校准", "B. 刺激呈现顺序固定", "C. 有效数据点多且随机呈现", "D. 可减少被试疲劳"], answer: -1, analysis: "" },
+        { id: 262, chapter: "实验心理学", type: "single", question: "平均差误法的有效性提高，主要依赖于：", options: ["A. 刺激等距原则", "B. 被试主动估计", "C. 长时间适应序列", "D. 二类反应范式"], answer: -1, analysis: "" },
+        { id: 263, chapter: "实验心理学", type: "single", question: "Weber分数（ΔI/I）越小，说明：", options: ["A. 感受性越弱", "B. 感受性越强", "C. 判定标准越严格", "D. 反应时越长"], answer: -1, analysis: "" },
+        { id: 264, chapter: "实验心理学", type: "single", question: "Fechner定律是建立在以下哪一假设之上？", options: ["A. 刺激强度与感觉呈线性关系", "B. 每个ΔI都带来相同的主观增量", "C. 信号与噪音分布正态", "D. 刺激呈随机顺序"], answer: -1, analysis: "" },
+        { id: 265, chapter: "实验心理学", type: "single", question: "Stevens定律可用于描述哪种类别的感觉强度？", options: ["A. 仅听觉", "B. 仅视觉", "C. 各种感觉通道", "D. 仅触觉"], answer: -1, analysis: "" },
+        { id: 266, chapter: "实验心理学", type: "single", question: "在信号检测实验中，如果先验概率和奖惩矩阵发生改变，最直接影响的是：", options: ["A. d′", "B. β（或O）", "C. ROC曲线形状", "D. 刺激序列"], answer: -1, analysis: "" },
+        { id: 267, chapter: "实验心理学", type: "single", question: "对比Yes/No法与评价法，下列陈述正确的是：", options: ["A. 两者都能直接计算d′", "B. 仅评价法可区分不同判定标准", "C. 仅Yes/No能绘制ROC", "D. 两者都无需计算虚报率"], answer: -1, analysis: "" },
+        { id: 268, chapter: "实验心理学", type: "single", question: "若ROC曲线非常平缓，说明被试：", options: ["A. 感受性高", "B. 感受性低", "C. 判定标准极严格", "D. 判定标准极宽松"], answer: -1, analysis: "" },
+        { id: 269, chapter: "实验心理学", type: "single", question: "在绘制ROC曲线时，选择更多的评价级别（如1–6级）主要是为了：", options: ["A. 减少试次", "B. 增加命中率", "C. 提高判定标准分辨率", "D. 简化计算"], answer: -1, analysis: "" },
+        { id: 270, chapter: "实验心理学", type: "single", question: "在最小变化法中，选择ABBA而非AAAABBBB的主要目的是：", options: ["A. 增加数据量", "B. 平衡习惯和期望误差", "C. 提高被试兴趣", "D. 简化操作"], answer: -1, analysis: "" },
+        { id: 271, chapter: "实验心理学", type: "single", question: "恒定刺激法对三类反应范式（大于/小于/等于）最不利的原因是：", options: ["A. 刺激点少", "B. 难以界定“不确定”类别", "C. 试次过多", "D. 无法测量上限", "A. 控制主观态度影响", "B. 激发被试参与兴趣", "C. 精确测量差别阈限", "D. 应用于二类反应"], answer: -1, analysis: "" },
+        { id: 272, chapter: "实验心理学", type: "single", question: "在实际应用中，为了同时测量绝对阈限和差别阈限，最合适的组合方法是：", options: ["A. 最小变化法 + Signal Detection", "B. 恒定刺激法 + 平均差误法", "C. 最小变化法 + 恒定刺激法", "D. 平均差误法 + ROC分析"], answer: -1, analysis: "" },
+        { id: 273, chapter: "实验心理学", type: "single", question: "Weber定律的局限性之一是：", options: ["A. 只适用于超阈刺激", "B. 无法解释比例量表结果", "C. 在极低或极高强度范围失效", "D. 与ROC曲线无关"], answer: -1, analysis: "" },
+        { id: 274, chapter: "实验心理学", type: "single", question: "Fechner定律和Stevens定律的主要区别在于：", options: ["A. Fechner是对数函数，Stevens是幂函数", "B. Fechner仅适用于听觉，Stevens适用于视觉", "C. Fechner无需操作定义，Stevens需要", "D. 两者无实质区别"], answer: -1, analysis: "" },
+        { id: 275, chapter: "实验心理学", type: "single", question: "在信号检测实验中，若被试为了避免错过信号故意放宽标准，会导致：", options: ["A. d′ 提高", "B. 虚报率升高", "C. 漏失率降低", "D. ROC曲线左下移"], answer: -1, analysis: "" },
+        { id: 276, chapter: "实验心理学", type: "single", question: "对于噪音分布和信号分布都呈正态且方差相等的假设，在绘制ROC时意味着：", options: ["A. 曲线对角线以下", "B. 曲线凸向坐标轴", "C. 灵敏度恒定", "D. 只能用Yes/No法"], answer: -1, analysis: "" },
+        { id: 277, chapter: "实验心理学", type: "single", question: "信号检测论中，将β设为1的情况对应的是：", options: ["A. 最大化命中率", "B. 最小化虚报率", "C. 先验概率与损益矩阵平衡", "D. Fechner定律的理想点"], answer: -1, analysis: "" },
+        { id: 278, chapter: "实验心理学", type: "single", question: "在信号检测的评价法中，常用来评估整体辨别能力的指标是：", options: ["A. 峰值反应时", "B. ROC曲线下面积(AUC)", "C. 平均反应时", "D. Weber分数"], answer: -1, analysis: "" },
+        { id: 279, chapter: "实验心理学", type: "single", question: "在信号检测理论中，“命中”（Hit）对应的情境是：", options: ["A. 信号存在，被试报告“无”", "B. 信号存在，被试报告“有”", "C. 信号不存在，被试报告“有”", "D. 信号不存在，被试报告“无”"], answer: -1, analysis: "" },
+        { id: 280, chapter: "实验心理学", type: "single", question: "“虚报”（False Alarm）指的是：", options: ["A. 信号存在，被试报告“无”", "B. 信号存在，被试报告“有”", "C. 信号不存在，被试报告“有”", "D. 信号不存在，被试报告“无”"], answer: -1, analysis: "" },
+        { id: 281, chapter: "实验心理学", type: "single", question: "在是/否（Yes/No）范式中，以下哪项不属于四种可能的反应？", options: ["A. 命中", "B. 漏失", "C. 平衡", "D. 虚报"], answer: -1, analysis: "" },
+        { id: 282, chapter: "实验心理学", type: "single", question: "d′（感受性指数）越大，说明：", options: ["A. 命中率与虚报率差距越小", "B. 信号分布与噪声分布越分离", "C. 判定标准越宽松", "D. 判定标准越严格"], answer: -1, analysis: "" },
+        { id: 283, chapter: "实验心理学", type: "single", question: "β（反应标准）越大，表明被试：", options: ["A. 越倾向于报告“有信号”", "B. 越倾向于报告“无信号”", "C. 感受性越高", "D. 感受性越低"], answer: -1, analysis: "" },
+        { id: 284, chapter: "实验心理学", type: "single", question: "在标准的正态分布假设下，当β=1时，说明：", options: ["A. 判定点位于两个分布交点", "B. 判定点偏向信号分布", "C. 判定点偏向噪声分布", "D. 判定点随意设定"], answer: -1, analysis: "" },
+        { id: 285, chapter: "实验心理学", type: "single", question: "下列哪种变化会导致ROC曲线向左上方凸起（性能更好）？", options: ["A. d′减小", "B. d′增大", "C. β增大", "D. β减小"], answer: -1, analysis: "" },
+        { id: 286, chapter: "实验心理学", type: "single", question: "在绘制ROC曲线时，横轴为虚报率(F)，纵轴为：", options: ["A. 漏失率", "B. 命中率(H)", "C. d′", "D. β"], answer: -1, analysis: "" },
+        { id: 287, chapter: "实验心理学", type: "single", question: "若被试的命中率H=0.85，虚报率F=0.15，则此点在ROC上会位于：", options: ["A. （0.15, 0.85）处", "B. （0.85, 0.15）处", "C. （0.85, 0.85）处", "D. （0.15, 0.15）处"], answer: -1, analysis: "" },
+        { id: 288, chapter: "实验心理学", type: "single", question: "“评价法”（rating method）相较于Yes/No法的优势在于可以：", options: ["A. 直接计算β", "B. 获得多组H–F对，绘制平滑ROC曲线", "C. 消除漏失率", "D. 减少试次数"], answer: -1, analysis: "" },
+        { id: 289, chapter: "实验心理学", type: "single", question: "在评价法中，若使用五级评分，意味着可得到________组命中/虚报率对。", options: ["A. 3", "B. 4", "C. 5", "D. 6"], answer: -1, analysis: "" },
+        { id: 290, chapter: "实验心理学", type: "single", question: "对于给定的d′，若被试想降低虚报率，应如何调整β？", options: ["A. 降低β", "B. 提高β", "C. β不变", "D. 随机调整"], answer: -1, analysis: "" },
+        { id: 291, chapter: "实验心理学", type: "single", question: "在信号检测实验中，漏失（Miss）的定义是：", options: ["A. 信号存在，被试报告“无”", "B. 信号存在，被试报告“有”", "C. 信号不存在，被试报告“有”", "D. 信号不存在，被试报告“无”"], answer: -1, analysis: "" },
+        { id: 292, chapter: "实验心理学", type: "single", question: "以下哪一项不影响d′的计算？", options: ["A. 命中率", "B. 虚报率", "C. 判定标准", "D. 信号与噪声分布的方差"], answer: -1, analysis: "" },
+        { id: 293, chapter: "实验心理学", type: "single", question: "在理想观察者模型中，ROC曲线的形状取决于：", options: ["A. β的值", "B. d′的值", "C. 试次数", "D. 信号呈现间隔"], answer: -1, analysis: "" },
+        { id: 294, chapter: "实验心理学", type: "single", question: "当信号和噪声分布方差不相等时，ROC曲线将：", options: ["A. 依旧对称", "B. 向上凸", "C. 不再为对称的抛物线", "D. 成直线"], answer: -1, analysis: "" },
+        { id: 295, chapter: "实验心理学", type: "single", question: "在二类反应范式中，“不确定”类别通常通过哪种方法处理？", options: ["A. 强行分入“有信号”", "B. 强行分入“无信号”", "C. 剔除该试次", "D. 单独统计分析"], answer: -1, analysis: "" },
+        { id: 296, chapter: "实验心理学", type: "single", question: "单纯使用Yes/No法无法分离：", options: ["A. d′与β", "B. H与F", "C. 信号与噪声", "D. 先验概率与奖惩结构"], answer: -1, analysis: "" },
+        { id: 297, chapter: "实验心理学", type: "single", question: "若先验信号概率增加，但β不变，则：", options: ["A. d′增大", "B. β自动调整", "C. 命中率和虚报率都增大", "D. ROC曲线形状改变"], answer: -1, analysis: "" },
+        { id: 298, chapter: "实验心理学", type: "single", question: "在信号检测论中，为了最大化收益，最佳β取决于：", options: ["A. d′", "B. 先验概率与奖惩矩阵", "C. 信号强度", "D. 虚报率"], answer: -1, analysis: "" },
+        { id: 299, chapter: "实验心理学", type: "single", question: "若一位被试总是报告“有信号”，其β将趋向：", options: ["A. 无限大", "B. 1", "C. 无限小", "D. 与d′相等"], answer: -1, analysis: "" },
+        { id: 300, chapter: "实验心理学", type: "single", question: "为评估被试的反应偏倚，可用下列哪项指标？", options: ["A. d′", "B. β或C (criterion)", "C. H–F", "D. AUC"], answer: -1, analysis: "" },
+        { id: 301, chapter: "实验心理学", type: "single", question: "AUC（ROC曲线下面积）为0.5时，表明：", options: ["A. 完美辨别", "B. 随机猜测", "C. 极严格标准", "D. 极宽松标准"], answer: -1, analysis: "" },
+        { id: 302, chapter: "实验心理学", type: "single", question: "在实践中，常用的声学信号检测任务中，控制β最常用的方法是：", options: ["A. 操纵奖励惩罚", "B. 改变信号强度", "C. 随机呈现", "D. 增减试次数"], answer: -1, analysis: "" },
+        { id: 303, chapter: "实验心理学", type: "single", question: "信号检测论中，C (criterion) 与 β 的关系是：", options: ["A. C = lnβ", "B. C = –lnβ", "C. C 与 β 无关", "D. C = β²"], answer: -1, analysis: "" },
+        { id: 304, chapter: "实验心理学", type: "single", question: "若一位被试的FAR（虚报率）大于HR（命中率），则其d′为：", options: ["A. 正值", "B. 负值", "C. 零", "D. 无法定义"], answer: -1, analysis: "" },
+        { id: 305, chapter: "实验心理学", type: "single", question: "在信号检测实验报告中，通常要同时报告哪些指标？", options: ["A. H, F, d′, β", "B. H, F, 刺激强度", "C. d′, 删去率", "D. β, 试次数"], answer: -1, analysis: "" },
+        { id: 306, chapter: "实验心理学", type: "single", question: "若希望对比两种不同监听条件下的灵敏度差异，应比较：", options: ["A. d′值", "B. β值", "C. H值", "D. F值"], answer: -1, analysis: "" },
+        { id: 307, chapter: "实验心理学", type: "single", question: "在使用评价法绘制ROC时，不同评分级别最关键的目的是：", options: ["A. 增加试次", "B. 平滑曲线，得到更多(H,F)点", "C. 降低疲劳", "D. 简化后续计算"], answer: -1, analysis: "" },
+        { id: 308, chapter: "实验心理学", type: "single", question: "若将信号检测模型用于医学诊断中，漏失率代表：", options: ["A. 病人被误诊为健康", "B. 病人被正确诊断", "C. 健康人被误诊为病人", "D. 健康人被正确排除"], answer: -1, analysis: "" },
+        { id: 309, chapter: "实验心理学", type: "single", question: "反应时（RT）通常被称为：", options: ["A. 运动时间", "B. 感觉时间", "C. 潜伏期", "D. 决策时间"], answer: -1, analysis: "" },
+        { id: 310, chapter: "实验心理学", type: "single", question: "简单反应时（A反应时）任务中，被试需要对________作出反应。", options: ["A. 多种刺激", "B. 单一指定刺激", "C. 任意刺激", "D. 排除刺激"], answer: -1, analysis: "" },
+        { id: 311, chapter: "实验心理学", type: "single", question: "选择反应时（B反应时）与辨别反应时（C反应时）的主要区别在于：", options: ["A. C反应时只需对一种刺激做反应，B反应时需对多种刺激做不同反应", "B. B反应时只需对一种刺激做反应，C反应时需对多种刺激做不同反应", "C. 二者无区别", "D. B反应时需要更快的手部运动"], answer: -1, analysis: "" },
+        { id: 312, chapter: "实验心理学", type: "single", question: "为防止被试的抢先反应，可以采用以下哪种方法？", options: ["A. 固定试次间隔", "B. 插入“侦察刺激”", "C. 增加刺激强度", "D. 降低刺激复杂度"], answer: -1, analysis: "" },
+        { id: 313, chapter: "实验心理学", type: "single", question: "在插入“侦察刺激”法中，“侦察刺激”是指：", options: ["A. 一个更明显的刺激信号", "B. 仅有预备信号但不实际呈现目标刺激", "C. 与目标刺激相似但不要求反应的刺激", "D. 伴随噪声的刺激"], answer: -1, analysis: "" },
+        { id: 314, chapter: "实验心理学", type: "single", question: "改变“预备”信号到刺激呈现之间的时间间隔，主要是为了控制：", options: ["A. 刺激强度", "B. 被试的准备状态", "C. 搶先反应", "D. 反应运动时间"], answer: -1, analysis: "" },
+        { id: 315, chapter: "实验心理学", type: "single", question: "以下哪项不是影响反应时的刺激变量？", options: ["A. 刺激面积", "B. 刺激强度", "C. 刺激复杂度", "D. 被试年龄"], answer: -1, analysis: "" },
+        { id: 316, chapter: "实验心理学", type: "single", question: "以下哪项属于“机体变量”？", options: ["A. 刺激呈现时间", "B. 刺激对比度", "C. 准备状态", "D. 刺激复杂度"], answer: -1, analysis: "" },
+        { id: 317, chapter: "实验心理学", type: "single", question: "下列哪项会使反应时延长？", options: ["A. 刺激强度增加", "B. 刺激复杂度降低", "C. 年龄增大", "D. 提高动机"], answer: -1, analysis: "" },
+        { id: 318, chapter: "实验心理学", type: "single", question: "“速度—正确率权衡”属于哪类影响反应时的因素？", options: ["A. 刺激变量", "B. 机体变量", "C. 实验变量", "D. 环境变量"], answer: -1, analysis: "" },
+        { id: 319, chapter: "实验心理学", type: "single", question: "减法反应时范式的核心逻辑是：", options: ["A. 同时比较两个不同任务的RT", "B. 两个任务中，一个任务包含额外的加工阶段，通过RT差异推断该阶段时间", "C. 随机改变刺激属性", "D. 对同一任务加减试次数"], answer: -1, analysis: "" },
+        { id: 320, chapter: "实验心理学", type: "single", question: "下列哪个实验是减法法的典型例子？", options: ["A. Stroop任务", "B. 心理旋转实验", "C. Simon任务", "D. Go/No-Go任务"], answer: -1, analysis: "" },
+        { id: 321, chapter: "实验心理学", type: "single", question: "加法反应时范式主要通过________来推断信息加工各阶段的时间。", options: ["A. 双重任务干扰", "B. 单/多变量RT变化", "C. 神经影像学", "D. 皮层电位"], answer: -1, analysis: "" },
+        { id: 322, chapter: "实验心理学", type: "single", question: "下列哪项实验示例属于加法法？", options: ["A. 短时记忆编码实验", "B. 短时记忆提取实验", "C. 内隐联想测验", "D. Stroop任务"], answer: -1, analysis: "" },
+        { id: 323, chapter: "实验心理学", type: "single", question: "开窗实验的特点是：", options: ["A. 只控制被试注意力", "B. 通过部分呈现刺激信息，直接测量各加工阶段时间", "C. 增加侦察刺激次数", "D. 固定SOA"], answer: -1, analysis: "" },
+        { id: 324, chapter: "实验心理学", type: "single", question: "序列反应时实验主要用于研究：", options: ["A. 准备状态对RT的影响", "B. 隐含学习和运动序列学习", "C. 减法法的假设", "D. 刺激强度效应"], answer: -1, analysis: "" },
+        { id: 325, chapter: "实验心理学", type: "single", question: "内隐联想测验（IAT）属于以下哪类范式的发展？", options: ["A. ABC反应时", "B. 减法法", "C. 实验范式进展", "D. 开窗实验"], answer: -1, analysis: "" },
+        { id: 326, chapter: "实验心理学", type: "single", question: "在ABC反应时分类中，C反应时也称为：", options: ["A. 简单反应时", "B. 选择反应时", "C. 辨别反应时", "D. 并行反应时"], answer: -1, analysis: "" },
+        { id: 327, chapter: "实验心理学", type: "single", question: "哪种方法不属于控制抢先反应的手段？", options: ["A. 随机改变刺激间隔", "B. 插入侦察刺激", "C. 告知被试降速反应", "D. 预警信号–刺激间时间随机化"], answer: -1, analysis: "" },
+        { id: 328, chapter: "实验心理学", type: "single", question: "实验范式进展中，下列哪项侧重于测量隐性态度或联想？", options: ["A. 序列反应时实验", "B. 心理旋转实验", "C. 内隐联想测验", "D. Poffenberger范式"], answer: -1, analysis: "" },
+        { id: 329, chapter: "实验心理学", type: "single", question: "在“线索范式”中，主要通过哪些手段来考察注意的效果？", options: ["A. 让被试同时执行两个任务", "B. 用提示或指导语引导注意一个明确刺激，并与其他刺激比较加工差异", "C. 在非目标刺激中寻找目标", "D. 通过屏幕闪烁测量眼动"], answer: -1, analysis: "" },
+        { id: 330, chapter: "实验心理学", type: "single", question: "下列哪项不属于“搜索范式”？", options: ["A. 奇异刺激搜索", "B. 目标–奇异刺激距离范式", "C. Stroop任务", "D. 无关特征搜索"], answer: -1, analysis: "" },
+        { id: 331, chapter: "实验心理学", type: "single", question: "“过滤范式”中典型的实验任务是：", options: ["A. 双耳分听", "B. Stroop任务", "C. 心理不应期范式", "D. 序列反应时"], answer: -1, analysis: "" },
+        { id: 332, chapter: "实验心理学", type: "single", question: "在Flanker范式中，如果目标两侧的干扰刺激与目标不一致，通常会导致：", options: ["A. 更快的反应时", "B. 较慢的反应时", "C. 反应时不变", "D. 完全无法反应"], answer: -1, analysis: "" },
+        { id: 333, chapter: "实验心理学", type: "single", question: "“双任务范式”最核心的研究目的是：", options: ["A. 测量刺激识别时间", "B. 评估两任务之间资源分配和相互干扰", "C. 比较首因效应与近因效应", "D. 验证过滤器理论"], answer: -1, analysis: "" },
+        { id: 334, chapter: "实验心理学", type: "single", question: "在心理不应期范式中，当第二刺激在第一反应后立即出现，第二反应通常会：", options: ["A. 加速", "B. 延迟", "C. 与第一反应无关", "D. 完全消失"], answer: -1, analysis: "" },
+        { id: 335, chapter: "实验心理学", type: "single", question: "双耳分听实验中，被试要做的主要任务是：", options: ["A. 同时报告左右同时出现的所有词语", "B. 追随一只耳的信息并忽略另一只耳的信息", "C. 随机切换注意两只耳", "D. 判断两只耳的刺激是否相同"], answer: -1, analysis: "" },
+        { id: 336, chapter: "实验心理学", type: "single", question: "Broadbent的过滤器理论认为信息筛选发生在：", options: ["A. 意识处理之后", "B. 短时记忆之后", "C. 感官输入之后、意识处理之前", "D. 短时记忆之前、感官输入之后"], answer: -1, analysis: "" },
+        { id: 337, chapter: "实验心理学", type: "single", question: "Treisman的衰减理论与过滤器理论的主要区别在于：", options: ["A. 衰减理论认为不重要信息完全丢弃", "B. 衰减理论认为所有信息都会进入短时记忆，只是强度不同", "C. 衰减理论认为筛选发生在意识之后", "D. 衰减理论完全否定过滤器概念"], answer: -1, analysis: "" },
+        { id: 338, chapter: "实验心理学", type: "single", question: "资源限制理论强调：", options: ["A. 注意是一种自动加工，不需资源", "B. 注意资源无限，可以同时处理所有任务", "C. 注意是一种有限资源，多任务时需分配，否则性能下降", "D. 注意完全由外部刺激强度决定"], answer: -1, analysis: "" },
+        { id: 339, chapter: "实验心理学", type: "single", question: "Kahneman的双加工理论指出注意加工分为：", options: ["A. 串行和并行两种", "B. 自动低资源和控制性高资源两种", "C. 初级感知和高级决策两种", "D. 长时记忆和短时记忆两种"], answer: -1, analysis: "" },
+        { id: 340, chapter: "实验心理学", type: "single", question: "在系列位置效应中，首因效应主要由哪个记忆系统支持？", options: ["A. 感官记忆", "B. 短时记忆", "C. 工作记忆", "D. 长时记忆"], answer: -1, analysis: "" },
+        { id: 341, chapter: "实验心理学", type: "single", question: "近因效应的存在主要反映：", options: ["A. 信息未进入任何记忆系统", "B. 信息仍保持在感官记忆中", "C. 信息保持在短时记忆系统", "D. 信息已进入长时记忆"], answer: -1, analysis: "" },
+        { id: 342, chapter: "实验心理学", type: "single", question: "增加刺激项目的呈现时间（复述时间）会带来何种效应？", options: ["A. 加强近因效应，首因效应不变", "B. 加强首因效应，近因效应不变", "C. 同时加强首因和近因效应", "D. 消除首因效应"], answer: -1, analysis: "" },
+        { id: 343, chapter: "实验心理学", type: "single", question: "将即时回忆改为延迟回忆并防止复述，会导致：", options: ["A. 首因效应消失", "B. 近因效应消失", "C. 两者都消失", "D. 两者都增强"], answer: -1, analysis: "" },
+        { id: 344, chapter: "实验心理学", type: "single", question: "“误导信息干扰范式”主要用于研究：", options: ["A. 注意分配", "B. 错误记忆如何被后续信息篡改", "C. 工作记忆容量", "D. 反应时分布"], answer: -1, analysis: "" },
+        { id: 345, chapter: "实验心理学", type: "single", question: "DRM范式中，诱发被试错误记忆的“诱发词”具有怎样的特点？", options: ["A. 从未出现但与学习材料高度语义相关", "B. 完全不相关", "C. 在学习材料中多次出现", "D. 随机选择的无意义词"], answer: -1, analysis: "" },
+        { id: 346, chapter: "实验心理学", type: "single", question: "斯伯林部分报告法的关键发现是：", options: ["A. 感官记忆只能保留3个项目", "B. 感官记忆能保留约9个项目", "C. 报告数与行数无关", "D. 声音线索无法提高报告准确率"], answer: -1, analysis: "" },
+        { id: 347, chapter: "实验心理学", type: "single", question: "在Sperling实验中，当显示12个字母仅报告一行时，被试平均能报告约几个？", options: ["A. 3–4 个", "B. 6–7 个", "C. 9–10 个", "D. 11–12 个"], answer: -1, analysis: "" },
+        { id: 348, chapter: "实验心理学", type: "single", question: "通过“×行报告数 × 行数”公式，Sperling推算全部报告时的估计最大保持量，大约是：", options: ["A. 4 个", "B. 8 个", "C. 10.5 个", "D. 12 个"], answer: -1, analysis: "" },
+        { id: 349, chapter: "实验心理学", type: "single", question: "补笔测验是研究哪种记忆类型的方法？", options: ["A. 陈述性记忆", "B. 内隐记忆", "C. 感官记忆", "D. 语义记忆"], answer: -1, analysis: "" },
+        { id: 350, chapter: "实验心理学", type: "single", question: "在词干补笔任务中，被试需要：", options: ["A. 回忆并口述整个列表", "B. 根据头几个字母补写剩余字母", "C. 判断单词是否出现过", "D. 重新排列字母顺序"], answer: -1, analysis: "" },
+        { id: 351, chapter: "实验心理学", type: "single", question: "残词不全测验与词干补笔的共同点是：", options: ["A. 都测量陈述性回忆", "B. 都依赖语义提示产生答案", "C. 都考察内隐记忆表现", "D. 都需要口头复述列表"], answer: -1, analysis: "" },
+        { id: 352, chapter: "实验心理学", type: "single", question: "知觉辨认任务中，用30ms速示呈现学过和未学过的单词，主要测量：", options: ["A. 反应时差异", "B. 内隐学习效果", "C. 知觉阈限", "D. 视觉搜索能力"], answer: -1, analysis: "" },
+        { id: 353, chapter: "实验心理学", type: "single", question: "下列哪种范式侧重考察注意的早期选择？", options: ["A. Broadbent过滤器范式", "B. Treisman衰减范式", "C. 多工序扩散模型", "D. DRM范式"], answer: -1, analysis: "" },
+        { id: 354, chapter: "实验心理学", type: "single", question: "“负启动范式”主要测量的是：", options: ["A. 注意的空间焦点", "B. 先前刺激对当前反应的抑制效应", "C. 视觉搜索效率", "D. 时间知觉"], answer: -1, analysis: "" },
+        { id: 355, chapter: "实验心理学", type: "single", question: "在视觉空间搜索范式中，如果目标与干扰项共享特征，通常搜索效率会如何？", options: ["A. 不受影响", "B. 提高", "C. 降低", "D. 完全失效"], answer: -1, analysis: "" },
+        { id: 356, chapter: "实验心理学", type: "single", question: "“目标–奇异刺激距离范式”研究的是：", options: ["A. 目标与干扰刺激在空间上的距离对搜索速度的影响", "B. 目标出现的位置对记忆的影响", "C. 目标颜色与形状的匹配度", "D. 目标–奇异刺激的语义关联性"], answer: -1, analysis: "" },
+        { id: 357, chapter: "实验心理学", type: "single", question: "在双耳分听任务中，若被试在非关注耳检测到自己名字，会对哪个理论构成挑战？", options: ["A. Broadbent过滤器理论", "B. Treisman衰减理论", "C. 资源限制理论", "D. 双加工理论"], answer: -1, analysis: "" },
+        { id: 358, chapter: "实验心理学", type: "single", question: "序列反应时实验主要用于探究：", options: ["A. 运动序列的隐式学习", "B. Stroop干扰效应", "C. 过滤器筛选过程", "D. 双任务资源分配"], answer: -1, analysis: "" },
+        { id: 359, chapter: "实验心理学", type: "single", question: "色轮测试主要用于评估下列哪项能力？", options: ["A. 双眼立体视觉", "B. 色觉与色彩记忆", "C. 皮肤触觉分辨", "D. 手眼协调"], answer: -1, analysis: "" },
+        { id: 360, chapter: "实验心理学", type: "single", question: "在色轮实验中，被试需要基于________来排列色块。", options: ["A. 空间位置", "B. 颜色名称", "C. 色相或明度", "D. 形状大小"], answer: -1, analysis: "" },
+        { id: 361, chapter: "实验心理学", type: "single", question: "动作稳定仪测量的主要指标是：", options: ["A. 反应时", "B. 颤动幅度和偏移量", "C. 手指力量", "D. 视觉场独立性"], answer: -1, analysis: "" },
+        { id: 362, chapter: "实验心理学", type: "single", question: "使用动作稳定仪时，为了量化动作稳定性，通常让被试：", options: ["A. 追随移动目标", "B. 在暗室中辨认闪光", "C. 将探针插入小孔并保持静止", "D. 调整杆至垂直位置"], answer: -1, analysis: "" },
+        { id: 363, chapter: "实验心理学", type: "single", question: "九洞仪主要考察的是：", options: ["A. 视觉场依存性", "B. 双耳分听能力", "C. 手眼协调与精细运动控制", "D. 暗适应速度"], answer: -1, analysis: "" },
+        { id: 364, chapter: "实验心理学", type: "single", question: "在两点阈量规测试中，记录的阈值代表：", options: ["A. 视网膜光感恢复时间", "B. 手指触觉分辨两个点的最小距离", "C. 颜色辨别最小色差", "D. 杆与方框的倾斜角度"], answer: -1, analysis: "" },
+        { id: 365, chapter: "实验心理学", type: "single", question: "棒框仪用于评估场独立性，主要让被试调整一根杆以达到主观的：", options: ["A. 垂直", "B. 水平", "C. 对角线", "D. 45°倾角"], answer: -1, analysis: "" },
+        { id: 366, chapter: "实验心理学", type: "single", question: "深度知觉仪通过向左右眼呈现不同图像来测试被试的：", options: ["A. 皮肤触觉", "B. 色彩记忆", "C. 立体视觉与深度知觉", "D. 手眼协调"], answer: -1, analysis: "" },
+        { id: 367, chapter: "实验心理学", type: "single", question: "暗适应仪绘制的暗适应曲线反映了：", options: ["A. 色觉分辨率随时间变化", "B. 视觉从明亮到黑暗环境中感光恢复的速度", "C. 皮肤对压力的阈值", "D. 手部精细动作稳定性"], answer: -1, analysis: "" },
+        { id: 368, chapter: "实验心理学", type: "single", question: "若某被试在暗适应仪测试中需要更长时间才能检测到低亮度闪光，这说明其：", options: ["A. 立体视觉能力较强", "B. 暗适应速度较慢", "C. 皮肤触觉敏感度较高", "D. 色彩记忆能力较差"], answer: -1, analysis: "" },
+        { id: 369, chapter: "实验心理学", type: "single", question: "Stroop实验中，自变量是：", options: ["A. 刺激呈现时间", "B. 词义–颜色关系（相符 vs 冲突）", "C. 字体大小", "D. 刺激位置"], answer: -1, analysis: "" },
+        { id: 370, chapter: "实验心理学", type: "single", question: "在Stroop实验中，因变量主要测量：", options: ["A. 回忆正确率", "B. 反应时与错误率", "C. 旋转角度", "D. 记忆集大小"], answer: -1, analysis: "" },
+        { id: 371, chapter: "实验心理学", type: "single", question: "Stroop效应最典型的结果是：", options: ["A. 冲突条件下反应更快", "B. 冲突条件下反应更慢、错误更多", "C. 相符条件下错误率更高", "D. 相符条件下反应更慢"], answer: -1, analysis: "" },
+        { id: 372, chapter: "实验心理学", type: "single", question: "心理旋转实验要求被试判断两组三维图形是否相同，其自变量是：", options: ["A. 列表长度", "B. 旋转角度大小", "C. 记忆集大小", "D. 刺激类型"], answer: -1, analysis: "" },
+        { id: 373, chapter: "实验心理学", type: "single", question: "心理旋转实验中，如果旋转角度越大，通常观察到：", options: ["A. 反应时越短", "B. 反应时与角度无关", "C. 反应时越长", "D. 错误率下降"], answer: -1, analysis: "" },
+        { id: 374, chapter: "实验心理学", type: "single", question: "Sperling部分报告法中，用来提示哪一行报告的是：", options: ["A. 颜色变化", "B. 音调信号（高、中、低音调）", "C. 闪烁方块", "D. 刺激位置标记"], answer: -1, analysis: "" },
+        { id: 375, chapter: "实验心理学", type: "single", question: "Sperling部分报告法推算出的感官记忆容量约为：", options: ["A. 3 个字母", "B. 5 个字母", "C. 9 个字母", "D. 15 个字母"], answer: -1, analysis: "" },
+        { id: 376, chapter: "实验心理学", type: "single", question: "在Sperling部分报告法中，单行报告正确率通常为：", options: ["A. 20%–40%", "B. 50%–60%", "C. 76%–100%", "D. 100%"], answer: -1, analysis: "" },
+        { id: 377, chapter: "实验心理学", type: "single", question: "系列位置效应实验中，“近因效应”指的是：", options: ["A. 列表中间项目回忆最好", "B. 列表首位项目回忆最好", "C. 列表末尾项目回忆最好", "D. 列表所有项目回忆均匀"], answer: -1, analysis: "" },
+        { id: 378, chapter: "实验心理学", type: "single", question: "下列哪项是系列位置效应的典型发现？", options: ["A. 中间项目回忆最好", "B. 首位和末位项目回忆最差", "C. 首位和末位项目回忆最好，中间最差", "D. 只有首位项目有优势"], answer: -1, analysis: "" },
+        { id: 379, chapter: "实验心理学", type: "single", question: "短时记忆视觉编码实验中，视觉相似（图形 vs 图形）刺激相比文字刺激，干扰效应会：", options: ["A. 更小", "B. 相同", "C. 更大", "D. 消失"], answer: -1, analysis: "" },
+        { id: 380, chapter: "实验心理学", type: "single", question: "在短时记忆视觉编码实验里，因变量通常是：", options: ["A. 判断反应时", "B. 回忆正确率", "C. 旋转角度", "D. 刺激强度"], answer: -1, analysis: "" },
+        { id: 381, chapter: "实验心理学", type: "single", question: "Sperling短时记忆提取实验（数字识别）中，自变量是：", options: ["A. 列表位置", "B. 刺激呈现时间", "C. 记忆集大小（N=1–6）", "D. 词义–颜色关系"], answer: -1, analysis: "" },
+        { id: 382, chapter: "实验心理学", type: "single", question: "在Sperling短时记忆提取实验中，随着记忆集大小增加，被试的反应时：", options: ["A. 线性增加", "B. 线性减少", "C. 保持不变", "D. 先增后减"], answer: -1, analysis: "" },
+        { id: 383, chapter: "实验心理学", type: "single", question: "波斯纳字母匹配实验比较了物理匹配（大小写）与身份匹配（字母本身），结果显示：", options: ["A. 身份匹配更快", "B. 物理匹配更快", "C. 两者反应时相同", "D. 身份匹配无自动化"], answer: -1, analysis: "" },
+        { id: 384, chapter: "实验心理学", type: "single", question: "在波斯纳实验中，以下哪项说明字母身份加工是后于物理特征的自动过程？", options: ["A. 身份匹配反应更快", "B. 物理匹配和身份匹配无差别", "C. 物理匹配反应更快", "D. 匹配类型不影响错误率"], answer: -1, analysis: "" },
+        { id: 385, chapter: "实验心理学", type: "single", question: "如果想研究注意资源分配在Stroop实验中的作用，最可能关注的因变量是：", options: ["A. 正确率", "B. 反应时", "C. 旋转角度", "D. 阈值"], answer: -1, analysis: "" },
+        { id: 386, chapter: "实验心理学", type: "single", question: "哪个实验最直接支持“心智旋转连续模型”？", options: ["A. Stroop效应实验", "B. 心理旋转实验", "C. Sperling部分报告法", "D. 系列位置效应实验"], answer: -1, analysis: "" },
+        { id: 387, chapter: "实验心理学", type: "single", question: "以下哪对实验都使用了声音提示来引导被试？", options: ["A. Stroop实验和心理旋转实验", "B. Sperling部分报告法和心理不应期范式", "C. Sperling部分报告法和双耳分听实验", "D. Sperling部分报告法和短时记忆提取实验"], answer: -1, analysis: "" },
+        { id: 388, chapter: "实验心理学", type: "single", question: "综合上述实验，下列说法正确的是：", options: ["A. Stroop效应和波斯纳匹配实验都涉及颜色识别", "B. Sperling部分报告法主要测量短时记忆容量", "C. 心理旋转实验测量手眼协调", "D. 系列位置效应实验使用三维图形材料"], answer: -1, analysis: "" },
+    ];
+
+    // 状态管理
+    let currentQuestionIndex = 0;
+    const userAnswers = new Array(questions.length).fill(null); 
+    
+    // 初始化 DOM
+    const quizArea = document.getElementById('quiz-area');
+    const navDotsContainer = document.getElementById('nav-dots');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    
+    function init() {
+        document.getElementById('total-count').textContent = questions.length;
+        renderQuestions();
+        renderNavDots();
+        updateUI();
+    }
+
+    function renderQuestions() {
+        questions.forEach((q, index) => {
+            const card = document.createElement('div');
+            card.className = `glass-card question-card ${q.type} ${index === 0 ? 'active' : ''}`;
+            card.id = `q-card-${index}`;
+
+            const typeLabel = q.type === 'multi' ? '多选题' : '单选题';
+            const typeClass = q.type;
+
+            let optionsHtml = '';
+            q.options.forEach((opt, optIndex) => {
+                let marker = String.fromCharCode(65 + optIndex);
+                let text = opt.replace(/^[A-Z]\.\s*/, '');
+
+                optionsHtml += `
+                    <div class="option-item" onclick="handleOptionClick(${index}, ${optIndex})" id="opt-${index}-${optIndex}">
+                        <div class="option-marker">${marker}</div>
+                        <div class="option-content">${text}</div>
+                    </div>
+                `;
+            });
+
+            const actionHtml = `
+                <button class="glass-button" id="submit-btn-${index}" onclick="submitAnswer(${index})" style="width:100%; margin-top:15px; color: white; background: var(--morandi-blue);">
+                    确认答案
+                </button>
+            `;
+
+            card.innerHTML = `
+                <div style="margin-bottom:15px;">
+                    <span class="chapter-tag">${q.chapter}</span>
+                    <span class="type-tag ${typeClass}">${typeLabel}</span>
+                </div>
+                <div class="question-text">${q.id}. ${q.question}</div>
+                <div class="options-list">${optionsHtml}</div>
+                ${actionHtml}
+                <div class="feedback-section" id="feedback-${index}">
+                    <div class="feedback-title">解析</div>
+                    <div style="font-size: 0.95rem; color: var(--text-main);">${q.analysis}</div>
+                </div>
+            `;
+            quizArea.appendChild(card);
+        });
+    }
+
+    function renderNavDots() {
+        questions.forEach((_, index) => {
+            const dot = document.createElement('div');
+            dot.className = `nav-dot ${index === 0 ? 'active' : ''}`;
+            dot.id = `nav-dot-${index}`;
+            dot.onclick = () => jumpToQuestion(index);
+            navDotsContainer.appendChild(dot);
+        });
+    }
+
+    window.handleOptionClick = function(qIndex, optIndex) {
+        const btn = document.getElementById(`submit-btn-${qIndex}`);
+        if (btn.disabled) return;
+
+        const q = questions[qIndex];
+        const optEl = document.getElementById(`opt-${qIndex}-${optIndex}`);
+
+        if (q.type === 'single') {
+            const allOpts = document.querySelectorAll(`#q-card-${qIndex} .option-item`);
+            allOpts.forEach(el => el.classList.remove('selected'));
+            optEl.classList.add('selected');
+        } else {
+            optEl.classList.toggle('selected');
+        }
+    };
+
+    window.submitAnswer = function(qIndex) {
+        const q = questions[qIndex];
+        const card = document.getElementById(`q-card-${qIndex}`);
+        const selectedEls = card.querySelectorAll('.option-item.selected');
+        
+        if (selectedEls.length === 0) {
+            alert('请先选择答案');
+            return;
+        }
+
+        const btn = document.getElementById(`submit-btn-${qIndex}`);
+        btn.disabled = true;
+        btn.textContent = '已作答';
+        btn.style.opacity = '0.6';
+        btn.style.cursor = 'default';
+
+        let userAns;
+        const selectedIndices = Array.from(selectedEls).map(el => {
+            const idParts = el.id.split('-');
+            return parseInt(idParts[2]);
+        });
+
+        if (q.type === 'single') {
+            userAns = selectedIndices[0];
+        } else {
+            userAns = selectedIndices.sort((a, b) => a - b);
+        }
+        
+        userAnswers[qIndex] = userAns;
+
+        let isCorrect = false;
+        if (q.type === 'single') {
+            isCorrect = (userAns === q.answer);
+        } else {
+            isCorrect = JSON.stringify(userAns) === JSON.stringify(q.answer.sort((a,b)=>a-b));
+        }
+
+        const feedback = document.getElementById(`feedback-${qIndex}`);
+        const navDot = document.getElementById(`nav-dot-${qIndex}`);
+        
+        feedback.classList.add('show');
+        feedback.style.borderLeftColor = isCorrect ? 'var(--success-color)' : 'var(--error-color)';
+        
+        const allOpts = card.querySelectorAll('.option-item');
+        const correctIndices = Array.isArray(q.answer) ? q.answer : [q.answer];
+        
+        correctIndices.forEach(idx => {
+            allOpts[idx].classList.add('correct');
+        });
+
+        selectedIndices.forEach(idx => {
+            if (!correctIndices.includes(idx)) {
+                allOpts[idx].classList.add('wrong');
+            }
+        });
+
+        navDot.classList.add(isCorrect ? 'correct' : 'wrong');
+
+        setTimeout(() => {
+            feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 100);
+
+        updateStats();
+    };
+
+    window.jumpToQuestion = function(index) {
+        document.getElementById(`q-card-${currentQuestionIndex}`).classList.remove('active');
+        document.getElementById(`nav-dot-${currentQuestionIndex}`).classList.remove('active');
+        
+        currentQuestionIndex = index;
+        
+        document.getElementById(`q-card-${currentQuestionIndex}`).classList.add('active');
+        document.getElementById(`nav-dot-${currentQuestionIndex}`).classList.add('active');
+        
+        updateUI();
+    };
+
+    window.nextQuestion = function() {
+        if (currentQuestionIndex < questions.length - 1) {
+            jumpToQuestion(currentQuestionIndex + 1);
+        } else {
+            showResults();
+        }
+    };
+
+    window.prevQuestion = function() {
+        if (currentQuestionIndex > 0) {
+            jumpToQuestion(currentQuestionIndex - 1);
+        }
+    };
+
+    window.resetQuiz = function() {
+        if(confirm('确定要重新开始练习吗？所有进度将重置。')) {
+            location.reload();
+        }
+    };
+
+    function updateUI() {
+        document.getElementById('current-index').textContent = currentQuestionIndex + 1;
+        
+        const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+        document.getElementById('progress-fill').style.width = `${progress}%`;
+
+        prevBtn.disabled = currentQuestionIndex === 0;
+        if (currentQuestionIndex === questions.length - 1) {
+            nextBtn.textContent = '查看结果';
+        } else {
+            nextBtn.textContent = '❯';
+        }
+
+        document.getElementById('result-area').style.display = 'none';
+        document.getElementById('quiz-area').style.display = 'block';
+    }
+
+    function updateStats() {
+        const answered = userAnswers.filter(a => a !== null).length;
+        if (answered === 0) return;
+
+        let correctCount = 0;
+        userAnswers.forEach((ans, idx) => {
+            if (ans === null) return;
+            const q = questions[idx];
+            let isC = false;
+            if (q.type === 'single') isC = (ans === q.answer);
+            else isC = JSON.stringify(ans) === JSON.stringify(q.answer.sort((a,b)=>a-b));
+            if (isC) correctCount++;
+        });
+
+        const acc = Math.round((correctCount / answered) * 100);
+        document.getElementById('current-accuracy').textContent = `${acc}%`;
+    }
+
+    function showResults() {
+        document.getElementById('quiz-area').style.display = 'none';
+        document.getElementById('result-area').style.display = 'block';
+        
+        let score = 0;
+        userAnswers.forEach((ans, idx) => {
+            if (ans === null) return;
+            const q = questions[idx];
+            let isC = false;
+            if (q.type === 'single') isC = (ans === q.answer);
+            else isC = JSON.stringify(ans) === JSON.stringify(q.answer.sort((a,b)=>a-b));
+            if (isC) score++;
+        });
+
+        document.getElementById('final-score').textContent = score;
+        
+        const total = questions.length;
+        const acc = Math.round((score / total) * 100);
+        
+        let comment = "继续加油！";
+        if (acc > 90) comment = "太棒了！掌握得非常好！";
+        else if (acc > 60) comment = "基础不错，注意查漏补缺。";
+        
+        document.getElementById('accuracy-text').innerHTML = `
+            共 ${total} 题，答对 <span style="color:var(--success-color);font-weight:bold;">${score}</span> 题<br>
+            正确率：${acc}%<br>
+            ${comment}
+        `;
+    }
+
+    async function appendFromMD() {
+        try {
+            const res = await fetch('实验心理学题目答案解析.md');
+            if (!res.ok) return;
+            const text = await res.text();
+            const lines = text.split(/\r?\n/);
+            const ansIdx = lines.findIndex(l => l.trim() === '答案');
+            const answerMap = new Map();
+            for (let i = (ansIdx >= 0 ? ansIdx + 1 : lines.length); i < lines.length; i++) {
+                const m = lines[i].match(/^(\d+)\.\s*([A-D])(?:\s*(.+))?/);
+                if (m) {
+                    const num = parseInt(m[1], 10);
+                    answerMap.set(num, { letter: m[2], explain: (m[3] || '').trim() });
+                }
+            }
+            const questionsToAppend = [];
+            for (let i = 0; i < (ansIdx >= 0 ? ansIdx : lines.length); i++) {
+                const qMatch = lines[i].match(/^(\d+)\.\s*(.+)/);
+                if (!qMatch) continue;
+                const id = parseInt(qMatch[1], 10);
+                if (id <= 200) continue;
+                const questionText = qMatch[2].trim();
+                const opts = [];
+                for (let k = 1; k <= 4 && i + k < lines.length; k++) {
+                    const optLine = lines[i + k];
+                    const om = optLine.match(/^[A-D]\.\s*(.+)/);
+                    if (om) {
+                        const letter = String.fromCharCode(64 + k);
+                        opts.push(`${letter}. ${om[1].trim()}`);
+                    }
+                }
+                if (opts.length !== 4) continue;
+                const ansInfo = answerMap.get(id);
+                if (!ansInfo) continue;
+                const idxMap = { 'A': 0, 'B': 1, 'C': 2, 'D': 3 };
+                const answerIndex = idxMap[ansInfo.letter];
+                const analysisText = `【答案】${ansInfo.letter}${ansInfo.explain ? '：' + ansInfo.explain : ''}`;
+                questionsToAppend.push({
+                    id,
+                    chapter: "综合练习 (单选)",
+                    type: "single",
+                    question: questionText,
+                    options: opts,
+                    answer: answerIndex,
+                    analysis: analysisText
+                });
+            }
+            if (questionsToAppend.length) {
+                questions.push(...questionsToAppend);
+            }
+        } catch (e) {}
+    }
+
+    window.addEventListener('DOMContentLoaded', async () => {       
+        // await appendFromMD();
+        const tc = document.getElementById('total-count');
+        if (tc) tc.textContent = String(questions.length);
+        const h1 = document.querySelector('header h1');
+        if (h1) h1.textContent = '实验心理学习题 (1-388)';
+        init();
+    });
+
+</script>
+</body>
+</html>
