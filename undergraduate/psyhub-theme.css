@@ -1,0 +1,81 @@
+
+:root {
+  --psy-bg: #f8f7f4;
+  --psy-text: #3f3f46;
+  --psy-muted: #64748b;
+  --psy-border: rgba(255,255,255,.82);
+  --psy-glass: rgba(255,255,255,.68);
+}
+html { background: var(--psy-bg); }
+body {
+  background:
+    radial-gradient(circle at 8% 8%, rgba(204,227,222,.78), transparent 34rem),
+    radial-gradient(circle at 92% 82%, rgba(226,217,243,.72), transparent 38rem),
+    linear-gradient(rgba(0,0,0,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,.025) 1px, transparent 1px),
+    var(--psy-bg) !important;
+  background-size: auto, auto, 32px 32px, 32px 32px, auto !important;
+  color: var(--psy-text) !important;
+  padding-top: 76px !important;
+  background-attachment: fixed !important;
+}
+.psyhub-course-shell {
+  position: fixed;
+  z-index: 5000;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(1080px, calc(100% - 28px));
+  min-height: 48px;
+  padding: 8px 10px 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border: 1px solid var(--psy-border);
+  border-radius: 16px;
+  background: rgba(255,255,255,.72);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  box-shadow: 0 12px 34px rgba(15,23,42,.08);
+  font-family: Inter, "Noto Sans SC", system-ui, sans-serif;
+}
+.psyhub-course-brand {
+  color: #18181b;
+  text-decoration: none;
+  font-weight: 750;
+  letter-spacing: -.02em;
+}
+.psyhub-course-links { display: flex; gap: 6px; }
+.psyhub-course-links a {
+  color: #475569;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 11px;
+  border-radius: 10px;
+  transition: .2s ease;
+}
+.psyhub-course-links a:hover { color: #111827; background: rgba(255,255,255,.88); }
+.back-home-btn, .home-fab { display: none !important; }
+.glass-card, .card, .quiz-card, .stats, .toc-top, .modal-content {
+  background: var(--psy-glass) !important;
+  border-color: var(--psy-border) !important;
+  box-shadow: 0 16px 42px rgba(15,23,42,.08) !important;
+  backdrop-filter: blur(20px) saturate(145%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(145%) !important;
+}
+.glass-button, .btn, button {
+  border-radius: 12px !important;
+}
+.header, .header h1, header h1, .section-title {
+  color: #27272a !important;
+}
+.container { position: relative; z-index: 1; }
+a { text-underline-offset: 3px; }
+@media (max-width: 640px) {
+  body { padding-top: 86px !important; }
+  .psyhub-course-shell { align-items: flex-start; }
+  .psyhub-course-links a { padding: 7px 8px; font-size: 12px; }
+  .psyhub-course-links a:first-child { display: none; }
+}

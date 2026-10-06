@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心理健康教育概论题库 </title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="glassmorphism.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 页面局部样式，使用全局莫兰迪与玻璃态变量 */
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-bottom: 100px;
+        }
+
+        /* Glassmorphism Components */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 16px;
+            box-shadow: var(--shadow-medium);
+            padding: 24px;
+            margin-bottom: 24px;
+            transition: transform 0.3s ease;
+        }
+
+        .glass-button {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 14px;
+            color: var(--text-dark);
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-light);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .glass-button:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.7);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+
+        .glass-button:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .glass-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background: rgba(200, 200, 200, 0.2);
+        }
+
+        .back-home-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+
+        /* Header */
+        header h1 {
+            font-family: 'Noto Serif SC', serif;
+            color: var(--text-dark);
+            margin: 0 0 10px 0;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .progress-container {
+            margin-top: 15px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            height: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--morandi-blue);
+            width: 0%;
+            transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* Tags */
+        .chapter-tag, .type-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            margin-right: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(4px);
+        }
+
+        .chapter-tag {
+            background: rgba(147, 162, 169, 0.15);
+            color: var(--text-main);
+        }
+
+        .type-tag.single {
+            background: rgba(156, 175, 152, 0.2);
+            color: #5a7058;
+        }
+
+        .type-tag.multi {
+            background: rgba(220, 199, 196, 0.3);
+            color: #8a6a66;
+        }
+
+        /* Question Area */
+        .question-text {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            line-height: 1.7;
+        }
+
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .option-item {
+            background: rgba(255, 255, 255, 0.4);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .option-item:hover {
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .option-item.selected {
+            background: var(--morandi-blue-light);
+            border-color: var(--morandi-blue);
+        }
+
+        .question-card.multi .option-item.selected {
+            background: var(--morandi-pink);
+            border-color: #bfa5a1;
+        }
+
+        .option-item.correct {
+            background: rgba(184, 196, 176, 0.3) !important;
+            border-color: var(--morandi-green) !important;
+        }
+
+        .option-item.wrong {
+            background: rgba(212, 184, 192, 0.3) !important;
+            border-color: var(--morandi-pink) !important;
+        }
+
+        .option-marker {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+            margin-right: 16px;
+            border: 2px solid #a0a0a0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: #888;
+            margin-top: 2px;
+        }
+
+        .question-card.multi .option-marker {
+            border-radius: 6px;
+        }
+
+        .option-item.selected .option-marker {
+            border-color: var(--text-main);
+            color: var(--text-main);
+            background: rgba(255,255,255,0.5);
+        }
+
+        .option-item.correct .option-marker {
+            border-color: var(--success-color);
+            background: var(--success-color);
+            color: white;
+            content: '✓';
+        }
+
+        .option-item.wrong .option-marker {
+            border-color: var(--error-color);
+            background: var(--error-color);
+            color: white;
+            content: '✕';
+        }
+
+        .feedback-section {
+            margin-top: 24px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
+            border-left: 4px solid var(--morandi-blue);
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .feedback-section.show {
+            display: block;
+        }
+
+        .feedback-title {
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-main);
+            font-family: 'Noto Serif SC', serif;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 800px;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(16px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .question-navigator {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 4px 10px;
+            flex: 1;
+            margin: 0 15px;
+            scrollbar-width: none;
+        }
+        .question-navigator::-webkit-scrollbar { display: none; }
+
+        .nav-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 4px;
+            background: rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .nav-dot.active {
+            width: 24px;
+            background: var(--morandi-blue);
+        }
+
+        .nav-dot.correct {
+            background: var(--success-color);
+            opacity: 0.8;
+        }
+
+        .nav-dot.wrong {
+            background: var(--error-color);
+            opacity: 0.8;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-card {
+            display: none;
+        }
+        
+        .question-card.active {
+            display: block;
+            animation: fadeIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .score-circle {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--morandi-blue), var(--morandi-green));
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 2.5rem;
+            font-weight: 700;
+            box-shadow: 0 10px 20px rgba(147, 162, 169, 0.4);
+            font-family: 'Noto Serif SC', serif;
+        }
+
+        .score-label {
+            font-size: 0.9rem;
+            font-weight: 400;
+            opacity: 0.9;
+            font-family: 'Inter', sans-serif;
+        }
+
+        @media (max-width: 600px) {
+            .back-home-btn {
+                position: static;
+                margin-bottom: 20px;
+                display: inline-block;
+            }
+            .bottom-nav {
+                width: 95%;
+                bottom: 10px;
+            }
+        }
+    </style>
+  <link rel="stylesheet" href="psyhub-theme.css">
+</head>
+<body>
+
+<nav class="psyhub-course-shell" aria-label="课程导航">
+  <a class="psyhub-course-brand" href="../index.html">PsyHub</a>
+  <div class="psyhub-course-links">
+    <a href="index.html">本科课程首页</a>
+    <a href="../index.html">返回主站</a>
+  </div>
+</nav>
+
+<a class="glass-button back-home-btn" href="index.html">🏠 返回首页</a>
+
+<div class="container">
+    <header class="glass-card">
+        <h1>心理健康教育习题 (1-200)</h1>
+        <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--text-light); margin-top: 10px;">
+            <span>进度: <span id="current-index">1</span> / <span id="total-count">200</span></span>
+            <span>正确率: <span id="current-accuracy">0%</span></span>
+        </div>
+        <div class="progress-container">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+    </header>
+
+    <div id="quiz-area" class="quiz-content">
+        <!-- 题目将通过 JS 渲染 -->
+    </div>
+
+    <div id="result-area" class="glass-card" style="display: none; text-align: center;">
+        <div class="stats-card">
+            <div class="score-circle">
+                <span id="final-score">0</span>
+                <span class="score-label">最终得分</span>
+            </div>
+            <h2 style="font-family: 'Noto Serif SC', serif; color: var(--text-main); margin-bottom: 10px;">练习完成</h2>
+            <p style="color: var(--text-light); margin-bottom: 30px;">
+                你完成了所有题目。<br>
+                <span id="accuracy-text"></span>
+            </p>
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <button class="glass-button" onclick="resetQuiz()">↺ 重新练习</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bottom-nav">
+    <button class="glass-button" style="padding: 8px 16px;" id="prev-btn" onclick="prevQuestion()">❮</button>
+    <div class="question-navigator" id="nav-dots">
+        <!-- 导航点 -->
+    </div>
+    <button class="glass-button" style="padding: 8px 16px;" id="next-btn" onclick="nextQuestion()">❯</button>
+</div>
+
+<script>
+    // 题目数据整合 (1-200)
+    const questions = [
+        // --- Part 1 (1-50) ---
+        { id: 1, chapter: "第一章 心理健康概述", type: "single", question: "根据世界卫生组织（WHO）的观点以及现代健康理念，一个人的完全健康状态应当包含躯体健康、心理健康、社会适应良好以及道德健康四个维度。若一名中学生体格健壮，智力正常，但在班级中经常表现出对他人的攻击性，且在违反集体规则后毫无愧疚感，缺乏基本的同理心。这主要反映了该生在健康哪一维度的缺失：", options: ["A. 生理健康", "B. 心理机能", "C. 道德健康", "D. 适应能力"], answer: 2, analysis: "【解析】道德健康是指不能损害他人利益来满足自己的需要，能辨别真伪、善恶、荣辱。题干中学生缺乏愧疚感、同理心，表现出攻击性，属于道德健康维度的缺失。" },
+        { id: 2, chapter: "第一章 心理健康概述", type: "multi", question: "某校在新生入学体检中，依据经典的健康“十标准”来评估学生的身体素质。下列体检观察结果中，符合“健康标准”描述的有：", options: ["A. 站立时头、臂、臀位置协调，身体匀称", "B. 眼睛明亮，反应敏捷，眼睑不发炎", "C. 牙齿清洁，无空洞，齿龈颜色正常且无出血", "D. 头发有光泽，无头屑"], answer: [0, 1, 2, 3], analysis: "【解析】WHO提出的健康十条标准中包含了：身体匀称、眼睛明亮、牙齿清洁、头发有光泽等具体的生理指标。" },
+        { id: 3, chapter: "第一章 心理健康概述", type: "single", question: "在衡量机体功能的“五快”标准中，关于“吃得快”的科学解读，下列说法正确的是：", options: ["A. 进餐速度越快越好，以节省时间投入学习", "B. 指进餐时有良好的食欲，不挑剔食物，并能很快吃完", "C. 指通过大量进食来缓解心理压力", "D. 指经常感到饥饿，消化系统代谢极快"], answer: 1, analysis: "【解析】“五快”中的“吃得快”并非指狼吞虎咽，而是指食欲良好，不挑食，进食过程顺利。" },
+        { id: 4, chapter: "第一章 心理健康概述", type: "multi", question: "“三良好”是衡量心理健康与社会适应的重要参考指标。某高三学生在模拟考失利后，能够迅速调整心态，告诉自己“一次失败不代表全部”，并制定了新的复习计划，同时在生活中依然保持幽默感。这体现了“三良好”中的：", options: ["A. 良好的个性人格", "B. 良好的睡眠质量", "C. 良好的处事能力", "D. 良好的体能储备"], answer: [0, 2], analysis: "【解析】该生表现出的幽默感属于良好的个性人格；迅速调整心态、制定计划属于良好的处事能力。" },
+        { id: 5, chapter: "第一章 心理健康概述", type: "single", question: "心理健康有广义和狭义之分。狭义的心理健康概念主要侧重于心理学层面的界定，其核心是指：", options: ["A. 一种高效而满意的、持续的心理状态", "B. 个体的基本心理活动的过程与内容完整协调一致", "C. 智力水平超常且情绪体验深刻", "D. 社会适应能力超越常人"], answer: 0, analysis: "【解析】狭义的心理健康主要指具备心理健康的主要特征，处于一种高效而满意的、持续的心理状态。" },
+        { id: 6, chapter: "第一章 心理健康概述", type: "multi", question: "在判断青少年学生心理健康状况时，需依据一套综合的评价标准。下列选项中，属于心理健康评价标准核心维度的有：", options: ["A. 智力水平正常", "B. 自我意识正确", "C. 意志行为健全", "D. 情绪乐观向上"], answer: [0, 1, 2, 3], analysis: "【解析】心理健康的标准通常包括：智力正常、情绪适中、意志健全、人格统一、人际关系和谐、社会适应良好、心理特点符合年龄特征等。" },
+        { id: 7, chapter: "第一章 心理健康概述", type: "single", question: "某初二学生坚信班里的同学都在通过咳嗽向他传递“死亡暗号”，为此极度恐惧，不敢去学校。经了解，班里同学并无此意。该生的表现主要违背了心理健康标准中的哪一项？", options: ["A. 智力水平正常", "B. 人际关系和谐", "C. 人格统一完整", "D. 心理与现实环境的统一"], answer: 3, analysis: "【解析】该生出现了妄想，即主观体验与客观现实不一致，违背了“心理与现实环境的统一”这一标准。" },
+        { id: 8, chapter: "第一章 心理健康概述", type: "single", question: "关于“学校心理健康教育”的定义，下列关键词中不属于其核心构成要素的是：", options: ["A. 根据中小学生生理、心理发展特点", "B. 运用有关心理教育方法和手段", "C. 以药物治疗和精神分析为主要途径", "D. 促进学生身心全面和谐发展和素质全面提高"], answer: 2, analysis: "【解析】学校心理健康教育主要运用教育和辅导的方法，而非医学模式的“药物治疗”或深度的“精神分析”。" },
+        { id: 9, chapter: "第二章 心理辅导与咨询", type: "multi", question: "在学校教育实践中，经常需要对“心理辅导”、“心理咨询”和“心理治疗”三个概念进行辨析。关于“心理辅导”的内涵，下列表述准确的有：", options: ["A. 是一种新型的、建设性的人际关系", "B. 旨在帮助学生准确认识自己、适应环境", "C. 其根本目标是为防止未来问题的发生提供知识性服务", "D. 主要针对患有严重精神障碍的学生进行矫治"], answer: [0, 1], analysis: "【解析】心理辅导强调一种建设性的助人关系，帮助学生自我认识和适应。它面向全体学生，而非仅针对严重精神障碍。" },
+        { id: 10, chapter: "第二章 心理辅导与咨询", type: "single", question: "某心理老师在校园广播中介绍心理中心的服务时说：“如果你在学习生活中感到轻微的困惑，或者有一些心理冲突想要找人倾诉、寻求建议，欢迎来心理咨询室。”这体现了“心理咨询”主要关注对象的：", options: ["A. 过去的历史创伤", "B. 未来的潜能开发", "C. 现在的心理机能改善", "D. 严重的人格重塑"], answer: 2, analysis: "【解析】心理咨询侧重于解决来访者“现在”面临的适应问题和心理困惑。" },
+        { id: 11, chapter: "第二章 心理辅导与咨询", type: "single", question: "区别心理辅导、心理咨询与心理治疗的关键维度之一是“对象”。通常情况下，心理治疗所针对的对象是：", options: ["A. 处在转变或转折时期的普通学生", "B. 心理健康水平较低，或有严重心理障碍的学生", "C. 在发展中遇到轻度心理困惑的正常学生", "D. 所有在校学生及教职员工"], answer: 1, analysis: "【解析】心理治疗针对的是有障碍、心理健康水平较低的对象；心理咨询针对有困惑的正常人；心理辅导针对全体学生。" },
+        { id: 12, chapter: "第二章 心理辅导与咨询", type: "multi", question: "从关注的重点和目标来看，心理辅导与心理治疗存在显著差异。下列说法符合专业界定的是：", options: ["A. 心理辅导重点关注对象的未来，主要做预防", "B. 心理治疗重点关注对象的过去，主要做矫治", "C. 心理辅导的根本目标是纠正行为失常", "D. 心理治疗的根本目标是恢复心理健康"], answer: [0, 1, 3], analysis: "【解析】辅导侧重发展和预防（未来），治疗侧重矫治和修复（过去/现在）。" },
+        { id: 13, chapter: "第二章 心理辅导与咨询", type: "single", question: "在学校心理健康教育的工作方式上，心理辅导更倾向于采用何种形式，以实现其面向全体、预防为主的功能？", options: ["A. 一对一的深度催眠", "B. 封闭式的医学观察", "C. 团体辅导或与个别辅导相结合", "D. 严格的药物控制"], answer: 2, analysis: "【解析】为了实现面向全体和预防功能，团体辅导（如心理课、活动）是最高效的方式，同时结合个别辅导。" },
+        { id: 14, chapter: "第一章 心理健康概述", type: "multi", question: "“五快”标准中的“睡得快”是指神经系统兴奋与抑制功能的协调。具体表现为：", options: ["A. 有睡意，上床后能很快入睡", "B. 睡眠质量高，睡得好", "C. 必须保证每天睡眠时间超过12小时", "D. 醒后头脑清醒，精神饱满"], answer: [0, 1, 3], analysis: "【解析】“睡得快”指入睡快、睡眠深、醒后精神好。并不强制规定睡眠时间长度。" },
+        { id: 15, chapter: "第一章 心理健康概述", type: "single", question: "某学生平时性格温和，待人友善，但在一次考试作弊被抓后，突然表现出极端的暴力倾向，甚至砸坏了教室门窗。这种行为表现主要违背了心理健康评价标准中的：", options: ["A. 智力水平正常", "B. 人格统一完整", "C. 意志行为健全", "D. 情绪乐观向上"], answer: 1, analysis: "【解析】人格统一完整要求个性特征具有稳定性。平时温和突然变得极端暴力，表现出人格的分裂或不稳定性。" },
+        { id: 16, chapter: "第二章 心理辅导与咨询", type: "single", question: "在“心理咨询”的过程中，咨询员借助语言、文字等媒介与咨询对象进行信息交流。其根本目标被描述为：", options: ["A. 消除心理问题与障碍，维护和增进心理健康", "B. 替学生做出所有重大的人生决定", "C. 诊断学生是否患有精神分裂症", "D. 说服学生无条件服从学校管理"], answer: 0, analysis: "【解析】心理咨询的目标是助人自助，消除障碍，增进健康。" },
+        { id: 17, chapter: "第二章 心理辅导与咨询", type: "multi", question: "学校心理健康教育中，对于“心理辅导”的时间维度特征，下列描述正确的有：", options: ["A. 心理辅导可以是终生的", "B. 心理辅导伴随着整个教育过程", "C. 心理辅导必须在限定的50分钟内完成", "D. 心理辅导是一个可长可短的定时过程（特指咨询与治疗）"], answer: [0, 1], analysis: "【解析】心理辅导作为一种教育理念和活动，贯穿终生和教育全过程。" },
+        { id: 18, chapter: "第二章 心理辅导与咨询", type: "single", question: "一位初一新生刚入校，对新环境感到不适应，不知道如何结交新朋友。班主任建议他参加学校组织的“新生适应工作坊”。这种针对处于转折期的普通学生开展的活动，最符合下列哪种工作的定义？", options: ["A. 心理诊治", "B. 心理辅导", "C. 心理治疗", "D. 危机干预"], answer: 1, analysis: "【解析】针对处于转折期、发展中的普通学生，旨在促进适应和发展的活动，属于典型的心理辅导。" },
+        { id: 19, chapter: "第一章 心理健康概述", type: "single", question: "健康标准中的“应变能力强”具体是指：", options: ["A. 能够抵抗一般性感冒和传染病", "B. 处事乐观，态度积极", "C. 能适应环境的各种变化", "D. 观察问题客观、现实"], answer: 2, analysis: "【解析】应变能力强即对环境变化的适应能力。" },
+        { id: 20, chapter: "第二章 心理辅导与咨询", type: "multi", question: "关于“心理治疗”在学校情境中的应用限制与特点，下列说法符合专业规范的有：", options: ["A. 需要由经过专业训练的治疗者进行", "B. 需要建立在良好的治疗关系基础上", "C. 班主任可以随意对学生实施心理治疗", "D. 其目的是消除和缓解当事人较严重的心理问题和障碍"], answer: [0, 1, 3], analysis: "【解析】心理治疗是高度专业化的工作，必须由受训专业人员进行。" },
+        { id: 21, chapter: "第三章 学校心理健康教育现状", type: "single", question: "某地区教育局在调研中发现，辖区内学校心理健康教育虽然建立了档案，但很多只是为了应付检查，且心理辅导室常年锁门。这反映了讲义中提到的我国大陆学校心理健康教育存在的哪一典型问题？", options: ["A. 地区间差异大，整体水平偏低", "B. 师资队伍薄弱，专业人才匮乏", "C. 观念陈旧落后，形式主义严重", "D. 理论水平较低，指导实践不力"], answer: 2, analysis: "【解析】只做表面文章、应付检查、设施闲置，是典型的形式主义表现。" },
+        { id: 22, chapter: "第三章 学校心理健康教育现状", type: "multi", question: "相比之下，国外学校心理健康教育已经发展得较为成熟。依据讲义，下列属于国外学校心理健康教育发展趋势的有：", options: ["A. 心理健康教育人才的专业化", "B. 心理健康教育途径的多样化", "C. 心理健康教育内容的单一化", "D. 心理健康教育资源的整合化"], answer: [0, 1, 3], analysis: "【解析】国外趋势包括人才专业化、途径多样化、资源整合化等。" },
+        { id: 23, chapter: "第四章 学校心理健康教育目标", type: "single", question: "学校心理健康教育的目标是一个多层次的体系。若学校通过讲座和宣传，致力于帮助全校学生预防心理疾病，减少心理问题的发生，这实现了学校心理健康教育的：", options: ["A. 基础目标", "B. 中间目标", "C. 终极目标", "D. 高级目标"], answer: 0, analysis: "【解析】基础目标是防治心理疾病；中间目标是优化心理素质；终极目标是开发心理潜能。" },
+        { id: 24, chapter: "第四章 学校心理健康教育目标", type: "multi", question: "根据目标层级理论，学校心理健康教育的“终极目标”主要包含哪些核心内涵？", options: ["A. 开发心理潜能", "B. 优化心理素质", "C. 实现自我价值", "D. 防治心理疾病"], answer: [0, 2], analysis: "【解析】终极目标指向人的全面发展，即开发潜能和实现自我价值。" },
+        { id: 25, chapter: "第四章 学校心理健康教育任务", type: "single", question: "某中学不仅开设了心理辅导课，还专门针对初三考生的焦虑问题开展了团体辅导，同时邀请家长到校进行亲子沟通培训。下列关于“任务”的表述，错误的是：", options: ["A. 面向全体学生开展预防性和发展性教育是主要任务", "B. 面向少数有心理困扰的学生开展矫正性咨询是必要补充", "C. 心理健康教育应完全由专职心理教师承担，无需家长参与", "D. 面向教师和家长开展工作可以间接促进学生心理健康"], answer: 2, analysis: "【解析】心理健康教育需要全员参与，包括教师、家长和社区，单纯依靠专职教师是不够的。" },
+        { id: 26, chapter: "第五章 心理健康教育原则", type: "single", question: "心理老师在制定教学计划时，强调“每一个学生都是心理健康教育的对象和参与者”，任何活动设计都不能只针对“问题学生”。这一理念直接遵循了学校心理健康教育的：", options: ["A. 全体性原则", "B. 差异性原则", "C. 活动性原则", "D. 保密性原则"], answer: 0, analysis: "【解析】全体性原则要求教育对象是全体学生。" },
+        { id: 27, chapter: "第五章 心理健康教育原则", type: "multi", question: "贯彻“全体性原则”时，学校心理健康教育工作者应避免的误区包括：", options: ["A. 将心理健康教育等同于针对个别“差生”的治疗", "B. 认为心理健康良好的优等生不需要接受心理教育", "C. 在活动设计上考虑到绝大多数学生的共同需要", "D. 仅关注有明显心理症状的学生"], answer: [0, 1, 3], analysis: "【解析】误区包括：只关注问题学生、忽视优等生、将教育等同于治疗。" },
+        { id: 28, chapter: "第五章 心理健康教育原则", type: "single", question: "李老师在讲授通用应对策略的同时，为个别情况特殊的学生提供课后单独辅导方案。这体现了：", options: ["A. 全体性原则与活动性原则的结合", "B. 全体性原则与差异性原则的结合", "C. 活动性原则与保密性原则的结合", "D. 预防性原则与矫治性原则的结合"], answer: 1, analysis: "【解析】既面向全体讲授通用策略，又关注个别差异提供单独辅导，体现了全体性与差异性原则的结合。" },
+        { id: 29, chapter: "第五章 心理健康教育原则", type: "single", question: "“差异性原则”要求心理健康教育必须关注和重视学生的个别差异。下列教学行为中，最能体现这一原则的是：", options: ["A. 无论初一还是初三，都使用完全相同的教案", "B. 针对性格内向和外向的学生，引导其探索不同的社交策略", "C. 要求所有学生演讲标准统一", "D. 忽略男女生心理发展不同步"], answer: 1, analysis: "【解析】针对不同性格特点提供不同的指导，是典型的关注个体差异的做法。" },
+        { id: 30, chapter: "第五章 心理健康教育原则", type: "multi", question: "讲义强调“活动性原则”是指要把学生作为活动的主体。下列关于该原则的实施策略，正确的有：", options: ["A. 重视通过亲身体验（如游戏、角色扮演）来促进学生发展", "B. 教师在课堂上应占据主导地位，全程进行理论灌输", "C. 活动设计应强调学生的参与性与互动性", "D. 认为“听懂了”心理知识就等于拥有了健康的心理素质"], answer: [0, 2], analysis: "【解析】活动性原则强调体验、参与和主体性。" },
+        { id: 31, chapter: "第五章 心理健康教育原则", type: "single", question: "王老师组织学生进行“盲人过河”的团队游戏，让学生在游戏中体验信任与沟通的重要性。这种教学方式主要依据的是：", options: ["A. 系统性原则", "B. 差异性原则", "C. 活动性原则", "D. 渗透性原则"], answer: 2, analysis: "【解析】通过游戏体验来达到教育目的，是活动性原则的典型应用。" },
+        { id: 32, chapter: "第六章 心理健康教育途径", type: "single", question: "学校心理健康教育的实施途径多种多样。其中，“学校心理健康教育课程”和“学校心理健康教育咨询”属于：", options: ["A. 渗透途径", "B. 专门途径", "C. 支持途径", "D. 隐性途径"], answer: 1, analysis: "【解析】课程和咨询是专门为心理健康教育设立的渠道，属于专门途径。" },
+        { id: 33, chapter: "第六章 心理健康教育途径", type: "multi", question: "“渗透途径”是指将心理健康教育融入学校日常工作的各个环节。下列属于渗透途径的有：", options: ["A. 语文老师在分析课文人物心理时引导学生思考性格养成", "B. 班主任在处理学生矛盾时运用共情技巧进行调解", "C. 学校定期举办“心理健康活动周”", "D. 学校图书馆设置温馨舒适的阅读区以缓解学生压力"], answer: [0, 1, 3], analysis: "【解析】A是学科渗透，B是管理渗透，D是环境渗透。" },
+        { id: 34, chapter: "第六章 心理健康教育途径", type: "single", question: "某历史老师在讲授“红军长征”时，重点引导学生体会革命先烈在极端困境中坚持不懈的意志品质。这种做法属于：", options: ["A. 学校学科教学渗透", "B. 学校课外活动渗透", "C. 学校环境优化渗透", "D. 专门心理健康课程"], answer: 0, analysis: "【解析】在历史学科教学中挖掘心理健康教育素材（意志品质），属于学科教学渗透。" },
+        { id: 35, chapter: "第六章 心理健康教育途径", type: "multi", question: "“学校环境优化渗透”是利用隐性课程发挥教育作用。下列属于环境渗透的有：", options: ["A. 在校园广播站开设“心灵之声”栏目", "B. 在教学楼走廊张贴心理健康漫画和名言", "C. 保持校园环境的整洁、优美和有序", "D. 心理咨询室的布置采用暖色调和舒适的家具"], answer: [1, 2, 3], analysis: "【解析】环境渗透包括物质环境（张贴画、整洁校园、咨询室布置）和心理环境。" },
+        { id: 36, chapter: "第六章 心理健康教育途径", type: "single", question: "下列班主任的行为中，符合“学校学生管理渗透”要求的是：", options: ["A. 发现学生早恋倾向，立即当众批评", "B. 制定班规时，组织全班讨论并确立共同遵守的契约", "C. 依据成绩高低安排座位", "D. 对违纪学生一律进行停课反省"], answer: 1, analysis: "【解析】民主制定班规有利于培养学生的自律和责任感，符合心理健康教育原则。" },
+        { id: 37, chapter: "第六章 心理健康教育途径", type: "multi", question: "“支持途径”强调学校与家庭、社区的协同育人。下列属于家庭心理健康教育支持途径的有：", options: ["A. 开设家长学校，教授青春期心理特点知识", "B. 定期召开家长会，反馈学生心理状况", "C. 邀请心理专家为家长举办亲子沟通讲座", "D. 将心理健康教育完全推卸给家庭负责"], answer: [0, 1, 2], analysis: "【解析】家长学校、家长会、讲座都是学校支持家庭教育的有效途径。" },
+        { id: 38, chapter: "第六章 心理健康教育途径", type: "single", question: "若学校联合所在社区，利用社区的青少年活动中心开展“假期心灵成长营”，这属于：", options: ["A. 学科教学渗透", "B. 社区心理健康教育（支持途径）", "C. 专门课程途径", "D. 矫正性心理治疗"], answer: 1, analysis: "【解析】利用社区资源开展教育活动，属于社区心理健康教育，是学校教育的支持途径。" },
+        { id: 39, chapter: "第六章 心理健康教育途径", type: "single", question: "学校利用校园文化节举办“心理情景剧大赛”，让学生自编自导自演。这种活动形式属于：", options: ["A. 学校学科教学渗透", "B. 学校课外活动渗透", "C. 家庭心理健康教育", "D. 社区心理健康教育"], answer: 1, analysis: "【解析】校园文化节、社团活动等属于学校课外活动渗透。" },
+        { id: 40, chapter: "第六章 心理健康教育途径", type: "multi", question: "下列关于各途径关系的描述，正确的有：", options: ["A. 专门途径是开展心理健康教育的主渠道", "B. 渗透途径起着潜移默化的作用", "C. 支持途径为学校教育提供必要的外部环境支持", "D. 各途径应当相互孤立，互不干涉"], answer: [0, 1, 2], analysis: "【解析】各途径应有机结合、互为补充，而非相互孤立。" },
+        { id: 41, chapter: "第七章 理论基础 (精神分析)", type: "single", question: "弗洛伊德将人的心理活动区分为三个层次。其中，那些虽然此时此刻意识不到，但在集中注意、努力思索后可以回忆起来的经验，属于：", options: ["A. 意识", "B. 前意识", "C. 潜意识", "D. 无意识"], answer: 1, analysis: "【解析】前意识（Preconscious）是指处于潜意识和意识之间的部分，通过努力可以召回到意识中。" },
+        { id: 42, chapter: "第七章 理论基础 (精神分析)", type: "multi", question: "根据弗洛伊德的观点，潜意识（Unconscious）是个体不能知觉的精神生活。下列关于潜意识的描述，符合讲义内容的有：", options: ["A. 它由原始冲动、本能以及出生后被压抑的欲望构成", "B. 其中的内容因为不被社会规范所容忍，所以被彻底消灭了", "C. 它虽然不为本人所意识到，但在积极活动", "D. 潜意识内的矛盾冲突可能导致神经症、精神病或梦的发生"], answer: [0, 2, 3], analysis: "【解析】潜意识内容并没有被消灭，而是被压抑，且一直在寻求表达。" },
+        { id: 43, chapter: "第七章 理论基础 (精神分析)", type: "single", question: "当个体的超我与本我、本我与现实之间产生矛盾和冲突时，人会感到焦虑。为了缓和这种焦虑，自我（Ego）会在不知不觉中调整冲突双方的关系。这种心理功能被称为：", options: ["A. 心理防御机制", "B. 认知重组", "C. 行为塑造", "D. 情绪宣泄"], answer: 0, analysis: "【解析】心理防御机制是自我为了减轻或消除因内心冲突而产生的焦虑所采取的潜意识策略。" },
+        { id: 44, chapter: "第七章 理论基础 (精神分析)", type: "multi", question: "下列选项中，属于心理防御机制的有：", options: ["A. 压抑 (Repression)", "B. 投射 (Projection)", "C. 系统脱敏 (Systematic Desensitization)", "D. 升华 (Sublimation)"], answer: [0, 1, 3], analysis: "【解析】系统脱敏是行为疗法的技术，不是防御机制。" },
+        { id: 45, chapter: "第七章 理论基础 (行为主义)", type: "single", question: "当一名学生对“当众发言”产生过分的焦虑反应时，咨询师引导他在放松状态下逐渐接触焦虑情境，建立一种不相容的反应（如放松）来消除敏感反应。这种方法是：", options: ["A. 满灌疗法", "B. 厌恶疗法", "C. 系统脱敏法", "D. 代币制"], answer: 2, analysis: "【解析】系统脱敏法的核心就是利用交互抑制原理，在放松状态下逐渐暴露于焦虑情境。" },
+        { id: 46, chapter: "第七章 理论基础 (人本主义)", type: "single", question: "马斯洛的需要层次理论中，在最初提出的“五层次”金字塔模型中，位于最高层的是：", options: ["A. 尊重的需要", "B. 社交的需要", "C. 安全的需要", "D. 自我实现的需要"], answer: 3, analysis: "【解析】五层次模型最高层是自我实现（Self-actualization）。" },
+        { id: 47, chapter: "第七章 理论基础 (人本主义)", type: "multi", question: "马斯洛后来在“尊重的需要”与“自我实现的需要”之间增加了两个新的层次。这两个层次是：", options: ["A. 归属与爱的需要", "B. 认识需要 (Need to know)", "C. 审美需要 (Aesthetic need)", "D. 超越需要"], answer: [1, 2], analysis: "【解析】后期完善的七层次模型中，增加了认识需要和审美需要。" },
+        { id: 48, chapter: "第七章 理论基础 (人本主义)", type: "single", question: "罗杰斯提出“咨询员应对来访者表现‘真我’，不应有任何虚伪和防御，不带假面具，心口一致、言行一致”，这种态度被称为：", options: ["A. 共情 (Empathy)", "B. 真诚 (Genuineness)", "C. 尊重 (Respect)", "D. 具体化 (Concreteness)"], answer: 1, analysis: "【解析】真诚（或一致性）是指咨询师在关系中是真实的，表里如一。" },
+        { id: 49, chapter: "第七章 理论基础 (人本主义)", type: "single", question: "在心理咨询中，咨询员能够深入了解来访者经历的情感和想法，设身处地地体会来访者的感受，了解他如何看自己、如何看世界。这种能力和态度被称为：", options: ["A. 同情", "B. 移情", "C. 共情", "D. 怜悯"], answer: 2, analysis: "【解析】共情（Empathy，也译为神入、同感）是指设身处地理解他人的能力，不同于同情。" },
+        { id: 50, chapter: "第七章 理论基础 (人本主义)", type: "multi", question: "罗杰斯提出的“尊重”态度，也被称为“无条件积极关注”。根据讲义，下列行为符合“尊重”定义的有：", options: ["A. 对来访者表现出真诚的热情、关心、喜欢和接纳", "B. 即使来访者表现很差时，也不表示鄙视或冷漠", "C. 只有当来访者行为符合道德规范时，才给予接纳", "D. 对来访者的人格给予无条件的肯定"], answer: [0, 1, 3], analysis: "【解析】无条件积极关注意味着接纳来访者作为一个人的价值，不设条件。" },
+
+        // --- Part 2 (51-100) ---
+        { id: 51, chapter: "第七章 理论基础 (艾利斯ABC)", type: "single", question: "艾利斯的ABC理论是认知心理辅导的核心。在ABC公式中，导致个体产生情绪障碍和神经症（C）的根本原因是：", options: ["A. 诱发事件 (A)", "B. 个体对事件的不合理信念 (B)", "C. 外部环境的压力", "D. 童年的创伤经历"], answer: 1, analysis: "【解析】ABC理论的核心观点是：人的情绪不是由某一诱发事件（A）直接引起的，而是由经历这一事件的人对该事件的解释和评价所产生的信念（B）引起的。" },
+        { id: 52, chapter: "第八章 自我意识辅导", type: "single", question: "自我意识辅导是学校心理健康教育的重要内容。其目标是帮助学生科学地认识自我、悦纳自我、激励自我、调适自我、管理自我，最终促进：", options: ["A. 学业成绩的提升", "B. 良好自我概念的形成和自我意识发展", "C. 身体素质的增强", "D. 社交范围的扩大"], answer: 1, analysis: "【解析】自我意识辅导的最终目标是促进学生良好自我概念的形成，使其自我意识向健康方向发展。" },
+        { id: 53, chapter: "第八章 自我意识辅导", type: "multi", question: "根据讲义，自我意识辅导的内容体系主要包括哪三个方面？", options: ["A. 自我认识教育与辅导", "B. 自我接纳教育与辅导", "C. 自我完善教育与辅导", "D. 自我批评教育与辅导"], answer: [0, 1, 2], analysis: "【解析】自我意识辅导包括：自我认识（知）、自我接纳（情）、自我完善（意/行）。" },
+        { id: 54, chapter: "第八章 自我意识辅导", type: "single", question: "“自我认识”是自我意识的基础。它包含“主体我对客体我的认识和评价”。具体来说，自我评价是指：", options: ["A. 自己对自己身心特征的直接感知", "B. 在自我认识的基础上对自己做出的某种判断", "C. 他人对自己的客观描述", "D. 心理测验的量化结果"], answer: 1, analysis: "【解析】自我评价是在自我认识（感知、思维）的基础上，对自己做出的某种判断或价值评估。" },
+        { id: 55, chapter: "第八章 自我意识辅导", type: "multi", question: "在实施“自我认识辅导”时，可以采用多种途径帮助学生认识自己。下列属于有效实施途径的有：", options: ["A. 通过他人的比较来认识自我", "B. 通过分析他人对自己的评价来认识自我", "C. 通过自己的活动表现和成果来认识自我", "D. 通过自我反思和自我批评来认识自我"], answer: [0, 1, 2, 3], analysis: "【解析】认识自我的途径包括：比较（社会比较）、他人评价（镜像自我）、活动成果（现实检验）、自我反思（内省）。" },
+        { id: 56, chapter: "第八章 自我意识辅导", type: "single", question: "某学生虽然成绩优秀，但总是觉得自己长相丑陋，不如别人，因此极度自卑。针对该生的情况，心理老师应重点开展：", options: ["A. 学习动机辅导", "B. 自我接纳辅导", "C. 职业生涯辅导", "D. 危机干预"], answer: 1, analysis: "【解析】该生的问题在于无法接纳自己的生理特征（长相），导致自卑，需要重点进行自我接纳辅导，帮助其悦纳自己。" },
+        { id: 57, chapter: "第八章 自我意识辅导", type: "single", question: "自我接纳是对自己的本来面目抱认可、肯定的态度。根据讲义，真正的自我接纳意味着：", options: ["A. 只相信自己存在的价值，忽视自己的缺点", "B. 认同自己的优点，同时也认同自己的缺点", "C. 强迫自己改变所有缺点以达到完美", "D. 放弃努力，安于现状"], answer: 1, analysis: "【解析】自我接纳是指欣然接受自己的一切，既包括优点也包括缺点，不自欺，不自卑。" },
+        { id: 58, chapter: "第八章 自我意识辅导", type: "multi", question: "为了有效实施“自我接纳辅导”，教师应遵循的策略包括：", options: ["A. 培养学生积极悦纳自我的态度", "B. 引导学生建立客观的自我评价", "C. 帮助学生构建（依赖于）自身具有的心理结构", "D. 鼓励学生盲目自信，无视他人反馈"], answer: [0, 1, 2], analysis: "【解析】盲目自信不是健康的自我接纳。正确的策略包括建立态度、客观评价和优化心理结构。" },
+        { id: 59, chapter: "第九章 人际关系辅导", type: "single", question: "心理健康教育中的“人际关系教育与辅导”旨在增进学生的人际互动和社会适应。下列哪一项不属于该辅导的直接目标？", options: ["A. 克服人际交往障碍", "B. 提高人际交往质量", "C. 促进学生人格成长和成熟", "D. 提高学生的应试技巧"], answer: 3, analysis: "【解析】人际关系辅导的目标是交往障碍的克服、交往质量的提升和人格的成长。提高应试技巧属于学习辅导范畴。" },
+        { id: 60, chapter: "第九章 人际关系辅导", type: "multi", question: "人际关系的教育与辅导内容广泛，涵盖了学生在校内外的各种关系。根据讲义，其主要内容包括：", options: ["A. 师生关系的辅导", "B. 同伴关系的辅导", "C. 亲子关系的辅导", "D. 异性关系的辅导"], answer: [0, 1, 2, 3], analysis: "【解析】学生的主要人际关系网络包括老师、同学（同伴）、父母（亲子）以及青春期特有的异性关系。" },
+        { id: 61, chapter: "第九章 人际关系辅导", type: "single", question: "青少年时期的异性交往是心理发展的必修课，但往往也是心理冲突的高发区。在实施异性关系辅导时，教师除了要引导学生把握交往原则和方法外，还必须重点引导学生：", options: ["A. 杜绝一切异性接触以保证学业", "B. 严格区分友谊与爱情的界限", "C. 尽早确立恋爱关系以寻求情感寄托", "D. 将异性同学视为竞争对手"], answer: 1, analysis: "【解析】异性交往辅导的重点之一是帮助学生正确区分异性友谊与爱情，避免早恋带来的困扰。" },
+        { id: 62, chapter: "第九章 人际关系辅导", type: "multi", question: "性心理辅导是促进学生人格健全发展的重要组成部分。根据复习资料，学校开展性心理辅导的核心内容主要涵盖哪四个方面？", options: ["A. 性生理教育", "B. 性心理教育", "C. 性道德教育", "D. 性法治教育"], answer: [0, 1, 2, 3], analysis: "【解析】性辅导是一个系统工程，包括生理知识、心理调适、道德规范和法律法规教育。" },
+        { id: 63, chapter: "第十章 情绪与情感辅导", type: "single", question: "情绪情感辅导的目标不仅是让学生开心，更重要的是培养情绪智力。下列对于情绪情感辅导内涵的描述，不准确的是：", options: ["A. 帮助学生认识和接纳自己的情绪", "B. 帮助学生认识他人的情绪并能有效地沟通", "C. 教导学生压抑所有负面情绪，只保留正面情绪", "D. 掌握控制、疏导不良情绪的适当渠道和方式"], answer: 2, analysis: "【解析】情绪辅导强调接纳和合理宣泄情绪，而非简单的“压抑”。负面情绪也有其功能，需要被看见和疏导。" },
+        { id: 64, chapter: "第十一章 学习心理辅导", type: "multi", question: "学习动机是直接推动学生进行学习的内部动力。在学校心理辅导中，分析学生的学习动机通常涉及以下哪些非认知因素？", options: ["A. 知识价值观", "B. 学习兴趣", "C. 学习能力感或自我效能感", "D. 成就归因"], answer: [0, 1, 2, 3], analysis: "【解析】学习动机的构成十分复杂，涉及价值观、兴趣、效能感和归因方式等多个维度。" },
+        { id: 65, chapter: "第十一章 学习心理辅导", type: "single", question: "班杜拉提出的“自我效能感”概念在学习辅导中应用广泛。在学习动机的语境下，它具体指的是学生：", options: ["A. 对知识价值的客观评价", "B. 对自身学习能力的认识与自信程度", "C. 对考试成绩运气成分的分析", "D. 对学习内容的直接兴趣"], answer: 1, analysis: "【解析】自我效能感是指个体对自己是否有能力完成某一行为的推测和判断，即自信程度。" },
+        { id: 66, chapter: "第十一章 学习心理辅导", type: "single", question: "学生在准备期末考试时，为了记住英语单词，反复进行朗读和默写，直到能背诵为止。这种为了保持信息而对信息进行反复加工的学习策略属于：", options: ["A. 复述策略", "B. 组织策略", "C. 精细加工策略", "D. 元认知策略"], answer: 0, analysis: "【解析】复述策略是指为了保持信息而对信息进行反复重复的过程，如朗读、抄写。" },
+        { id: 67, chapter: "第十一章 学习心理辅导", type: "multi", question: "“组织策略”是高阶的学习策略，旨在对材料进行深层加工。下列学习行为中，属于运用了组织策略的有：", options: ["A. 学习完一章历史后，画出时间线和思维导图进行梳理", "B. 阅读课文时，将内容按特征或类别进行整理、归类", "C. 学习“光合作用”时，将其过程编码为流程图", "D. 机械地重复背诵课文段落"], answer: [0, 1, 2], analysis: "【解析】组织策略包括列提纲、利用图形（图表、流程图）、利用表格等，目的是整合知识，形成结构。D属于复述策略。" },
+        { id: 68, chapter: "第十一章 学习心理辅导", type: "single", question: "“精细加工策略”的核心在于建立新旧知识的联系。例如，学生在学习新的数学公式时，尝试将其与已有的几何知识联系起来，以此增加新信息的意义。这种策略旨在：", options: ["A. 仅仅在工作记忆中保持信息", "B. 对材料进行简单的分类排列", "C. 利用已有的图式和知识使新信息合理化", "D. 监控自己的学习过程"], answer: 2, analysis: "【解析】精细加工策略通过寻找新旧知识间的内在联系，使新信息更有意义，从而促进深度理解和记忆。" },
+        { id: 69, chapter: "第十一章 学习心理辅导", type: "single", question: "考试焦虑主要分为两类：一类是在考试过程产生的焦虑（如怯场、晕场），另一类是：", options: ["A. 考试结束后对成绩的担忧", "B. 考试来临前的一段时间内持续存在的焦虑", "C. 平时上课时的紧张感", "D. 对特定学科的厌恶感"], answer: 1, analysis: "【解析】考试焦虑通常包括预感性焦虑（考前）和过程性焦虑（考中）。" },
+        { id: 70, chapter: "第十一章 学习心理辅导", type: "multi", question: "针对普遍存在的考试焦虑现象，学校开展考试心理辅导主要应聚焦于哪两个方面？", options: ["A. 如何排解考试焦虑（情绪调节）", "B. 怎样提高应试技能（策略指导）", "C. 怎样降低家长的期望值", "D. 怎样预测高考试题"], answer: [0, 1], analysis: "【解析】考试辅导的核心是“心态”和“技巧”。心态上要排解焦虑，技巧上要掌握应试策略。" },
+        { id: 71, chapter: "第十二章 生活适应辅导", type: "single", question: "随着社会发展，休闲活动日益重要。学校开展休闲辅导的主要目的是帮助学生建立正确的休闲观念，获得必备技能，以及：", options: ["A. 学会选择安排优异的休闲活动方式", "B. 利用休闲时间进行兼职赚钱", "C. 将休闲活动完全学术化", "D. 抵制所有流行文化"], answer: 0, analysis: "【解析】休闲辅导旨在提升学生的生活质量，重点在于引导学生选择健康、有益的休闲方式。" },
+        { id: 72, chapter: "第十二章 生活适应辅导", type: "multi", question: "职业辅导（生涯辅导）的实施是一个系统的过程。根据资料，其具体实施内容应当包括：", options: ["A. 了解职业和专业（外部探索）", "B. 了解自己的职业心理（内部探索）", "C. 掌握选择职业的技巧（决策行动）", "D. 强制分配学生的未来职业"], answer: [0, 1, 2], analysis: "【解析】职业辅导遵循“知己、知彼、决策”的逻辑，即了解外部世界、了解内部自我、做出选择。" },
+        { id: 73, chapter: "第十二章 生活适应辅导", type: "single", question: "危机心理辅导是针对处于危机情境（如自杀风险）的学生提供的紧急帮助。其核心不包括：", options: ["A. 提供心理危机干预", "B. 提供及时的心理帮助和支持", "C. 对自杀者进行危机干预", "D. 对学生进行长期的精神分析治疗"], answer: 3, analysis: "【解析】危机辅导是“急救”，重点是干预、支持和稳定，而非长期的深度治疗。" },
+        { id: 74, chapter: "第十二章 生活适应辅导", type: "multi", question: "当校园危机事件发生后，实施危机心理辅导通常遵循一定的步骤。下列属于危机辅导实施环节的有：", options: ["A. 帮助学生重新认识世界", "B. 引导学生调试情绪", "C. 提高学生解决问题的能力", "D. 鼓励学生寻求社会支持"], answer: [0, 1, 2, 3], analysis: "【解析】危机干预的步骤通常包括：确立关系、保证安全、情绪宣泄与支持、矫正认知、提升应对能力、建立支持系统等。" },
+        { id: 75, chapter: "第十三章 心理健康教育课程", type: "single", question: "关于“学校心理健康教育课程”的定义，最全面的理解是：", options: ["A. 仅仅指每周一节的心理课", "B. 学生在学校环境中获得的关于心理健康发展、心理素质提高方面的全部教育性经验", "C. 学校心理咨询室提供的个别辅导服务", "D. 班主任开展的德育班会"], answer: 1, analysis: "【解析】课程不仅指狭义的课时，而是指学生获得的全部相关教育经验的总和，包含显性课程和隐性课程。" },
+        { id: 76, chapter: "第十三章 心理健康教育课程", type: "multi", question: "从课程结构形式来看，学校心理健康教育课程主要划分为两大类。这两类分别是：", options: ["A. 独立型心理健康教育课程", "B. 心理健康教育融合型课程（渗透型）", "C. 心理健康教育网络课程", "D. 心理健康教育家庭课程"], answer: [0, 1], analysis: "【解析】课程形式主要分为专门设立的“独立型”课程和渗透在学科、活动中的“融合型”课程。" },
+        { id: 77, chapter: "第十三章 心理健康教育课程", type: "multi", question: "“心理健康教育活动课程”强调让学生在活动中成长。下列特征中，属于该类课程显著特征的有：", options: ["A. 活动性", "B. 系统性", "C. 主体性", "D. 互动性"], answer: [0, 2, 3], analysis: "【解析】活动课程最显著的标签是：以活动为载体（活动性），以学生为主体（主体性），强调师生生生互动（互动性）。" },
+        { id: 78, chapter: "第十三章 心理健康教育课程", type: "single", question: "学校心理健康教育课程的内容结构包含多个要素。其中，涉及“情感经验要素”的目标主要是：", options: ["A. 掌握心理健康的基本概念", "B. 培养自尊、自爱、自信等积极的情感体验", "C. 锻炼坚韧不拔的意志品质", "D. 学习人际交往的社会规范"], answer: 1, analysis: "【解析】A是认知要素，C是意志要素，D是社会行为要素。B直接涉及情感体验，属于情感要素。" },
+        { id: 79, chapter: "第十三章 心理健康教育课程", type: "single", question: "在设计心理健康教育课程的主题时，通常按照一定的逻辑程序进行。排在“确立主题名称”之后的步骤通常是：", options: ["A. 拟定教学活动程序设计", "B. 设定主题活动目标", "C. 做好课前准备工作", "D. 采用教学活动方式"], answer: 1, analysis: "【解析】课程设计的一般逻辑：定主题 -> 定目标 -> 选内容/方式 -> 设计程序 -> 准备。" },
+        { id: 80, chapter: "第十三章 心理健康教育课程", type: "multi", question: "集体讨论法是心理课中常用的教学方法。为了适应不同的教学目标，教师可以采用多种讨论形式，包括：", options: ["A. 小组讨论法", "B. 辩论式讨论", "C. 配对讨论法", "D. 脑力激荡法"], answer: [0, 1, 2, 3], analysis: "【解析】这些都是有效的讨论形式。小组讨论适合深入交流，辩论适合澄清价值观，配对适合快速分享，脑力激荡适合激发创意。" },
+        { id: 81, chapter: "第十三章 心理健康教育课程", type: "single", question: "在设计学校心理健康教育课程的主题活动时，教师需要做好充分的课前准备。根据讲义所述的课程设计步骤，排在“采用教学活动方式”之后的步骤是：", options: ["A. 确立主题名称", "B. 设定主题活动目标", "C. 做好课前准备工作", "D. 拟定教学活动程序设计"], answer: 3, analysis: "【解析】确定了主题、目标和方式后，接下来需要设计具体的教学流程（程序），最后才是课前准备。" },
+        { id: 82, chapter: "第十三章 心理健康教育课程", type: "multi", question: "“脑力激荡法”（头脑风暴法）是心理健康教育课程中激发创造性思维的常用方法。在使用该方法时，为了保证效果，教师应遵循的原则包括：", options: ["A. 鼓励学生自由联想，不仅限于常规思路", "B. 对学生的发言暂缓评价，不立即分优劣", "C. 追求发言的数量，多多益善", "D. 一旦学生说错，立即予以纠正以正视听"], answer: [0, 1, 2], analysis: "【解析】头脑风暴的核心原则是：延迟评价、自由联想、以量求质。D选项“立即纠正”会抑制学生的思维，是错误的。" },
+        { id: 83, chapter: "第十三章 心理健康教育课程", type: "single", question: "角色扮演法是一种体验式教学方法。关于其在心理健康教育中的独特作用，下列表述最准确的是：", options: ["A. 主要用于选拔具有表演天赋的学生", "B. 能够让学生以角色身份表露人格、情感或内心冲突", "C. 是为了让课堂气氛热闹，纯粹的娱乐活动", "D. 能够替代心理医生的专业治疗"], answer: 1, analysis: "【解析】角色扮演利用了“投射”效应，让学生在安全的面具下表达真实的情感和冲突，促进自我觉察。" },
+        { id: 84, chapter: "第七章 理论基础 (精神分析)", type: "single", question: "弗洛伊德的人格层次理论将心理活动分为意识、前意识和潜意识。其中，“虽然此时此刻意识不到，但可在集中注意、努力思索后回忆起来的那部分经验”被称为：", options: ["A. 潜意识", "B. 前意识", "C. 无意识", "D. 核心意识"], answer: 1, analysis: "【解析】前意识是连接意识和潜意识的桥梁，储存着可以被提取的记忆和经验。" },
+        { id: 85, chapter: "第七章 理论基础 (精神分析)", type: "multi", question: "潜意识（Unconscious）是精神分析理论的核心概念。下列关于潜意识特征的描述，符合复习讲义内容的有：", options: ["A. 是个体不能知觉的精神生活", "B. 由原始冲动、本能及出生后被压抑的欲望构成", "C. 虽然不被意识到，但力图渗透到意识中以获得满足", "D. 潜意识内的矛盾冲突可能导致神经症或梦的发生"], answer: [0, 1, 2, 3], analysis: "【解析】潜意识具有原始性、动力性（力图冲破压抑）和致病性（冲突导致症状），是个体无法直接知觉的部分。" },
+        { id: 86, chapter: "第七章 理论基础 (精神分析)", type: "single", question: "当个体面临超我与本我、本我与现实的冲突时，自我会启动心理防御机制。其中，“将自己不被社会规范所接受的欲望（如攻击性）转化为社会赞许的活动（如体育竞赛）”的机制是：", options: ["A. 投射", "B. 压抑", "C. 升华", "D. 退化"], answer: 2, analysis: "【解析】升华（Sublimation）是将本能冲动转移到社会认可的目标上，是积极的防御机制。" },
+        { id: 87, chapter: "第七章 理论基础 (精神分析)", type: "multi", question: "讲义中列举了多种心理防御机制。下列选项中，属于常见心理防御机制的有：", options: ["A. 否认 (Denial)", "B. 隔离 (Isolation)", "C. 抵消 (Undoing)", "D. 反向形成 (Reaction Formation)"], answer: [0, 1, 2, 3], analysis: "【解析】这些都是精神分析理论中经典的防御机制。" },
+        { id: 88, chapter: "第七章 理论基础 (行为主义)", type: "single", question: "行为主义治疗技术中，“系统脱敏法”主要用于解决哪类心理问题？", options: ["A. 精神分裂症的幻觉", "B. 对特定事物或环境的过分敏感反应（如恐惧、焦虑）", "C. 严重的抑郁情绪", "D. 人格分裂"], answer: 1, analysis: "【解析】系统脱敏法是治疗恐惧症和焦虑症的经典行为疗法。" },
+        { id: 89, chapter: "第七章 理论基础 (行为主义)", type: "single", question: "系统脱敏法的核心原理是“交互抑制”。其具体操作是：", options: ["A. 让学生一次性暴露在最恐惧的情境中", "B. 在当事人身上发起一种不相容的反应（如放松），以消除敏感反应", "C. 通过厌恶刺激来惩罚不良行为", "D. 深入分析童年的创伤记忆"], answer: 1, analysis: "【解析】交互抑制是指用一种生理状态（如放松）来抑制另一种不相容的生理状态（如焦虑）。" },
+        { id: 90, chapter: "第七章 理论基础 (人本主义)", type: "multi", question: "马斯洛的需要层次理论是人本主义心理学的基石。下列关于该理论的表述，正确的有：", options: ["A. 人的需要从低级到高级呈金字塔状排列", "B. 最基础的需要是安全需要", "C. 自我实现的需要位于最高层", "D. 后期增加了认识需要和审美需要"], answer: [0, 2, 3], analysis: "【解析】最基础的需要是生理需要，而非安全需要。其他表述正确。" },
+        { id: 91, chapter: "第七章 理论基础 (人本主义)", type: "single", question: "罗杰斯认为咨询关系是心理咨询成功的关键。其中，咨询员“对来访者表现‘真我’，不带假面具，心口一致”的态度被称为：", options: ["A. 共情", "B. 尊重", "C. 真诚", "D. 具体化"], answer: 2, analysis: "【解析】真诚（Genuineness）或一致性，要求咨询师真实地存在于关系中。" },
+        { id: 92, chapter: "第七章 理论基础 (人本主义)", type: "single", question: "咨询员能够设身处地地体会来访者的感受，了解其内心世界，这种“感同身受”的能力在罗杰斯的理论中被称为：", options: ["A. 移情", "B. 共情", "C. 同情", "D. 投射"], answer: 1, analysis: "【解析】共情（Empathy）是进入对方的参照系去理解对方，是咨询师的核心能力。" },
+        { id: 93, chapter: "第七章 理论基础 (人本主义)", type: "multi", question: "罗杰斯提出的“尊重”态度（无条件积极关注）要求咨询员：", options: ["A. 对来访者表现出真诚的热情和关心", "B. 即使来访者表现很差，也不表示鄙视", "C. 无条件接纳来访者作为一个人的价值", "D. 只有当来访者进步时才给予鼓励"], answer: [0, 1, 2], analysis: "【解析】尊重是“无条件”的，不能以对方的表现或进步作为接纳的条件（D错误）。" },
+        { id: 94, chapter: "第七章 理论基础 (艾利斯ABC)", type: "single", question: "艾利斯的ABC理论认为，导致个体产生情绪困扰（C）的直接原因并非诱发事件（A），而是：", options: ["A. 潜意识的冲突", "B. 童年的阴影", "C. 个体对事件的看法、解释及评价（B）", "D. 外部环境的恶劣"], answer: 2, analysis: "【解析】B（Belief）是指信念系统，即个体对A的认知和评价，它是导致C（Consequence）的直接原因。" },
+        { id: 95, chapter: "第十四章 学生心理问题成因", type: "multi", question: "学生心理健康问题的影响因素多种多样。根据讲义分类，属于“本位因素”（内在、主观因素）的有：", options: ["A. 个体的生物遗传因素", "B. 个体的心理活动因素", "C. 家庭教养方式", "D. 学校的应试压力"], answer: [0, 1], analysis: "【解析】本位因素指个体自身具有的因素，包括生物学因素和心理因素。C和D属于诱发因素（环境因素）。" },
+        { id: 96, chapter: "第十四章 学生心理问题成因", type: "single", question: "诱发因素是指引起心理问题的外在、客观因素。下列属于诱发因素的是：", options: ["A. 学生的性格特点", "B. 学生的认知模式", "C. 社会文化环境与家庭因素", "D. 学生的遗传基因"], answer: 2, analysis: "【解析】性格、认知、基因均属于个体内在的本位因素。环境、家庭、学校属于外在的诱发因素。" },
+        { id: 97, chapter: "第十五章 心理测验", type: "single", question: "心理测验是了解学生心理状况的重要工具。关于“心理测验”的定义，讲义中强调它是：", options: ["A. 对学生人品的终极审判", "B. 通过观察少数有代表性的行为，对心理特点做出的推论和数量化分析", "C. 医生诊断精神病的唯一依据", "D. 预测学生未来财富的算命工具"], answer: 1, analysis: "【解析】心理测验是心理学测量工具，是对心理特质的间接推论和量化分析。" },
+        { id: 98, chapter: "第十五章 心理测验", type: "multi", question: "学校常用的心理测验量表主要分为几大类。下列属于“能力测验”范畴的有：", options: ["A. 智力测验", "B. 能力倾向测验", "C. 创造力测验", "D. 人格测验"], answer: [0, 1, 2], analysis: "【解析】能力测验测量的是认知能力，包括一般能力（智力）、特殊能力（能力倾向）和创造力。人格测验属于另一大类。" },
+        { id: 99, chapter: "第十六章 档案管理", type: "single", question: "学生心理健康教育档案是开展工作的依据。其中，“心理测评资料”应当记录的内容包括：", options: ["A. 测评的类型与日期", "B. 测评结果与分析", "C. 针对测评结果的教育建议", "D. 以上内容均应包含"], answer: 3, analysis: "【解析】完整的测评资料应包含时间类型、结果分析以及相应的教育建议。" },
+        { id: 100, chapter: "第十六章 档案管理", type: "multi", question: "在心理健康教育档案中，“心理健康教育活动资料”主要指针对学生心理障碍进行的个案记录。其核心内容应包括：", options: ["A. 主诉及症状表现", "B. 原因分析与诊断", "C. 咨询的方法与过程及效果", "D. 辅导教师的签名"], answer: [0, 1, 2, 3], analysis: "【解析】个案记录（活动资料）必须翔实，包含症状、诊断、过程、效果及责任人签名。" },
+
+        // --- Part 3 (101-150) ---
+        { id: 101, chapter: "学校心理健康教育工作者", type: "single", question: "从广义的角度来看，学校心理健康教育工作者的主体应当是：", options: ["A. 拥有心理学博士学位的专家", "B. 获得国家二级心理咨询师资格证的专职人员", "C. 学校的全体教职员工", "D. 学校的行政管理人员"], answer: 2, analysis: "【解析】广义的学校心理健康教育工作者包括学校所有的教师，不仅仅是专职心理教师。" },
+        { id: 102, chapter: "学校心理健康教育工作者", type: "multi", question: "狭义的学校心理健康教育工作者是指受过专门训练的专兼职人员。下列属于狭义范畴的有：", options: ["A. 专门从事心理健康教育教学的教师", "B. 学校心理健康教育中心开展咨询工作的教师", "C. 帮助学生开展生涯辅导与规划的教师", "D. 仅仅负责后勤保障的学校职工"], answer: [0, 1, 2], analysis: "【解析】狭义的工作者是指专业人员，包括教学、咨询和生涯辅导的专兼职教师。" },
+        { id: 103, chapter: "学校心理健康教育工作者", type: "single", question: "当心理老师通过观察和调研，撰写《初中生网络成瘾现状调查报告》，并探索相应的干预策略时，他主要体现的角色是：", options: ["A. 学校心理健康教育的研究者", "B. 学生的心理咨询员", "C. 师生心理健康的示范者", "D. 学校行政管理者"], answer: 0, analysis: "【解析】撰写调研报告和探索干预策略属于科学研究的范畴，体现了研究者的角色。" },
+        { id: 104, chapter: "学校心理健康教育工作者", type: "multi", question: "学校心理健康教育工作者的任务繁重且多样。根据相关理论，下列关于其工作任务的描述，符合专业要求的有：", options: ["A. 为学校的全体学生服务，而不仅仅是问题学生", "B. 与其经常参与个别学生工作，不如更多地参与群体工作", "C. 充当学校整体计划的顾问，协助行政人员", "D. 强调使用心理测验对学生进行分类诊断，贴上标签"], answer: [0, 1, 2], analysis: "【解析】心理健康教育应面向全体，注重预防（群体工作），并协助学校管理。D选项贴标签是违背职业伦理的。" },
+        { id: 105, chapter: "学生心理问题成因", type: "single", question: "下列导致学生心理问题的因素中，属于“本位因素”（个体自身具有的内在因素）的是：", options: ["A. 父母离异造成的家庭破碎", "B. 个体的生物遗传因素", "C. 教师不当的管教方式", "D. 糟糕的社区治安环境"], answer: 1, analysis: "【解析】本位因素是个体内在的，如生物遗传和心理特质。A、C、D均为外在环境因素（诱发因素）。" },
+        { id: 106, chapter: "学生心理问题成因", type: "single", question: "某学生性格内向、敏感多疑，这属于其心理活动的固有特点。当该生在遭遇人际挫折后出现心理障碍，这种“敏感多疑”的性格特点应被归类为：", options: ["A. 诱发因素", "B. 外部因素", "C. 本位因素", "D. 环境因素"], answer: 2, analysis: "【解析】性格特点属于个体的心理活动因素，是导致心理问题的内在基础，即本位因素。" },
+        { id: 107, chapter: "学生心理问题成因", type: "multi", question: "“诱发因素”是引起心理问题的外在、客观因素。在分析学生心理问题时，下列应被视为诱发因素的有：", options: ["A. 家庭经济状况的突然恶化", "B. 学校过重的学业负担和应试压力", "C. 社会网络中传播的不良价值观", "D. 学生自身大脑神经递质的异常分泌"], answer: [0, 1, 2], analysis: "【解析】家庭、学校、社会因素均属于外在的诱发因素。D属于内在的生物本位因素。" },
+        { id: 108, chapter: "学校心理健康教育工作者", type: "single", question: "当心理老师“对教师、行政人员以及其他学校工作人员起顾问作用”时，其主要目的是：", options: ["A. 监督教师的教学质量", "B. 协助解决教职员工管理及学生教育中的心理学问题", "C. 替代班主任进行班级管理", "D. 收集教师的隐私信息"], answer: 1, analysis: "【解析】顾问角色的核心是提供专业支持，协助解决教育教学管理中遇到的心理相关问题。" },
+        { id: 109, chapter: "心理防御机制", type: "single", question: "在心理防御机制中，个体在遭遇痛苦或焦虑时，无意识地将某种不被接受的念头、冲动或记忆排除在意识之外，使其不被自己察觉。这种最基本的防御机制是：", options: ["A. 压抑 (Repression)", "B. 投射 (Projection)", "C. 否认 (Denial)", "D. 隔离 (Isolation)"], answer: 0, analysis: "【解析】压抑是防御机制的基础，指将痛苦经验强制性地排除在意识之外。" },
+        { id: 110, chapter: "心理防御机制", type: "multi", question: "某学生在考试作弊被抓后，不仅不承认错误，反而坚称“是老师故意针对我，看我不顺眼才抓我”。这种将自己不被接受的冲动或过失归咎于他人的心理防御机制涉及：", options: ["A. 合理化 (Rationalization)", "B. 投射 (Projection)", "C. 升华 (Sublimation)", "D. 幽默 (Humor)"], answer: [0, 1], analysis: "【解析】这既包含了“投射”（认为老师针对我），也包含了“合理化”（为错误找借口）。升华和幽默是成熟机制，此处不适用。" },
+        { id: 111, chapter: "心理测验", type: "single", question: "如果心理老师想要了解一名学生的智力水平是否正常，或者其在机械、空间感知等方面的潜在优势，应选用的测验类型是：", options: ["A. 学生人格测验", "B. 学生心理健康测验", "C. 学生能力测验", "D. 学生学业考试"], answer: 2, analysis: "【解析】智力测验和能力倾向测验（如机械、空间能力）均属于能力测验的范畴。" },
+        { id: 112, chapter: "心理测验", type: "multi", question: "心理测验量表种类繁多。下列具体的测验功能中，属于“学生人格测验”范畴的有：", options: ["A. 确定学生属于内向还是外向性格", "B. 描述学生的气质类型（如胆汁质、多血质）", "C. 测量学生的逻辑推理智商", "D. 鉴别学生的性格特点"], answer: [0, 1, 3], analysis: "【解析】人格测验用于测量性格、气质、态度等非认知特征。C属于能力（智力）测验。" },
+        { id: 113, chapter: "档案管理", type: "single", question: "关于档案内容的收集，下列哪项资料通常不包含在“心理健康教育活动资料”中：", options: ["A. 咨询的个案记录（主诉、诊断等）", "B. 心理健康教育的阶段性评价", "C. 学生的期末各科卷面原始分数", "D. 辅导教师的签名"], answer: 2, analysis: "【解析】期末分数属于学业成绩资料（学生综合资料），而非心理教育活动的具体记录。" },
+        { id: 114, chapter: "职业道德", type: "single", question: "学校心理健康教育工作者需要遵守严格的职业道德。其职业道德的功能之一是“可以为来访者提供保护自己的法律依据”，这主要是指：", options: ["A. 职业道德规范了工作者的行为，若违规造成伤害，来访者可据此维权", "B. 职业道德要求咨询师必须是律师", "C. 职业道德允许来访者随意起诉学校", "D. 职业道德保证咨询一定能解决问题"], answer: 0, analysis: "【解析】职业道德规范具有准法律性质，若咨询师违背伦理（如泄密、性侵），来访者可依据这些规范进行投诉或法律维权。" },
+        { id: 115, chapter: "职业道德", type: "multi", question: "心理咨询师在工作中必须保持“师生心理健康的示范者”这一角色。这意味着心理老师应当：", options: ["A. 拥有健康的心理素质", "B. 在面对压力时展现出良好的应对能力", "C. 掩盖自己所有的负面情绪，表现得完美无缺", "D. 以积极乐观的生活态度感染师生"], answer: [0, 1, 3], analysis: "【解析】示范者意味着展示真实的健康状态和应对能力，而非虚假的完美（C错误，咨询师也应真实）。" },
+        { id: 116, chapter: "心理防御机制", type: "single", question: "在遭遇亲人去世等重大打击时，个体潜意识地拒绝承认已经发生的事实，坚信亲人还活着。这种心理防御机制是：", options: ["A. 压抑", "B. 否认", "C. 退化", "D. 抵消"], answer: 1, analysis: "【解析】否认（Denial）是拒绝承认痛苦现实的存在，是一种原始的防御机制。" },
+        { id: 117, chapter: "学校心理健康教育工作者", type: "single", question: "心理老师向班主任提供了关于多动症的科学知识和应对策略。这体现了心理老师的哪项任务？", options: ["A. 提供有关生理、心理学方面的科学知识和信息", "B. 对较低档次的心理服务机构实行监督", "C. 直接对学生进行药物治疗", "D. 取代班主任与家长的沟通"], answer: 0, analysis: "【解析】心理老师的重要任务之一是向教师和家长普及心理学科学知识，消除误解。" },
+        { id: 118, chapter: "学校心理健康教育工作者", type: "multi", question: "下列关于学校心理健康教育工作者任务的描述，正确的有：", options: ["A. 协助学校行政人员确定并实现教学计划目标", "B. 在预防药物滥用和维护学校纪律方面承担主要责任", "C. 有效地利用社会相互作用方面的技能与交往技巧", "D. 忽视处于不利处境的学生，集中精力培养优等生"], answer: [0, 2], analysis: "【解析】B错误，维护纪律通常是行政人员的职责；D错误，应特别关注处于不利处境的学生。A和C是正确任务。" },
+        { id: 119, chapter: "心理防御机制", type: "single", question: "心理防御机制中的“隔离”（Isolation）是指：", options: ["A. 将痛苦的情感与相关的事件或记忆分离开来", "B. 物理上将自己关在房间里不出来", "C. 将攻击冲动转化为艺术创作", "D. 退回到幼儿时期的行为模式"], answer: 0, analysis: "【解析】隔离机制是指将认知（事件记忆）与情感（痛苦感受）切断，使人能理智地谈论创伤而不带情感。" },
+        { id: 120, chapter: "职业道德", type: "single", question: "关于“学校心理健康教育工作者的职业道德”，下列说法中最核心的要素是：", options: ["A. 必须拥有高超的催眠技术", "B. 热爱学校心理健康教育工作和热爱学生", "C. 必须在国内外核心期刊发表论文", "D. 必须与学生建立朋友以外的私人关系"], answer: 1, analysis: "【解析】热爱工作和热爱学生是职业道德的情感基础和核心动力。D违反了双重关系伦理。" },
+        { id: 121, chapter: "学习心理辅导", type: "single", question: "在学习心理辅导中，区分不同的学习策略是重点。如果一名学生在复习时主动列出了一个包含“流派-代表人物-核心观点”的对比表格，这种策略属于：", options: ["A. 复述策略", "B. 精细加工策略", "C. 组织策略", "D. 资源管理策略"], answer: 2, analysis: "【解析】利用表格、图示对知识进行归类整理，属于组织策略。" },
+        { id: 122, chapter: "学习心理辅导", type: "multi", question: "“精细加工策略”强调新旧知识的连接与意义构建。下列学习行为中，被判定为运用了精细加工策略的有：", options: ["A. 记忆“Mount Everest”高度8848米时，联想为“爬爬试吧”", "B. 学习英文单词“Pest”（害虫）时，联想为“拍死它”", "C. 在阅读过程中，对重点内容进行划线和圈点", "D. 学习“二十四节气歌”来辅助记忆"], answer: [0, 1, 3], analysis: "【解析】A、B、D均为记忆术（谐音、口诀），属于精细加工策略。C划线通常被视为复述策略（简单重复）。" },
+        { id: 123, chapter: "心理防御机制", type: "single", question: "某男生暗恋班上一位女生却被拒绝，于是开始四处宣扬“她长得其实很丑，根本配不上我”，这种“酸葡萄”心理属于：", options: ["A. 投射", "B. 反向形成", "C. 合理化", "D. 否认"], answer: 2, analysis: "【解析】合理化（文饰作用）中的“酸葡萄”心理，即得不到就说不好，以维护自尊。" },
+        { id: 124, chapter: "心理防御机制", type: "single", question: "心理防御机制中的“反向形成”（Reaction Formation）是指个体将内心不被接受的冲动转化为相反的行为。下列案例中最符合“反向形成”的是：", options: ["A. 一位对继子女充满敌意的继母，在公开场合表现得对孩子溺爱和无微不至", "B. 贪污公款的官员坚信自己是在为国家做贡献", "C. 遇到车祸后，伤者完全忘记了事故发生的经过", "D. 成绩差的学生通过体育特长来获得自信"], answer: 0, analysis: "【解析】内心敌意，行为溺爱，这种极端的相反表现是典型的反向形成。" },
+        { id: 125, chapter: "理论基础 (行为主义)", type: "multi", question: "行为主义疗法中的“代币制”是基于操作性条件反射原理的。关于代币制的实施，下列表述符合心理学原理的有：", options: ["A. 必须明确界定希望出现的“目标行为”", "B. “代币”必须是具有实际价值的物品（如钱币），不能是象征物", "C. 积累的代币必须能够兑换学生喜欢的强化物（奖励）", "D. 目标行为出现后应立即给予代币强化"], answer: [0, 2, 3], analysis: "【解析】代币可以是象征物（如贴纸、筹码），不一定是钱币。B错误。其他选项均为代币制实施要点。" },
+        { id: 126, chapter: "理论基础 (行为主义)", type: "single", question: "在学校心理咨询中，针对有特定恐惧症（如学校恐怖症）的学生，咨询师采用逐渐暴露于焦虑情境并配合放松的方法，这种技术是：", options: ["A. 满灌疗法", "B. 系统脱敏法", "C. 厌恶疗法", "D. 认知重组法"], answer: 1, analysis: "【解析】系统脱敏法是治疗恐怖症最常用的行为技术。" },
+        { id: 127, chapter: "理论基础 (艾利斯ABC)", type: "multi", question: "艾利斯的ABC理论（理性情绪疗法）认为，个体的不合理信念（B）通常具有哪些典型特征？", options: ["A. 绝对化要求", "B. 过分概括化", "C. 糟糕至极", "D. 灵活变通"], answer: [0, 1, 2], analysis: "【解析】不合理信念的三大特征：绝对化（必须）、过分概括（全盘否定）、糟糕至极（灾难化）。" },
+        { id: 128, chapter: "心理防御机制", type: "single", question: "在心理防御机制中，个体试图用相反的行为来挽回或“抵消”先前不被接受的行为或念头（如反复洗手以消除内疚）。这种机制是：", options: ["A. 隔离", "B. 抵消 (Undoing)", "C. 反向形成", "D. 否认"], answer: 1, analysis: "【解析】抵消机制常见于强迫症状，通过象征性的仪式动作来消除焦虑或罪恶感。" },
+        { id: 129, chapter: "学习心理辅导", type: "single", question: "学习策略中的“复述策略”并非只是死记硬背。下列哪项行为虽然看似简单，但属于复述策略的一种？", options: ["A. 将历史事件编成故事", "B. 在书页边距写下自己的感悟", "C. 抄写课文中的生词", "D. 绘制章节的树状图"], answer: 2, analysis: "【解析】抄写、朗读、重复背诵均属于复述策略。A是精细加工，B是精细加工，D是组织策略。" },
+        { id: 130, chapter: "职业辅导", type: "multi", question: "职业辅导是帮助学生探索未来的过程。在实施“了解职业和专业”这一环节时，学校可以采取的有效措施包括：", options: ["A. 组织学生参观当地的高新技术企业", "B. 邀请不同职业的家长进课堂分享工作经历", "C. 指导学生查阅大学专业目录及就业前景报告", "D. 仅让学生阅读教材中的理论定义"], answer: [0, 1, 2], analysis: "【解析】职业探索需要通过参观、访谈、查阅资料等多种实践方式进行，单一阅读教材（D）效果有限。" },
+        { id: 131, chapter: "心理健康教育课程", type: "single", question: "心理健康教育课程的教学方法中，“配对讨论法”通常适用于：", options: ["A. 全班同学共同解决一个复杂难题", "B. 同桌两人之间就某一具体问题进行简短交流", "C. 正反两方进行激烈的辩论", "D. 需要产生大量创意点子的场合"], answer: 1, analysis: "【解析】配对讨论（同桌交流）适合快速分享和热身，便于所有学生参与。" },
+        { id: 132, chapter: "理论基础 (人本主义)", type: "single", question: "马斯洛认为，只有当低层次需要得到满足后，高层次需要才会产生。基础理论模型中，下列需要按照从低到高排序正确的是：", options: ["A. 安全 -> 社交 -> 尊重 -> 生理", "B. 生理 -> 安全 -> 社交 -> 尊重", "C. 尊重 -> 社交 -> 安全 -> 生理", "D. 社交 -> 尊重 -> 生理 -> 安全"], answer: 1, analysis: "【解析】马斯洛五层次：生理 -> 安全 -> 社交（归属与爱）-> 尊重 -> 自我实现。" },
+        { id: 133, chapter: "学生心理问题成因", type: "multi", question: "影响学生心理健康的“学校因素”属于诱发因素。下列具体的学校因素中，可能对学生心理健康产生负面影响的有：", options: ["A. 唯成绩论的评价体系", "B. 专制或放任的师生关系", "C. 校园欺凌现象", "D. 丰富多彩的社团活动"], answer: [0, 1, 2], analysis: "【解析】不良的评价体系、师生关系和同伴关系（欺凌）是负面因素。社团活动通常是积极因素。" },
+        { id: 134, chapter: "档案管理", type: "single", question: "在学校心理健康教育档案管理中，若发现某学生的心理测评结果显示有严重的自杀风险，心理老师应当：", options: ["A. 严格遵守保密原则，绝不告诉任何人", "B. 突破保密例外，及时通知学校及家长进行干预", "C. 将结果张贴在公告栏以示警示", "D. 仅记录在档案中，等待学生自己求助"], answer: 1, analysis: "【解析】保密例外原则：当来访者可能危及自身或他人生命安全时，必须突破保密，寻求相关人员帮助。" },
+        { id: 135, chapter: "职业道德", type: "single", question: "心理健康教育工作者职业道德的作用之一是“调控学校心理健康教育工作者内部的各种意见”。这主要是指：", options: ["A. 压制不同学术观点的表达", "B. 统一所有咨询师的治疗风格", "C. 通过共同的伦理规范解决专业工作中的分歧与冲突", "D. 规定咨询师的收费标准"], answer: 2, analysis: "【解析】职业道德作为行业共识，能协调同行间的关系，解决专业分歧。" },
+        { id: 136, chapter: "理论基础", type: "multi", question: "讲义中提到的“森田疗法”是一种东方独特的心理治疗方法。其核心的治疗原则是：", options: ["A. 顺其自然", "B. 为所当为", "C. 深入挖掘潜意识", "D. 改变不合理信念"], answer: [0, 1], analysis: "【解析】森田疗法八字方针：顺其自然，为所当为。" },
+        { id: 137, chapter: "理论基础 (艾利斯ABC)", type: "single", question: "某学生因为一次考试失利，就认定自己“一无是处”、“彻底失败”。依据艾利斯的ABC理论，这种不合理信念属于：", options: ["A. 绝对化要求", "B. 过分概括化", "C. 糟糕至极", "D. 投射效应"], answer: 1, analysis: "【解析】以偏概全，通过一件小事否定整体自我，属于过分概括化。" },
+        { id: 138, chapter: "心理测验", type: "single", question: "心理测验中的“能力倾向测验”不同于智力测验，它主要侧重于：", options: ["A. 测量学生已经掌握的知识水平", "B. 测量学生的一般认知能力", "C. 预测学生在特定领域（如音乐、机械）的未来潜能", "D. 测量学生的人格特质"], answer: 2, analysis: "【解析】能力倾向测验旨在预测个体在特定领域的潜在能力和发展可能性。" },
+        { id: 139, chapter: "生活适应辅导", type: "multi", question: "在进行“休闲辅导”时，学校教育的重点应当放在：", options: ["A. 帮助学生获得有益的休闲知识", "B. 培养学生健康的休闲态度", "C. 提升学生选择和安排休闲活动的能力", "D. 强制学生参加枯燥的技能训练"], answer: [0, 1, 2], analysis: "【解析】休闲辅导旨在提升生活质量，包含知识、态度和能力的培养。强制训练违背休闲本质。" },
+        { id: 140, chapter: "心理健康教育课程", type: "single", question: "心理健康教育课程中的“环境课程”是指：", options: ["A. 专门讲授环境保护知识的课程", "B. 校园物质环境、文化环境及人际心理环境对学生的潜移默化影响", "C. 在户外进行的体育课", "D. 生物课中的生态系统章节"], answer: 1, analysis: "【解析】环境课程即隐性课程，指环境氛围对学生心理的熏陶作用。" },
+        { id: 141, chapter: "学习心理辅导", type: "single", question: "在学习策略的辅导中，为了帮助学生记忆“八国联军”的名字，老师教学生使用“饿的话，每日熬一鹰”的谐音口诀。这种通过赋予无意义材料以人为意义的学习策略是：", options: ["A. 复述策略", "B. 组织策略", "C. 精细加工策略", "D. 资源管理策略"], answer: 2, analysis: "【解析】谐音记忆术属于精细加工策略，通过人为添加意义来辅助记忆。" },
+        { id: 142, chapter: "学习心理辅导", type: "multi", question: "组织策略是整合所学新知识之间、新旧知识之间内在联系，形成新的知识结构。下列属于组织策略的具体操作有：", options: ["A. 列提纲", "B. 利用图形（如流程图、模型图）", "C. 利用表格（如一览表）", "D. 大声朗读课文"], answer: [0, 1, 2], analysis: "【解析】列提纲、绘图、制表都是构建知识结构的组织策略。D是复述策略。" },
+        { id: 143, chapter: "心理防御机制", type: "single", question: "心理防御机制并不总是消极的。某学生身体残疾，无法在体育上获得成就，于是他加倍努力学习，最终在数学竞赛中获得金牌，以此赢得他人的尊重。这种“失之东隅，收之桑榆”的心理机制是：", options: ["A. 补偿 (Compensation)", "B. 升华 (Sublimation)", "C. 合理化", "D. 抵消"], answer: 0, analysis: "【解析】补偿机制是指个体利用某种领域的成功来弥补其他领域的缺陷或自卑。" },
+        { id: 144, chapter: "心理防御机制", type: "single", question: "在面对尴尬或痛苦的处境时，个体运用诙谐、幽默的语言或行为来化解困境，调节情绪，这种被认为比较成熟的心理防御机制是：", options: ["A. 压抑", "B. 幽默", "C. 投射", "D. 反向形成"], answer: 1, analysis: "【解析】幽默是一种高级、成熟的心理防御机制。" },
+        { id: 145, chapter: "职业辅导", type: "multi", question: "职业辅导中，帮助学生“了解自己的职业心理”是核心环节之一。根据复习资料，这一环节具体包括引导学生认知自己的：", options: ["A. 职业兴趣", "B. 职业能力倾向", "C. 职业价值观", "D. 所有的行业薪资标准"], answer: [0, 1, 2], analysis: "【解析】了解自我是职业辅导的基础，主要包括兴趣、能力和价值观。薪资标准属于了解外部职业环境。" },
+        { id: 146, chapter: "生活适应辅导", type: "single", question: "在生活适应辅导中，除了休闲辅导和职业辅导外，针对学生日常消费观念和行为的教育也是重要内容。明确列出的项目是：", options: ["A. 投资辅导", "B. 消费辅导", "C. 储蓄辅导", "D. 法律辅导"], answer: 1, analysis: "【解析】消费辅导帮助学生树立正确的消费观，适应市场经济生活。" },
+        { id: 147, chapter: "生活适应辅导", type: "single", question: "危机心理辅导的最后一步通常是建立长效机制。根据讲义的实施步骤，排在“鼓励学生寻求社会支持”之后的措施是：", options: ["A. 设立心理危机干预电话热线", "B. 强制学生休学", "C. 进行家庭治疗", "D. 召开全校警示大会"], answer: 0, analysis: "【解析】危机干预的最后环节通常是建立持续的支持渠道，如热线电话。" },
+        { id: 148, chapter: "心理健康教育课程", type: "multi", question: "学校心理健康教育课程的设计必须遵循科学的程序。在“设定主题活动目标”之后，紧接着需要完成的步骤包括：", options: ["A. 做好课前准备工作", "B. 选择或设计教学活动方式", "C. 拟定教学活动程序", "D. 印刷试卷"], answer: [0, 1, 2], analysis: "【解析】课程设计流程通常为：定主题 -> 定目标 -> 选方式/内容 -> 拟程序 -> 做准备。" },
+        { id: 149, chapter: "心理健康教育课程", type: "single", question: "学校心理健康教育活动课程具有“系统性”特征。这主要体现在：", options: ["A. 课程内容应当是一个循序渐进、相互联系的有机整体", "B. 课程必须由一名老师从头教到尾", "C. 课程必须使用国家统一编写的教材", "D. 课程考核必须采用标准化的心理测验"], answer: 0, analysis: "【解析】系统性指课程目标和内容的连贯性、层次性和整体性。" },
+        { id: 150, chapter: "心理健康教育课程", type: "single", question: "角色扮演法（Role Playing）在心理教学中具有独特的“投射”功能。这意味着：", options: ["A. 学生在扮演中会掩饰真实的自己", "B. 学生会不自觉地将自己的人格、情感和内心冲突通过角色表露出来", "C. 学生会将角色的缺点投射给观众", "D. 教师通过投影仪展示案例"], answer: 1, analysis: "【解析】角色扮演能让学生在无意识中投射内心真实状态，从而便于教师观察和指导。" }
+    ];
+
+    // 状态管理
+    let currentQuestionIndex = 0;
+    const userAnswers = new Array(questions.length).fill(null); 
+    
+    // 初始化 DOM
+    const quizArea = document.getElementById('quiz-area');
+    const navDotsContainer = document.getElementById('nav-dots');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    
+    function init() {
+        document.getElementById('total-count').textContent = questions.length;
+        renderQuestions();
+        renderNavDots();
+        updateUI();
+    }
+
+    function renderQuestions() {
+        questions.forEach((q, index) => {
+            const card = document.createElement('div');
+            card.className = `glass-card question-card ${q.type} ${index === 0 ? 'active' : ''}`;
+            card.id = `q-card-${index}`;
+
+            const typeLabel = q.type === 'multi' ? '多选题' : '单选题';
+            const typeClass = q.type;
+
+            let optionsHtml = '';
+            q.options.forEach((opt, optIndex) => {
+                let marker = String.fromCharCode(65 + optIndex);
+                let text = opt.replace(/^[A-Z]\.\s*/, '');
+
+                optionsHtml += `
+                    <div class="option-item" onclick="handleOptionClick(${index}, ${optIndex})" id="opt-${index}-${optIndex}">
+                        <div class="option-marker">${marker}</div>
+                        <div class="option-content">${text}</div>
+                    </div>
+                `;
+            });
+
+            const actionHtml = `
+                <button class="glass-button" id="submit-btn-${index}" onclick="submitAnswer(${index})" style="width:100%; margin-top:15px; color: white; background: var(--morandi-blue);">
+                    确认答案
+                </button>
+            `;
+
+            card.innerHTML = `
+                <div style="margin-bottom:15px;">
+                    <span class="chapter-tag">${q.chapter}</span>
+                    <span class="type-tag ${typeClass}">${typeLabel}</span>
+                </div>
+                <div class="question-text">${q.id}. ${q.question}</div>
+                <div class="options-list">${optionsHtml}</div>
+                ${actionHtml}
+                <div class="feedback-section" id="feedback-${index}">
+                    <div class="feedback-title">解析</div>
+                    <div style="font-size: 0.95rem; color: var(--text-main);">${q.analysis}</div>
+                </div>
+            `;
+            quizArea.appendChild(card);
+        });
+    }
+
+    function renderNavDots() {
+        questions.forEach((_, index) => {
+            const dot = document.createElement('div');
+            dot.className = `nav-dot ${index === 0 ? 'active' : ''}`;
+            dot.id = `nav-dot-${index}`;
+            dot.onclick = () => jumpToQuestion(index);
+            navDotsContainer.appendChild(dot);
+        });
+    }
+
+    window.handleOptionClick = function(qIndex, optIndex) {
+        const btn = document.getElementById(`submit-btn-${qIndex}`);
+        if (btn.disabled) return;
+
+        const q = questions[qIndex];
+        const optEl = document.getElementById(`opt-${qIndex}-${optIndex}`);
+
+        if (q.type === 'single') {
+            const allOpts = document.querySelectorAll(`#q-card-${qIndex} .option-item`);
+            allOpts.forEach(el => el.classList.remove('selected'));
+            optEl.classList.add('selected');
+        } else {
+            optEl.classList.toggle('selected');
+        }
+    };
+
+    window.submitAnswer = function(qIndex) {
+        const q = questions[qIndex];
+        const card = document.getElementById(`q-card-${qIndex}`);
+        const selectedEls = card.querySelectorAll('.option-item.selected');
+        
+        if (selectedEls.length === 0) {
+            alert('请先选择答案');
+            return;
+        }
+
+        const btn = document.getElementById(`submit-btn-${qIndex}`);
+        btn.disabled = true;
+        btn.textContent = '已作答';
+        btn.style.opacity = '0.6';
+        btn.style.cursor = 'default';
+
+        let userAns;
+        const selectedIndices = Array.from(selectedEls).map(el => {
+            const idParts = el.id.split('-');
+            return parseInt(idParts[2]);
+        });
+
+        if (q.type === 'single') {
+            userAns = selectedIndices[0];
+        } else {
+            userAns = selectedIndices.sort((a, b) => a - b);
+        }
+        
+        userAnswers[qIndex] = userAns;
+
+        let isCorrect = false;
+        if (q.type === 'single') {
+            isCorrect = (userAns === q.answer);
+        } else {
+            isCorrect = JSON.stringify(userAns) === JSON.stringify(q.answer.sort((a,b)=>a-b));
+        }
+
+        const feedback = document.getElementById(`feedback-${qIndex}`);
+        const navDot = document.getElementById(`nav-dot-${qIndex}`);
+        
+        feedback.classList.add('show');
+        feedback.style.borderLeftColor = isCorrect ? 'var(--success-color)' : 'var(--error-color)';
+        
+        const allOpts = card.querySelectorAll('.option-item');
+        const correctIndices = Array.isArray(q.answer) ? q.answer : [q.answer];
+        
+        correctIndices.forEach(idx => {
+            allOpts[idx].classList.add('correct');
+        });
+
+        selectedIndices.forEach(idx => {
+            if (!correctIndices.includes(idx)) {
+                allOpts[idx].classList.add('wrong');
+            }
+        });
+
+        navDot.classList.add(isCorrect ? 'correct' : 'wrong');
+
+        setTimeout(() => {
+            feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 100);
+
+        updateStats();
+    };
+
+    window.jumpToQuestion = function(index) {
+        document.getElementById(`q-card-${currentQuestionIndex}`).classList.remove('active');
+        document.getElementById(`nav-dot-${currentQuestionIndex}`).classList.remove('active');
+        
+        currentQuestionIndex = index;
+        
+        document.getElementById(`q-card-${currentQuestionIndex}`).classList.add('active');
+        document.getElementById(`nav-dot-${currentQuestionIndex}`).classList.add('active');
+        
+        updateUI();
+    };
+
+    window.nextQuestion = function() {
+        if (currentQuestionIndex < questions.length - 1) {
+            jumpToQuestion(currentQuestionIndex + 1);
+        } else {
+            showResults();
+        }
+    };
+
+    window.prevQuestion = function() {
+        if (currentQuestionIndex > 0) {
+            jumpToQuestion(currentQuestionIndex - 1);
+        }
+    };
+
+    window.resetQuiz = function() {
+        if(confirm('确定要重新开始练习吗？所有进度将重置。')) {
+            location.reload();
+        }
+    };
+
+    function updateUI() {
+        document.getElementById('current-index').textContent = currentQuestionIndex + 1;
+        
+        const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+        document.getElementById('progress-fill').style.width = `${progress}%`;
+
+        prevBtn.disabled = currentQuestionIndex === 0;
+        if (currentQuestionIndex === questions.length - 1) {
+            nextBtn.textContent = '查看结果';
+        } else {
+            nextBtn.textContent = '❯';
+        }
+
+        document.getElementById('result-area').style.display = 'none';
+        document.getElementById('quiz-area').style.display = 'block';
+    }
+
+    function updateStats() {
+        const answered = userAnswers.filter(a => a !== null).length;
+        if (answered === 0) return;
+
+        let correctCount = 0;
+        userAnswers.forEach((ans, idx) => {
+            if (ans === null) return;
+            const q = questions[idx];
+            let isC = false;
+            if (q.type === 'single') isC = (ans === q.answer);
+            else isC = JSON.stringify(ans) === JSON.stringify(q.answer.sort((a,b)=>a-b));
+            if (isC) correctCount++;
+        });
+
+        const acc = Math.round((correctCount / answered) * 100);
+        document.getElementById('current-accuracy').textContent = `${acc}%`;
+    }
+
+    function showResults() {
+        document.getElementById('quiz-area').style.display = 'none';
+        document.getElementById('result-area').style.display = 'block';
+        
+        let score = 0;
+        userAnswers.forEach((ans, idx) => {
+            if (ans === null) return;
+            const q = questions[idx];
+            let isC = false;
+            if (q.type === 'single') isC = (ans === q.answer);
+            else isC = JSON.stringify(ans) === JSON.stringify(q.answer.sort((a,b)=>a-b));
+            if (isC) score++;
+        });
+
+        document.getElementById('final-score').textContent = score;
+        
+        const total = questions.length;
+        const acc = Math.round((score / total) * 100);
+        
+        let comment = "继续加油！";
+        if (acc > 90) comment = "太棒了！掌握得非常好！";
+        else if (acc > 60) comment = "基础不错，注意查漏补缺。";
+        
+        document.getElementById('accuracy-text').innerHTML = `
+            共 ${total} 题，答对 <span style="color:var(--success-color);font-weight:bold;">${score}</span> 题<br>
+            正确率：${acc}%<br>
+            ${comment}
+        `;
+    }
+
+    init();
+
+</script>
+</body>
+</html>

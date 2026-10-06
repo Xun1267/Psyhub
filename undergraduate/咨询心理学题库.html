@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>咨询心理学题库</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="glassmorphism.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-bottom: 100px;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 16px;
+            box-shadow: var(--shadow-medium);
+            padding: 24px;
+            margin-bottom: 24px;
+            transition: transform 0.3s ease;
+        }
+        .glass-button {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 14px;
+            color: var(--text-dark);
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-light);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .glass-button:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.7);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+        .glass-button:active:not(:disabled) {
+            transform: translateY(0);
+        }
+        .glass-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background: rgba(200, 200, 200, 0.2);
+        }
+        .back-home-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+        header h1 {
+            font-family: 'Noto Serif SC', serif;
+            color: var(--text-dark);
+            margin: 0 0 10px 0;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+        .progress-container {
+            margin-top: 15px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            height: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--morandi-blue);
+            width: 0%;
+            transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .chapter-tag, .type-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            margin-right: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(4px);
+        }
+        .chapter-tag {
+            background: rgba(147, 162, 169, 0.15);
+            color: var(--text-main);
+        }
+        .type-tag.single {
+            background: rgba(156, 175, 152, 0.2);
+            color: #5a7058;
+        }
+        .type-tag.multi {
+            background: rgba(220, 199, 196, 0.3);
+            color: #8a6a66;
+        }
+        .question-text {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            line-height: 1.7;
+        }
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .option-item {
+            background: rgba(255, 255, 255, 0.4);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: flex-start;
+        }
+        .option-item:hover {
+            background: rgba(255, 255, 255, 0.7);
+        }
+        .option-item.selected {
+            background: var(--morandi-blue-light);
+            border-color: var(--morandi-blue);
+        }
+        .question-card.multi .option-item.selected {
+            background: var(--morandi-pink);
+            border-color: #bfa5a1;
+        }
+        .option-item.correct {
+            background: rgba(184, 196, 176, 0.3) !important;
+            border-color: var(--morandi-green) !important;
+        }
+        .option-item.wrong {
+            background: rgba(212, 184, 192, 0.3) !important;
+            border-color: var(--morandi-pink) !important;
+        }
+        .option-marker {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+            margin-right: 16px;
+            border: 2px solid #a0a0a0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: #888;
+            margin-top: 2px;
+        }
+        .question-card.multi .option-marker {
+            border-radius: 6px;
+        }
+        .option-item.selected .option-marker {
+            border-color: var(--text-main);
+            color: var(--text-main);
+            background: rgba(255,255,255,0.5);
+        }
+        .option-item.correct .option-marker {
+            border-color: var(--success-color);
+            background: var(--success-color);
+            color: white;
+            content: '✓';
+        }
+        .option-item.wrong .option-marker {
+            border-color: var(--error-color);
+            background: var(--error-color);
+            color: white;
+            content: '✕';
+        }
+        .feedback-section {
+            margin-top: 24px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
+            border-left: 4px solid var(--morandi-blue);
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+        .feedback-section.show {
+            display: block;
+        }
+        .feedback-title {
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-main);
+            font-family: 'Noto Serif SC', serif;
+        }
+        .bottom-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 800px;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(16px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        .question-navigator {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 4px 10px;
+            flex: 1;
+            margin: 0 15px;
+            scrollbar-width: none;
+        }
+        .question-navigator::-webkit-scrollbar { display: none; }
+        .nav-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 4px;
+            background: rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+        .nav-dot.active {
+            width: 24px;
+            background: var(--morandi-blue);
+        }
+        .nav-dot.correct {
+            background: var(--success-color);
+            opacity: 0.8;
+        }
+        .nav-dot.wrong {
+            background: var(--error-color);
+            opacity: 0.8;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .question-card { display: none; }
+        .question-card.active {
+            display: block;
+            animation: fadeIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .score-circle {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--morandi-blue), var(--morandi-green));
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 2.5rem;
+            font-weight: 700;
+            box-shadow: 0 10px 20px rgba(147, 162, 169, 0.4);
+            font-family: 'Noto Serif SC', serif;
+        }
+        .score-label {
+            font-size: 0.9rem;
+            font-weight: 400;
+            opacity: 0.9;
+            font-family: 'Inter', sans-serif;
+        }
+        @media (max-width: 600px) {
+            .back-home-btn {
+                position: static;
+                margin-bottom: 20px;
+                display: inline-block;
+            }
+            .bottom-nav {
+                width: 95%;
+                bottom: 10px;
+            }
+        }
+    </style>
+  <link rel="stylesheet" href="psyhub-theme.css">
+</head>
+<body>
+
+<nav class="psyhub-course-shell" aria-label="课程导航">
+  <a class="psyhub-course-brand" href="../index.html">PsyHub</a>
+  <div class="psyhub-course-links">
+    <a href="index.html">本科课程首页</a>
+    <a href="../index.html">返回主站</a>
+  </div>
+</nav>
+<a class="glass-button back-home-btn" href="index.html">🏠 返回首页</a>
+<div class="container">
+    <header class="glass-card">
+        <h1>咨询心理学习题</h1>
+        <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--text-light); margin-top: 10px;">
+            <span>进度: <span id="current-index">0</span> / <span id="total-count">0</span></span>
+            <span>正确率: <span id="current-accuracy">0%</span></span>
+        </div>
+        <div class="progress-container">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+    </header>
+    <div id="quiz-area" class="quiz-content"></div>
+    <div id="result-area" class="glass-card" style="display: none; text-align: center;">
+        <div class="stats-card">
+            <div class="score-circle">
+                <span id="final-score">0</span>
+                <span class="score-label">最终得分</span>
+            </div>
+            <h2 style="font-family: 'Noto Serif SC', serif; color: var(--text-main); margin-bottom: 10px;">练习完成</h2>
+            <p style="color: var(--text-light); margin-bottom: 30px;">
+                你完成了所有题目。<br>
+                <span id="accuracy-text"></span>
+            </p>
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <button class="glass-button" onclick="resetQuiz()">↺ 重新练习</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="bottom-nav">
+    <button class="glass-button" style="padding: 8px 16px;" id="prev-btn" onclick="prevQuestion()">❮</button>
+    <div class="question-navigator" id="nav-dots"></div>
+    <button class="glass-button" style="padding: 8px 16px;" id="next-btn" onclick="nextQuestion()">❯</button>
+</div>
+<script>
+    const quizArea = document.getElementById('quiz-area');
+    const navDotsContainer = document.getElementById('nav-dots');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    let questions = [];
+    let userAnswers = [];
+    let currentQuestionIndex = 0;
+
+    function letterToIndex(ch) { return ch.charCodeAt(0) - 65; }
+
+    async function loadAndParseMD() {
+        try {
+            const res = await fetch('咨询心理学题目答案解析1.md');
+            if (!res.ok) throw new Error('无法加载题目文件');
+            const text = await res.text();
+            const lines = text.split(/\r?\n/);
+
+            const qBlocks = [];
+            let current = null;
+            
+            // Pass 1: Parse Questions
+            for (let i = 0; i < lines.length; i++) {
+                const raw = lines[i].trim();
+                if (!raw) continue;
+                
+                // Stop question parsing if we hit explicit answer headers
+                if (/^一、单项选择题解析/.test(raw) || /^二、多项选择题解析/.test(raw)) {
+                    if (current) qBlocks.push(current);
+                    current = null;
+                    break;
+                }
+
+                const qMatch = raw.match(/^(\d+)[.、]\s*(.*)$/);
+                // Ensure it's not an answer line (e.g. "1. C", "21. 答案：B", "269. 【答案】A, B, C", "• 281. 【答案】B")
+                const isAnswerLine = /^(\d+)[.、]\s*([A-D]+)$/.test(raw) || 
+                                     /^(\d+)[.、]\s*答案[:：]/.test(raw) ||
+                                     /^(\d+)[.、]\s*【答案】/.test(raw) ||
+                                     /^[•o]?\s*\d+[.、]\s*【答案】/.test(raw);
+
+                if (qMatch && !isAnswerLine) {
+                    if (current) qBlocks.push(current);
+                    const id = parseInt(qMatch[1], 10);
+                    const title = qMatch[2];
+                    const type = /多选/.test(title) ? 'multi' : 'single';
+                    current = { id, question: title.replace(/\s*\((?:单选|多选)\)\s*/, ''), options: [], type };
+                    continue;
+                }
+                
+                if (!current) continue;
+                const optMatch = raw.match(/^([A-D])[.、]\s*(.*)$/);
+                if (optMatch) {
+                    current.options.push(`${optMatch[1]}. ${optMatch[2]}`);
+                }
+            }
+            if (current) qBlocks.push(current);
+
+            // Pass 2: Parse Answers & Analysis
+            const answerMap = {};
+            const analysisMap = {};
+            
+            for (let i = 0; i < lines.length; i++) {
+                const raw = lines[i].trim();
+                if (!raw) continue;
+
+                let id = null;
+                let ansStr = '';
+                let inlineAna = '';
+
+                // Pattern 1: 21. 答案：B
+                const m1 = raw.match(/^(\d+)[.、]\s*答案[:：]\s*([A-D]+)\s*$/);
+                // Pattern 2: 1. C (Short format)
+                const m2 = raw.match(/^(\d+)[.、]\s*([A-D]+)$/);
+                // Pattern 3: 269. 【答案】A, B, C
+                const m3 = raw.match(/^(\d+)[.、]\s*【答案】\s*([A-D\s,]+)$/);
+                // Pattern 4: • 281. 【答案】B 解析：...
+                const m4 = raw.match(/^[•o]?\s*(\d+)[.、]\s*【答案】\s*([A-D\s,]+)\s+解析[:：]\s*(.*)$/);
+
+                if (m1) {
+                    id = parseInt(m1[1], 10);
+                    ansStr = m1[2];
+                } else if (m2) {
+                    id = parseInt(m2[1], 10);
+                    ansStr = m2[2];
+                } else if (m3) {
+                    id = parseInt(m3[1], 10);
+                    ansStr = m3[2];
+                } else if (m4) {
+                    id = parseInt(m4[1], 10);
+                    ansStr = m4[2];
+                    inlineAna = m4[3];
+                }
+
+                if (id !== null) {
+                    answerMap[id] = ansStr.replace(/[^A-D]/g, '').split('');
+                    
+                    // Capture Analysis
+                    let ana = inlineAna;
+                    let j = i + 1;
+                    while (j < lines.length) {
+                        const t = lines[j].trim();
+                        // Stop if next line is a new answer or header
+                        if (/^(\d+)[.、]/.test(t) || /^[一二三四]、/.test(t) || /^[•o]?\s*\d+[.、]/.test(t)) break;
+                        
+                        const aMatch = t.match(/^[•o]?\s*解析[:：]\s*(.*)$/);
+                        if (aMatch) {
+                            if (ana) ana += '<br>';
+                            ana += aMatch[1];
+                        } else if (t) {
+                            if (ana) ana += '<br>';
+                            ana += t;
+                        }
+                        j++;
+                    }
+                    analysisMap[id] = ana || '';
+                    i = j - 1;
+                }
+            }
+
+            // Filter valid questions
+            const filteredBlocks = qBlocks.filter(q => Array.isArray(q.options) && q.options.length > 0);
+            
+            questions = filteredBlocks.map(q => {
+                const letters = answerMap[q.id] || [];
+                // If answer missing, default to empty (no correct answer marked)
+                const isMulti = letters.length > 1 || q.type === 'multi';
+                const ansIndices = isMulti ? letters.map(letterToIndex) : (letters[0] ? letterToIndex(letters[0]) : -1);
+                return {
+                    id: q.id,
+                    chapter: '咨询心理学',
+                    type: isMulti ? 'multi' : 'single',
+                    question: q.question,
+                    options: q.options,
+                    answer: ansIndices,
+                    analysis: analysisMap[q.id] || '暂无解析'
+                };
+            });
+
+            renderAll();
+        } catch (e) {
+            console.error(e);
+            quizArea.innerHTML = '<div class="error-message">加载题库失败，请确保使用本地服务器或正确的文件路径。</div>';
+        }
+    }
+
+    function renderAll() {
+        document.getElementById('total-count').textContent = questions.length;
+        userAnswers = new Array(questions.length).fill(null);
+        renderQuestions();
+        renderNavDots();
+        document.getElementById('current-index').textContent = 1;
+        document.getElementById(`q-card-0`).classList.add('active');
+        document.getElementById(`nav-dot-0`).classList.add('active');
+        updateUI();
+    }
+
+    function renderQuestions() {
+        questions.forEach((q, index) => {
+            const card = document.createElement('div');
+            card.className = `glass-card question-card ${q.type} ${index === 0 ? 'active' : ''}`;
+            card.id = `q-card-${index}`;
+            const typeLabel = q.type === 'multi' ? '多选题' : '单选题';
+            const typeClass = q.type;
+            let optionsHtml = '';
+            q.options.forEach((opt, optIndex) => {
+                const marker = String.fromCharCode(65 + optIndex);
+                const text = opt.replace(/^[A-D][.、]\s*/, '');
+                optionsHtml += `
+                    <div class="option-item" onclick="handleOptionClick(${index}, ${optIndex})" id="opt-${index}-${optIndex}">
+                        <div class="option-marker">${marker}</div>
+                        <div class="option-content">${text}</div>
+                    </div>
+                `;
+            });
+            const actionHtml = `
+                <button class="glass-button" id="submit-btn-${index}" onclick="submitAnswer(${index})" style="width:100%; margin-top:15px; color: white; background: var(--morandi-blue);">
+                    确认答案
+                </button>
+            `;
+            card.innerHTML = `
+                <div style="margin-bottom:15px;">
+                    <span class="chapter-tag">${q.chapter}</span>
+                    <span class="type-tag ${typeClass}">${typeLabel}</span>
+                </div>
+                <div class="question-text">${q.id}. ${q.question}</div>
+                <div class="options-list">${optionsHtml}</div>
+                ${actionHtml}
+                <div class="feedback-section" id="feedback-${index}">
+                    <div class="feedback-title">解析</div>
+                    <div style="font-size: 0.95rem; color: var(--text-main);">${q.analysis}</div>
+                </div>
+            `;
+            quizArea.appendChild(card);
+        });
+    }
+
+    function renderNavDots() {
+        questions.forEach((_, index) => {
+            const dot = document.createElement('div');
+            dot.className = `nav-dot ${index === 0 ? 'active' : ''}`;
+            dot.id = `nav-dot-${index}`;
+            dot.onclick = () => jumpToQuestion(index);
+            navDotsContainer.appendChild(dot);
+        });
+    }
+
+    window.handleOptionClick = function(qIndex, optIndex) {
+        const btn = document.getElementById(`submit-btn-${qIndex}`);
+        if (btn.disabled) return;
+        const q = questions[qIndex];
+        const optEl = document.getElementById(`opt-${qIndex}-${optIndex}`);
+        if (q.type === 'single') {
+            const allOpts = document.querySelectorAll(`#q-card-${qIndex} .option-item`);
+            allOpts.forEach(el => el.classList.remove('selected'));
+            optEl.classList.add('selected');
+        } else {
+            optEl.classList.toggle('selected');
+        }
+    };
+
+    window.submitAnswer = function(qIndex) {
+        const q = questions[qIndex];
+        const card = document.getElementById(`q-card-${qIndex}`);
+        const selectedEls = card.querySelectorAll('.option-item.selected');
+        if (selectedEls.length === 0) {
+            alert('请先选择答案');
+            return;
+        }
+        const btn = document.getElementById(`submit-btn-${qIndex}`);
+        btn.disabled = true;
+        btn.textContent = '已作答';
+        btn.style.opacity = '0.6';
+        btn.style.cursor = 'default';
+        let userAns;
+        const selectedIndices = Array.from(selectedEls).map(el => {
+            const idParts = el.id.split('-');
+            return parseInt(idParts[2]);
+        });
+        if (q.type === 'single') {
+            userAns = selectedIndices[0];
+        } else {
+            userAns = selectedIndices.sort((a, b) => a - b);
+        }
+        userAnswers[qIndex] = userAns;
+        let isCorrect = false;
+        if (q.type === 'single') {
+            isCorrect = (userAns === q.answer);
+        } else {
+            const target = Array.isArray(q.answer) ? q.answer.slice().sort((a,b)=>a-b) : [];
+            isCorrect = JSON.stringify(userAns) === JSON.stringify(target);
+        }
+        const feedback = document.getElementById(`feedback-${qIndex}`);
+        const navDot = document.getElementById(`nav-dot-${qIndex}`);
+        feedback.classList.add('show');
+        feedback.style.borderLeftColor = isCorrect ? 'var(--success-color)' : 'var(--error-color)';
+        const allOpts = card.querySelectorAll('.option-item');
+        const correctIndices = Array.isArray(q.answer) ? q.answer : [q.answer];
+        correctIndices.forEach(idx => { allOpts[idx].classList.add('correct'); });
+        selectedIndices.forEach(idx => {
+            if (!correctIndices.includes(idx)) {
+                allOpts[idx].classList.add('wrong');
+            }
+        });
+        navDot.classList.add(isCorrect ? 'correct' : 'wrong');
+        setTimeout(() => {
+            feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 100);
+        updateStats();
+    };
+
+    window.jumpToQuestion = function(index) {
+        document.getElementById(`q-card-${currentQuestionIndex}`).classList.remove('active');
+        document.getElementById(`nav-dot-${currentQuestionIndex}`).classList.remove('active');
+        currentQuestionIndex = index;
+        document.getElementById(`q-card-${currentQuestionIndex}`).classList.add('active');
+        document.getElementById(`nav-dot-${currentQuestionIndex}`).classList.add('active');
+        updateUI();
+    };
+    window.nextQuestion = function() {
+        if (currentQuestionIndex < questions.length - 1) {
+            jumpToQuestion(currentQuestionIndex + 1);
+        } else {
+            showResults();
+        }
+    };
+    window.prevQuestion = function() {
+        if (currentQuestionIndex > 0) {
+            jumpToQuestion(currentQuestionIndex - 1);
+        }
+    };
+    window.resetQuiz = function() {
+        if (confirm('确定要重新开始练习吗？所有进度将重置。')) {
+            location.reload();
+        }
+    };
+    function updateUI() {
+        document.getElementById('current-index').textContent = currentQuestionIndex + 1;
+        const progress = ((currentQuestionIndex + 1) / (questions.length || 1)) * 100;
+        document.getElementById('progress-fill').style.width = `${progress}%`;
+        prevBtn.disabled = currentQuestionIndex === 0;
+        if (currentQuestionIndex === questions.length - 1) {
+            nextBtn.textContent = '查看结果';
+        } else {
+            nextBtn.textContent = '❯';
+        }
+        document.getElementById('result-area').style.display = 'none';
+        document.getElementById('quiz-area').style.display = 'block';
+    }
+    function updateStats() {
+        const answered = userAnswers.filter(a => a !== null).length;
+        if (answered === 0) return;
+        let correctCount = 0;
+        userAnswers.forEach((ans, idx) => {
+            if (ans === null) return;
+            const q = questions[idx];
+            let isC = false;
+            if (q.type === 'single') isC = (ans === q.answer);
+            else {
+                const target = Array.isArray(q.answer) ? q.answer.slice().sort((a,b)=>a-b) : [];
+                isC = JSON.stringify(ans) === JSON.stringify(target);
+            }
+            if (isC) correctCount++;
+        });
+        const acc = Math.round((correctCount / answered) * 100);
+        document.getElementById('current-accuracy').textContent = `${acc}%`;
+    }
+    function showResults() {
+        document.getElementById('quiz-area').style.display = 'none';
+        document.getElementById('result-area').style.display = 'block';
+        let score = 0;
+        userAnswers.forEach((ans, idx) => {
+            if (ans === null) return;
+            const q = questions[idx];
+            let isC = false;
+            if (q.type === 'single') isC = (ans === q.answer);
+            else {
+                const target = Array.isArray(q.answer) ? q.answer.slice().sort((a,b)=>a-b) : [];
+                isC = JSON.stringify(ans) === JSON.stringify(target);
+            }
+            if (isC) score++;
+        });
+        document.getElementById('final-score').textContent = score;
+        const total = questions.length;
+        const acc = Math.round((score / total) * 100);
+        let comment = "继续加油！";
+        if (acc > 90) comment = "太棒了！掌握得非常好！";
+        else if (acc > 60) comment = "基础不错，注意查漏补缺。";
+        document.getElementById('accuracy-text').innerHTML = `
+            共 ${total} 题，答对 <span style="color:var(--success-color);font-weight:bold;">${score}</span> 题<br>
+            正确率：${acc}%<br>
+            ${comment}
+        `;
+    }
+    loadAndParseMD();
+</script>
+</body>
+</html>

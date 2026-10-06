@@ -1,0 +1,2187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心理学研究方法全章节题库（含多选）</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="glassmorphism.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --success-color: #2ecc71;
+            --error-color: #e74c3c;
+            --text-color: #333;
+            --bg-color: #f5f7fa;
+            --card-bg: #ffffff;
+            --multi-select-color: #9b59b6; /* Purple for multi-select */
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        .back-home-btn { position: fixed; top: 16px; left: 16px; z-index: 1000; text-decoration: none; padding: 8px 12px; border-radius: 14px; background: rgba(255,255,255,0.9); border: 1px solid rgba(0,0,0,0.08); color: #111; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .back-home-btn:hover { background: #fff; }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-bottom: 80px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-color);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: none;
+        }
+
+        .question-card.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .chapter-tag {
+            display: inline-block;
+            background: #e1f0ff;
+            color: var(--primary-color);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            margin-right: 10px;
+        }
+
+        .type-tag {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .type-tag.single {
+            background: #e8f5e9;
+            color: var(--success-color);
+        }
+
+        .type-tag.multi {
+            background: #f3e5f5;
+            color: var(--multi-select-color);
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .option-item {
+            background: #f8f9fa;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+        }
+
+        .option-item:hover {
+            background: #edf2f7;
+        }
+
+        /* Styles for Single Select */
+        .option-item.selected {
+            border-color: var(--primary-color);
+            background: #e1f0ff;
+        }
+
+        /* Styles for Multi Select */
+        .question-card.multi .option-item.selected {
+            border-color: var(--multi-select-color);
+            background: #f3e5f5;
+        }
+        .question-card.multi .option-item.selected .option-marker {
+            border-color: var(--multi-select-color);
+            color: var(--multi-select-color);
+        }
+
+        .option-item.correct {
+            border-color: var(--success-color) !important;
+            background: rgba(46, 204, 113, 0.1) !important;
+        }
+
+        .option-item.wrong {
+            border-color: var(--error-color) !important;
+            background: rgba(231, 76, 60, 0.1) !important;
+        }
+
+        .option-marker {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%; /* Rounded for single */
+            border: 2px solid #ccc;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: #999;
+            flex-shrink: 0;
+        }
+
+        /* Square marker for multi select */
+        .question-card.multi .option-marker {
+            border-radius: 4px;
+        }
+
+        .option-item.selected .option-marker {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .option-item.correct .option-marker {
+            border-color: var(--success-color);
+            background: var(--success-color);
+            color: white;
+            content: '✓';
+        }
+
+        .option-item.wrong .option-marker {
+            border-color: var(--error-color);
+            background: var(--error-color);
+            color: white;
+            content: '✕';
+        }
+
+        .feedback-section {
+            margin-top: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+            display: none;
+        }
+
+        .feedback-section.show {
+            display: block;
+        }
+
+        .feedback-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .explanation {
+            font-size: 0.95rem;
+            color: #555;
+            white-space: pre-line;
+        }
+
+        .btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background: #357abd;
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background: #e1f0ff;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 15px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .question-navigator {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 5px;
+            max-width: 60%;
+            scrollbar-width: thin;
+        }
+
+        .nav-dot {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .nav-dot.active {
+            background: var(--primary-color);
+            color: white;
+            transform: scale(1.2);
+        }
+
+        .nav-dot.correct {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .nav-dot.wrong {
+            background: var(--error-color);
+            color: white;
+        }
+
+        .stats-card {
+            text-align: center;
+        }
+        
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+    </style>
+    <style>
+        .back-home-btn { position: fixed; top: 16px; left: 16px; z-index: 1000; }
+        .progress-bar { height: 8px; background: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.5); border-radius: 12px; margin-top: 12px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--morandi-blue); width: 0%; transition: width 0.3s var(--ease-smooth); }
+        .option-item { background: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.5); border-radius: 14px; padding: 12px; margin-bottom: 10px; cursor: pointer; transition: all 0.2s var(--ease-smooth); display: flex; align-items: center; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+        .option-item:hover { background: rgba(255,255,255,0.6); }
+        .option-item.selected { border-color: var(--morandi-blue); background: rgba(168,181,200,0.25); }
+        .question-card.multi .option-item.selected { border-color: var(--morandi-purple); background: rgba(192,184,212,0.25); }
+        .option-marker { background: rgba(255,255,255,0.5); border-color: rgba(0,0,0,0.15); }
+        .glass-button:disabled { opacity: 0.6; cursor: not-allowed; }
+        .bottom-nav { background: rgba(255,255,255,0.6); border-top: 1px solid rgba(255,255,255,0.5); box-shadow: 0 -6px 20px rgba(0,0,0,0.08); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+        .nav-dot { min-width: 28px; height: 28px; padding: 0 6px; border-radius: 12px; background: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.6); color: var(--text-dark); }
+        .nav-dot.active { background: var(--morandi-blue); color: #fff; transform: scale(1.06); }
+        .nav-dot.correct { background: #2ecc71; color: #fff; }
+        .nav-dot.wrong { background: #e74c3c; color: #fff; }
+    </style>
+  <link rel="stylesheet" href="psyhub-theme.css">
+</head>
+<body>
+
+<nav class="psyhub-course-shell" aria-label="课程导航">
+  <a class="psyhub-course-brand" href="../index.html">PsyHub</a>
+  <div class="psyhub-course-links">
+    <a href="index.html">本科课程首页</a>
+    <a href="../index.html">返回主站</a>
+  </div>
+</nav>
+
+<a class="glass-button back-home-btn" href="index.html">🏠 返回首页</a>
+
+<div class="container">
+    <header class="glass-card">
+        <h1>心理学研究方法全章节题库</h1>
+        <div style="margin-top: 10px; font-size: 0.9rem; color: #666;">
+            共 <span id="total-count">0</span> 题 | 当前第 <span id="current-index">1</span> 题
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+    </header>
+
+    <div class="quiz-content glass-card" id="quiz-area">
+        <!-- Questions will be injected here -->
+    </div>
+
+    <div id="result-area" class="quiz-content glass-card" style="display: none; text-align: center;">
+        <div class="stats-card">
+            <div class="score-circle">
+                <span id="final-score">0</span>
+                <span class="score-label">总得分</span>
+            </div>
+            <h2>练习完成!</h2>
+            <p>你完成了所有 <span id="total-questions-res"></span> 道题目</p>
+            <p id="accuracy-text"></p>
+            <button class="btn" onclick="location.reload()">重新练习</button>
+        </div>
+    </div>
+</div>
+
+<div class="bottom-nav">
+    <button class="glass-button" style="width: auto; padding: 8px 15px;" id="prev-btn" onclick="prevQuestion()">上一题</button>
+    <div class="question-navigator" id="nav-dots">
+        <!-- Dots injected here -->
+    </div>
+    <button class="glass-button" style="width: auto; padding: 8px 15px;" id="next-btn" onclick="nextQuestion()">下一题</button>
+</div>
+
+<script>
+    // 定义题目数据结构
+    // type: 'single' (单选) | 'multi' (多选)
+    // answer: index for single, array of indices for multi
+    
+    const questions = [
+        // --- 第一部分 考研真题精选 单选 ---
+        {
+            chapter: "考研真题精选 (单选)",
+            type: "single",
+            question: "为了探讨小学生的学习动机,研究者设计一些问题组成问卷,要求不同年级的学生回答,然后对其结果进行分析,这种研究方法是()。",
+            options: ["A.实验法", "B.观察法", "C.个案法", "D.调查法"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】调查法就某一问题,用口头或书面的形式向被调查者提问,通过对他的回答进行分析来了解他的心理活动的方法。调查法包括访谈法和问卷法。"
+        },
+        {
+            chapter: "考研真题精选 (单选)",
+            type: "single",
+            question: "向被试多次呈现几个固定的刺激,然后记录各个刺激引起的相应反应的次数,以测定感觉阈限。这种方法是()。",
+            options: ["A.极限法", "B.恒定刺激法", "C.平均差误法", "D.信号检测法"],
+            answer: 1,
+            analysis: "【答案】B\n【解析】恒定刺激法是以相同的次数呈现少数几个恒定的刺激,通过被试觉察到每个刺激的次数来确定阈限。"
+        },
+        {
+            chapter: "考研真题精选 (单选)",
+            type: "single",
+            question: "某电视台要对8条广告的受欢迎程度进行评估,请20名评判者对这8条广告按“喜欢”排序。这种方法是()。",
+            options: ["A.对偶比较法", "B.感觉等距法", "C.等级排列法", "D.数量估计法"],
+            answer: 2,
+            analysis: "【答案】C\n【解析】等级排列法是把许多刺激同时呈现,让许多被试按照一定标准,把这些刺激排成一个顺序。"
+        },
+        {
+            chapter: "考研真题精选 (单选)",
+            type: "single",
+            question: "DRM (Deese-Roediger-McDermott)范式主要用来研究()。",
+            options: ["A.错误记忆", "B.内隐记忆", "C.前瞻记忆", "D.回溯记忆"],
+            answer: 0,
+            analysis: "【答案】A\n【解析】DRM范式主要用来研究错误记忆,错误记忆是指错误地声明一个以前未呈现过的词或从未发生过的事曾经呈现或发生。"
+        },
+        {
+            chapter: "考研真题精选 (单选)",
+            type: "single",
+            question: "直接使用抽签法从总体中抽取一部分个体组成研究样本的方法是()。",
+            options: ["A.简单随机抽样", "B.分层抽样", "C.分阶段抽样", "D.等距抽样"],
+            answer: 0,
+            analysis: "【答案】A\n【解析】简单随机抽样就是从总体N个单位中任意抽取n个单位作为样本,使每个可能的样本被抽中的概率相等。"
+        },
+        {
+            chapter: "考研真题精选 (单选)",
+            type: "single",
+            question: "依据费希纳定律制定的心理量表,采用的方法是()。",
+            options: ["A.数量估计法", "B.绝对阈限法", "C.差别阈限法", "D.信号检测法"],
+            answer: 2,
+            analysis: "【答案】C\n【解析】差别阈限法以绝对阈限为起点,以最小可觉差为最小单位制作心理量表。费希纳定律基于此。"
+        },
+        {
+            chapter: "考研真题精选 (单选)",
+            type: "single",
+            question: "用来研究知觉拓扑不变性和似动现象关系的范式是()。",
+            options: ["A.运动竞争范式", "B.中央线索范式", "C.点探测范式", "D.停止信号范式"],
+            answer: 0,
+            analysis: "【答案】A\n【解析】运动竞争范式,也称双眼竞争范式,可以用来研究知觉拓扑不变性和似动现象关系。"
+        },
+        {
+            chapter: "考研真题精选 (单选)",
+            type: "single",
+            question: "常用来克服安慰剂效应的方法是()。",
+            options: ["A.ABBA法", "B.确保主试不知道实验目的", "C.恒定法", "D.控制组接受虚假实验处理"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】让对照组接受虚假的实验处理,考查安慰剂效应的大小,然后从实验组的测量结果减去安慰剂效应的量。"
+        },
+        {
+            chapter: "考研真题精选 (单选)",
+            type: "single",
+            question: "下列选项中,属于情绪主观体验测评方法的是()。",
+            options: ["A.情绪圆形量表", "B.分化情绪量表", "C.面部动作编码系统", "D.情绪的三维模式图"],
+            answer: 1,
+            analysis: "【答案】B\n【解析】情绪主观体验测评方法主要包括形容词检表、维度等级量表、分化情绪量表和时间抽样技术。"
+        },
+        {
+            chapter: "考研真题精选 (单选)",
+            type: "single",
+            question: "先向被试呈现有一定次序或位置的刺激系列,然后刺激系列打乱,要求被试按照刺激呈现的次序或位置复原。这种研究记忆的方法属于()。",
+            options: ["A.回忆法", "B.再认法", "C.再学法", "D.重建法"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】重建法要求被试把刚刚呈现过的刺激按原次序排列。"
+        },
+        {
+            chapter: "考研真题精选 (单选)",
+            type: "single",
+            question: "在记忆研究中,为了防止复述产生作用,通常采用的控制方法是()。",
+            options: ["A.Donders减因素法", "B.Ebbinghaus节省法", "C.Sternberg加因素法", "D.Peterson-Peterson分心法"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】皮特森等人在实验中采用布朗-皮特森技术(分心法)防止被试进行复述。"
+        },
+        {
+            chapter: "考研真题精选 (单选)",
+            type: "single",
+            question: "研究者将50名被试随机分为两组...该实验中的声旁规则性属于()。",
+            options: ["A.被试内变量", "B.被试间变量", "C.额外变量", "D.无关变量"],
+            answer: 0,
+            analysis: "【答案】A\n【解析】两组被试都阅读了规则和不规则字，说明每个被试都接受了声旁规则性的两个水平，因此是被试内变量。"
+        },
+        {
+            chapter: "考研真题精选 (单选)",
+            type: "single",
+            question: "用经典心理物理学方法测定感觉阈限容易产生序列效应,通常采用的方法是()。",
+            options: ["A.恒定法", "B.消除法", "C.匹配法", "D.ABBA法"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】ABBA方法可以平衡系列效应(顺序误差)。"
+        },
+        {
+            chapter: "考研真题精选 (单选)",
+            type: "single",
+            question: "采用的教学方法有自学辅导式和启发式,使用的英语教材有A、B、C三个版本。该实验设计是()。",
+            options: ["A.二因素实验设计", "B.三因素实验设计", "C.五因素实验设计", "D.六因素实验设计"],
+            answer: 0,
+            analysis: "【答案】A\n【解析】有两个自变量:教学方法、教材版本,所以是二因素设计(2×3)。"
+        },
+        {
+            chapter: "考研真题精选 (单选)",
+            type: "single",
+            question: "依据APA的心理学论文写作规范,下列参考文献书写格式正确的是()。",
+            options: ["A. ...: 475-490.", "B. ...34, 475-490.", "C. ...2006, 34, 475-490.", "D. ...2006, 34: 475-490."],
+            answer: 1,
+            analysis: "【答案】B\n【解析】APA格式应该是作者(年份).文章名.期刊名,卷号,页码。期刊名和卷号斜体。"
+        },
+        {
+            chapter: "考研真题精选 (单选)",
+            type: "single",
+            question: "如果实验出现了自变量的混淆,直接受到影响的研究效度是()。",
+            options: ["A.内部效度", "B.外部效度", "C.结构效度", "D.统计效度"],
+            answer: 0,
+            analysis: "【答案】A\n【解析】内部效度指自变量与因变量之间因果关系的明确程度。混淆变量直接威胁内部效度。"
+        },
+        {
+            chapter: "考研真题精选 (单选)",
+            type: "single",
+            question: "建立顺序量表采用的主要方法是()。",
+            options: ["A.分段法", "B.感觉等距法", "C.等级排列法", "D.差别阈限法"],
+            answer: 2,
+            analysis: "【答案】C\n【解析】顺序量表的建立方法是对偶比较法与等级排列法。"
+        },
+        {
+            chapter: "考研真题精选 (单选)",
+            type: "single",
+            question: "下列选项中,测定启动效应常用的方法是()。",
+            options: ["A.双耳分析法", "B.对偶联合法", "C.知觉辨认法", "D.分散注意法"],
+            answer: 2,
+            analysis: "【答案】C\n【解析】知觉辨认法、词汇判断、词干补笔等常用于测定启动效应。"
+        },
+        {
+            chapter: "考研真题精选 (单选)",
+            type: "single",
+            question: "在“不同情境下幼儿延迟满足的实验研究”中,“不同情境”是()。",
+            options: ["A.自变量", "B.因变量", "C.控制变量", "D.无关变量"],
+            answer: 0,
+            analysis: "【答案】A\n【解析】情境是研究者操纵的变量，以观察其对延迟满足(因变量)的影响。"
+        },
+        {
+            chapter: "考研真题精选 (单选)",
+            type: "single",
+            question: "心理学研究报告中的“研究方法”部分通常不包括()。",
+            options: ["A.被试分配", "B.研究假设", "C.材料选择", "D.实验设计"],
+            answer: 1,
+            analysis: "【答案】B\n【解析】研究假设一般属于前言部分。"
+        },
+        {
+            chapter: "考研真题精选 (单选)",
+            type: "single",
+            question: "从第二次呈现起,要求被试在每个项目出现时,说出紧邻其后的下一个项目。这种记忆研究方法属于()。",
+            options: ["A.全部呈现法", "B.重建法", "C.重学法", "D.提示法"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】这是提示法的典型操作。"
+        },
+        {
+            chapter: "考研真题精选 (单选)",
+            type: "single",
+            question: "研究者通常通过控制温度、照明...以突显自变量与因变量之间可能的因果关系,这些做法损害最大的效果类型是()。",
+            options: ["A.内部效度", "B.外部效度", "C.构思效度", "D.统计结论效度"],
+            answer: 1,
+            analysis: "【答案】B\n【解析】严格控制提高了内部效度，但人为性增加，降低了外部效度(推广性)。"
+        },
+        {
+            chapter: "考研真题精选 (单选)",
+            type: "single",
+            question: "序列反应时方法的基本逻辑来源于()。",
+            options: ["A.加法反应时法", "B.减法反应时法", "C.开窗实验法", "D.排除-包含法"],
+            answer: 1,
+            analysis: "【答案】B\n【解析】序列反应时任务依据的基本逻辑来源于减法反应时。"
+        },
+        {
+            chapter: "考研真题精选 (单选)",
+            type: "single",
+            question: "斯蒂芬森(W.Stephenson) 1953年提出的研究自我概念的方法是()。",
+            options: ["A.语义区分法", "B.Q分类技术", "C.两难故事法", "D.内隐联想法"],
+            answer: 1,
+            analysis: "【答案】B\n【解析】斯蒂芬森提出Q分类技术研究自我概念。"
+        },
+        {
+            chapter: "考研真题精选 (单选)",
+            type: "single",
+            question: "在研究的某一时期内...发生的各种社会事件都可能影响被试的行为...这种影响研究内部效度的因素属于()。",
+            options: ["A.历史因素", "B.成熟因素", "C.统计回归效应", "D.交互作用"],
+            answer: 0,
+            analysis: "【答案】A\n【解析】历史因素是指在实验过程中,与实验变量同时发生,并对实验结果产生影响的特定事件。"
+        },
+        {
+            chapter: "考研真题精选 (单选)",
+            type: "single",
+            question: "探讨注意在多个并行任务间的指向和调节作用时,常用的研究范式是()。",
+            options: ["A.双侧任务范式", "B.双任务范式", "C.提示范式", "D.搜索范式"],
+            answer: 1,
+            analysis: "【答案】B\n【解析】双任务范式主要关心注意是如何在多个并行任务间起到指向和调节作用的。"
+        },
+        {
+            chapter: "考研真题精选 (单选)",
+            type: "single",
+            question: "采用拉丁方设计控制额外变量的方法属于()。",
+            options: ["A.消除法", "B.恒定法", "C.抵消法", "D.随机控制法"],
+            answer: 2,
+            analysis: "【答案】C\n【解析】拉丁方设计属于抵消法(平衡法)的一种，用于抵消顺序误差等。"
+        },
+
+        // --- 第一部分 考研真题精选 多选 ---
+        {
+            chapter: "考研真题精选 (多选)",
+            type: "multi",
+            question: "研究错误记忆的常用方法有()。",
+            options: ["A.残图辨认测验", "B.偏好判断测验", "C.关联效应测验", "D.词语遮蔽测验"],
+            answer: [2, 3],
+            analysis: "【答案】CD\n【解析】关联效应测验(DRM)和词语遮蔽测验是研究错误记忆的方法。A是内隐记忆，B是人格。"
+        },
+        {
+            chapter: "考研真题精选 (多选)",
+            type: "multi",
+            question: "取样时应遵循的原则有()。",
+            options: ["A.随机化", "B.代表性", "C.数量化", "D.置换性"],
+            answer: [0, 1],
+            analysis: "【答案】AB\n【解析】取样的基本原则包括随机化和代表性。"
+        },
+        {
+            chapter: "考研真题精选 (多选)",
+            type: "multi",
+            question: "在利他行为研究中,影响旁观者效应的因素有()。",
+            options: ["A.责任分散", "B.时间压力", "C.评价恐惧", "D.情境的不确定性"],
+            answer: [0, 2, 3],
+            analysis: "【答案】ACD\n【解析】引起旁观者效应的因素:责任扩散、情境不明确、评价恐惧。"
+        },
+        {
+            chapter: "考研真题精选 (多选)",
+            type: "multi",
+            question: "下列通常用于研究错误记忆的范式有()。",
+            options: ["A.DRM范式", "B.K/R范式", "C.点探测范式", "D.序列反应时范式"],
+            answer: [0, 1],
+            analysis: "【答案】AB\n【解析】DRM范式和K/R范式(知道/记得范式)常用于错误记忆研究。"
+        },
+
+        // --- 第1章 ---
+        {
+            chapter: "第1章 概述 (单选)",
+            type: "single",
+            question: "涉及人类被试的实验心理学研究应该遵循以下伦理道德,除了()。",
+            options: ["A.保障被试的知情同意权", "B.保障被试的退出自由", "C.保密原则", "D.给被试一定的被试费用"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】付费不是必须的伦理原则。"
+        },
+        {
+            chapter: "第1章 概述 (单选)",
+            type: "single",
+            question: "关于某种特殊条件可能产生某种特定结果的可检测的预测叫作()。",
+            options: ["A.推论", "B.数据", "C.外化解释", "D.假设"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】假设是基于事实的推测性解释或设想。"
+        },
+        {
+            chapter: "第1章 概述 (单选)",
+            type: "single",
+            question: "你认为暖色调的房间可以减少人的不良情绪,这是你的( )。",
+            options: ["A.理论", "B.实验设计", "C.问题", "D.假设"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】这是一个关于条件和结果关系的陈述，即假设。"
+        },
+        {
+            chapter: "第1章 概述 (多选)",
+            type: "multi",
+            question: "下列研究中适宜使用非人类被试的实验有()。",
+            options: ["A.图形推理实验", "B.损毁饱中枢以观察摄食情况的变化", "C.学习能力在代际间的遗传", "D.睡眠剥夺对记忆能力的影响"],
+            answer: [1, 2, 3],
+            analysis: "【答案】BCD\n【解析】损毁、遗传代际、剥夺等由于伦理或操作原因常使用动物。"
+        },
+
+        // --- 第2章 ---
+        {
+            chapter: "第2章 方法论 (单选)",
+            type: "single",
+            question: "下列心理学研究方法中可以确定因果关系的是()。",
+            options: ["A.自然观察法", "B.相关法", "C.实验法", "D.个案法"],
+            answer: 2,
+            analysis: "【答案】C\n【解析】实验法通过控制变量可以确定因果关系。"
+        },
+        {
+            chapter: "第2章 方法论 (单选)",
+            type: "single",
+            question: "希望通过“内省”把“经验”分解为简单心理元素的心理学家是()。",
+            options: ["A.费希纳", "B.冯特", "C.艾宾浩斯", "D.铁钦纳"],
+            answer: 1,
+            analysis: "【答案】B\n【解析】冯特提倡科学内省。"
+        },
+
+        // --- 第4章 ---
+        {
+            chapter: "第4章 课题选择 (单选)",
+            type: "single",
+            question: "选题的实践基础是()。",
+            options: ["A.一定的事实依据", "B.客观真理", "C.主观意愿", "D.实践基础"],
+            answer: 0,
+            analysis: "【答案】A\n【解析】选题要有一定的事实依据。"
+        },
+        {
+            chapter: "第4章 课题选择 (多选)",
+            type: "multi",
+            question: "选择研究课题包括的含义是()。",
+            options: ["A.选择研究领域", "B.选择被研究群体", "C.选择具体的研究课题", "D.选择研究工具"],
+            answer: [0, 2],
+            analysis: "【答案】AC\n【解析】选择研究课题主要指领域和具体课题的选择。"
+        },
+
+        // --- 第5章 ---
+        {
+            chapter: "第5章 文献查阅 (单选)",
+            type: "single",
+            question: "在研究文献中,研究综述、专题评述、进展报告等属于()。",
+            options: ["A.零次文献", "B.一次文献", "C.二次文献", "D.三次文献"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】综述类属于三次文献。"
+        },
+        {
+            chapter: "第5章 文献查阅 (单选)",
+            type: "single",
+            question: "以所掌握资料中的参考文献为线索,查找有关主题的文献。这种检索文献的方法是()。",
+            options: ["A.顺查法", "B.逆查法", "C.引文查找法", "D.综合查找法"],
+            answer: 2,
+            analysis: "【答案】C\n【解析】利用参考文献查找称为引文查找法。"
+        },
+        {
+            chapter: "第5章 文献查阅 (单选)",
+            type: "single",
+            question: "为了避免重复劳动,提高科学研究的效益,最重要的工作是()。",
+            options: ["A.选题", "B.写出论证报告", "C.文献检索", "D.制定课题计划"],
+            answer: 2,
+            analysis: "【答案】C\n【解析】文献检索能避免重复前人工作。"
+        },
+        {
+            chapter: "第5章 文献查阅 (单选)",
+            type: "single",
+            question: "题录、书目、索引、提要和文摘等属于()。",
+            options: ["A.一次文献", "B.二次文献", "C.三次文献", "D.四次文献"],
+            answer: 1,
+            analysis: "【答案】B\n【解析】检索性文献属于二次文献。"
+        },
+        {
+            chapter: "第5章 文献查阅 (单选)",
+            type: "single",
+            question: "参考性文献与其他文献相比,具有()。",
+            options: ["A.客观报告性", "B.主观综合性", "C.主观报告性", "D.客观综合性"],
+            answer: 1,
+            analysis: "【答案】B\n【解析】参考性文献具有主观综合性。"
+        },
+        {
+            chapter: "第5章 文献查阅 (单选)",
+            type: "single",
+            question: "( )是目前研究者使用较多的、也是获取文献资源效率最高的文献数据资源。",
+            options: ["A.专业期刊", "B.索引", "C.电子出版物和电子学术期刊", "D.网络文献数据库"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】网络文献数据库效率最高。"
+        },
+
+        // --- 第6章 ---
+        {
+            chapter: "第6章 研究的设计 (单选)",
+            type: "single",
+            question: "霍桑效应和实验者效应会影响实验结果,最佳的办法是采用双盲实验,这种控制额外变量的方法属于()。",
+            options: ["A.排除法", "B.恒定法", "C.匹配法", "D.随机化法"],
+            answer: 0,
+            analysis: "【答案】A\n【解析】排除法是将额外变量从实验中排除。"
+        },
+        {
+            chapter: "第6章 研究的设计 (单选)",
+            type: "single",
+            question: "如果我们在抽样过程中存在某种偏好,则此抽样称为()。",
+            options: ["A.随机样本", "B.有偏样本", "C.非系统样本", "D.独立样本"],
+            answer: 1,
+            analysis: "【答案】B\n【解析】存在偏好即为有偏样本。"
+        },
+        {
+            chapter: "第6章 研究的设计 (单选)",
+            type: "single",
+            question: "将调查对象划分为若干类,然后从每一类中随机抽取若干单位进行观察,这称为()。",
+            options: ["A.等距抽样", "B.两阶段随机抽样", "C.分层抽样", "D.简单随机抽样"],
+            answer: 2,
+            analysis: "【答案】C\n【解析】分层抽样。"
+        },
+        {
+            chapter: "第6章 研究的设计 (单选)",
+            type: "single",
+            question: "一项新测验与现存的经常引用的同类测验的相关,是()的证据。",
+            options: ["A.内容效度", "B.实证效度", "C.预测效度", "D.构想效度"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】相容效度属于构想效度。"
+        },
+        {
+            chapter: "第6章 研究的设计 (多选)",
+            type: "multi",
+            question: "内部效度的影响因素有()。",
+            options: ["A.统计回归", "B.主试-被试的相互作用", "C.零结果", "D.测量工具的局限性"],
+            answer: [0, 1],
+            analysis: "【答案】AB\n【解析】统计回归、选择偏差等影响内部效度。"
+        },
+        {
+            chapter: "第6章 研究的设计 (多选)",
+            type: "multi",
+            question: "外部效度的影响因素有()。",
+            options: ["A.实验环境的人为性", "B.无预备实验", "C.测量工具的局限性", "D.样本缺乏代表性"],
+            answer: [0, 2, 3],
+            analysis: "【答案】ACD\n【解析】人为性、样本代表性、测量工具影响外部效度。"
+        },
+        {
+            chapter: "第6章 研究的设计 (多选)",
+            type: "multi",
+            question: "( ) 会影响构思效度。",
+            options: ["A.单一操作的偏差", "B.被试在执行实验时对假设的猜测", "C.操作化前对构想的分析不够完整", "D.构想与构想间有限制的推广力"],
+            answer: [0, 1, 2, 3],
+            analysis: "【答案】ABCD\n【解析】这些因素均影响构思效度。"
+        },
+        {
+            chapter: "第6章 研究的设计 (多选)",
+            type: "multi",
+            question: "( )会影响统计效度。",
+            options: ["A.统计功效低", "B.违反统计方法的使用条件", "C.测量信度低", "D.被试没有代表性"],
+            answer: [0, 1, 2],
+            analysis: "【答案】ABC\n【解析】统计效度涉及统计推断的准确性。"
+        },
+        {
+            chapter: "第6章 研究的设计 (多选)",
+            type: "multi",
+            question: "在选择研究对象时,下面有关总体的阐述错误的是()。",
+            options: ["A.符合条件的全体研究对象", "B.在某一相同性质上...就是总体", "C.研究对象的全体", "D.是一定时空范围内研究对象的全部总和"],
+            answer: [1, 2, 3],
+            analysis: "【答案】BCD\n【解析】注：此题题目问“错误的是”，解析指出B,C,D表述有误或不准确（需结合教材定义，通常总体指符合条件的所有个体的集合）。"
+        },
+        {
+            chapter: "第6章 研究的设计 (多选)",
+            type: "multi",
+            question: "下面对于无关变量的表述错误的是()。",
+            options: ["A.是一个相对概念...", "B.与研究主体没有主观联系的变量", "C.与研究主体没有客观联系的变量", "D.是一个相对概念,相对于...主观和客观变量而言"],
+            answer: [1, 2, 3],
+            analysis: "【答案】BCD\n【解析】无关变量是相对于自变量和因变量而言的。"
+        },
+
+        // --- 第7章 ---
+        {
+            chapter: "第7章 观察法 (单选)",
+            type: "single",
+            question: "最原始的、应用最广的心理学研究方法是()。",
+            options: ["A.观察法", "B.谈话法", "C.个案法", "D.分析法"],
+            answer: 0,
+            analysis: "【答案】A\n【解析】观察法是最原始、应用最广的方法。"
+        },
+        {
+            chapter: "第7章 观察法 (单选)",
+            type: "single",
+            question: "观察法...其中直接观察法的局限在于()。",
+            options: ["A.不易收集非语言行为", "B.不便于在自然情境下进行", "C.不利于纵向分析", "D.不适合大规模的研究"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】直接观察法适合小样本，不适合大规模研究。"
+        },
+        {
+            chapter: "第7章 观察法 (单选)",
+            type: "single",
+            question: "在非结构参与式观察研究中,最适宜采用的记录方法是()。",
+            options: ["A.时间取样记录法", "B.日记描述记录法", "C.行为检查记录法", "D.事件取样记录法"],
+            answer: 1,
+            analysis: "【答案】B\n【解析】日记描述记录法适合非结构参与观察。"
+        },
+        {
+            chapter: "第7章 观察法 (单选)",
+            type: "single",
+            question: "受身心发展水平的制约,幼儿...较适宜采用()。",
+            options: ["A.实验法", "B.访谈法", "C.观察法", "D.问卷法"],
+            answer: 2,
+            analysis: "【答案】C\n【解析】幼儿语言能力弱，观察法最适宜。"
+        },
+        {
+            chapter: "第7章 观察法 (多选)",
+            type: "multi",
+            question: "观察法一般在下列()情况下采用。",
+            options: ["A.所研究的对象无法加以控制", "B.在控制条件下可能影响某种行为的出现", "C.研究者无法参与被研究者的活动", "D.由于社会道德的要求,不能对某种现象进行控制"],
+            answer: [0, 1, 3],
+            analysis: "【答案】ABD\n【解析】当无法控制、控制影响行为或伦理限制时使用观察法。"
+        },
+
+        // --- 第8章 ---
+        {
+            chapter: "第8章 访谈法 (单选)",
+            type: "single",
+            question: "与问卷调查相比,访谈调查的优点是()。",
+            options: ["A.更具客观性", "B.更有利于做大样本研究", "C.更有利于研究深层次的复杂问题", "D.更易对数据进行编码处理"],
+            answer: 2,
+            analysis: "【答案】C\n【解析】访谈法灵活性强，可以深入了解问题。"
+        },
+        {
+            chapter: "第8章 访谈法 (单选)",
+            type: "single",
+            question: "访谈过程的标准化是( )访谈调查最显著的特点。",
+            options: ["A.结构性", "B.重复性", "C.集体性", "D.系统性"],
+            answer: 0,
+            analysis: "【答案】A\n【解析】结构性访谈标准化程度高。"
+        },
+        {
+            chapter: "第8章 访谈法 (多选)",
+            type: "multi",
+            question: "下列属于访谈调查特点的是()。",
+            options: ["A.灵活性强", "B.调查具有匿名性", "C.不受书面语言文字的限制", "D.可以使用复杂的访谈提纲"],
+            answer: [0, 2, 3],
+            analysis: "【答案】ACD\n【解析】访谈法通常不具有匿名性（面对面）。"
+        },
+        {
+            chapter: "第8章 访谈法 (多选)",
+            type: "multi",
+            question: "下列说法中正确的是()。",
+            options: ["A.访谈法是研究者和被研究者的直接接触", "B.访谈法不需要做准备工作", "C.访谈法对于不适于书面语言的对象更容易接受", "D.访谈法具有较好的灵活性"],
+            answer: [0, 2, 3],
+            analysis: "【答案】ACD\n【解析】访谈法需要做充分准备。"
+        },
+        {
+            chapter: "第8章 访谈法 (多选)",
+            type: "multi",
+            question: "下列说法中属于访问前准备工作内容的是()。",
+            options: ["A.一切可用的记录工具", "B.知识和心理方面的准备", "C.交通工具", "D.被访问者的合作"],
+            answer: [0, 1, 3],
+            analysis: "【答案】ABD\n【解析】准备工作包括工具、知识心理准备及获取合作。"
+        },
+
+        // --- 第9章 ---
+        {
+            chapter: "第9章 问卷法 (单选)",
+            type: "single",
+            question: "编制态度问卷,下面不正确的叙述是()。",
+            options: ["A.题目不可以使用双重否定句", "B.应尽量回避社会赞许性高的问题", "C.量表尺度在7±2之间最好", "D.一般说来,编制问卷的题目越多越好"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】题目适量即可，不是越多越好。"
+        },
+        {
+            chapter: "第9章 问卷法 (单选)",
+            type: "single",
+            question: "提高问卷效度的关键是()。",
+            options: ["A.正确选题", "B.写好指导语", "C.问卷题目的行文技巧", "D.设计“目标体系”"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】设计“目标体系”是提高效度的关键。"
+        },
+
+        // --- 第10章 ---
+        {
+            chapter: "第10章 测验法 (单选)",
+            type: "single",
+            question: "在能力倾向测验中常用的效标是()。",
+            options: ["A.临床诊断", "B.特殊训练成绩", "C.等级评定", "D.专家判断"],
+            answer: 1,
+            analysis: "【答案】B\n【解析】特殊训练成绩是能力倾向测验常用的效标。"
+        },
+        {
+            chapter: "第10章 测验法 (单选)",
+            type: "single",
+            question: "一般而言,心理测验的分数属于()。",
+            options: ["A.类别量表", "B.等级量表", "C.等距量表", "D.比率量表"],
+            answer: 2,
+            analysis: "【答案】C\n【解析】大多数心理学家喜欢把测验依据一定法则转换为等距量表。"
+        },
+        {
+            chapter: "第10章 测验法 (单选)",
+            type: "single",
+            question: "用1代表男,用2代表女...这样的量表通常叫作()量表。",
+            options: ["A.命名", "B.顺序", "C.等距", "D.等比"],
+            answer: 0,
+            analysis: "【答案】A\n【解析】命名量表。"
+        },
+        {
+            chapter: "第10章 测验法 (单选)",
+            type: "single",
+            question: "测验的客观性不包括()的客观性。",
+            options: ["A.测验的刺激", "B.对反应的量化", "C.绝对的标准", "D.对结果的推论"],
+            answer: 2,
+            analysis: "【答案】C\n【解析】客观性指刺激、反应量化、结果推论的标准化，不包括绝对标准（心理测量常无绝对零点）。"
+        },
+        {
+            chapter: "第10章 测验法 (单选)",
+            type: "single",
+            question: "当被试人数较多,测验时间和经费又有限时,最好选用()测验。",
+            options: ["A.个别", "B.团体", "C.速度", "D.投射"],
+            answer: 1,
+            analysis: "【答案】B\n【解析】团体测验经济高效。"
+        },
+        {
+            chapter: "第10章 测验法 (单选)",
+            type: "single",
+            question: "首创“心理测验”这一术语的是()。",
+            options: ["A.高尔登", "B.比奈", "C.波林", "D.卡特尔"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】卡特尔。"
+        },
+        {
+            chapter: "第10章 测验法 (单选)",
+            type: "single",
+            question: "速度测验的信度应以()取得。",
+            options: ["A.奇偶法", "B.筛选法", "C.反应时法", "D.重测法"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】速度测验不适用分半信度，常用重测法。"
+        },
+        {
+            chapter: "第10章 测验法 (单选)",
+            type: "single",
+            question: "评价项目的主要指标是()。",
+            options: ["A.信度", "B.效度", "C.区分度", "D.难度和区分度"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】项目的指标是难度和区分度。"
+        },
+        {
+            chapter: "第10章 测验法 (单选)",
+            type: "single",
+            question: "分析试卷中作文题(满分为50分)的区分度,应采用()。",
+            options: ["A.等级相关法", "B.积差相关法", "C.点二列相关法", "D.列联相关法"],
+            answer: 1,
+            analysis: "【答案】B\n【解析】总分和项目分数均为连续变量，用积差相关。"
+        },
+        {
+            chapter: "第10章 测验法 (单选)",
+            type: "single",
+            question: "大多数适合普通人群的测验...其题目的难度应该()。",
+            options: ["A.比较低", "B.接近0.5", "C.比较高", "D.无所谓"],
+            answer: 1,
+            analysis: "【答案】B\n【解析】0.5左右区分度最好。"
+        },
+        {
+            chapter: "第10章 测验法 (单选)",
+            type: "single",
+            question: "难度是指项目的难易程度,用P代表。P值越(),难度越低。",
+            options: ["A.大", "B.小", "C.低", "D.接近0"],
+            answer: 0,
+            analysis: "【答案】A\n【解析】P是通过率，P越大越容易。"
+        },
+        {
+            chapter: "第10章 测验法 (单选)",
+            type: "single",
+            question: "在200个学生中,答对某项目的人数为120人,则该项目的难度为()。",
+            options: ["A.0.1", "B.0.2", "C.0.4", "D.0.6"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】P = 120/200 = 0.6。"
+        },
+        {
+            chapter: "第10章 测验法 (单选)",
+            type: "single",
+            question: "( )是由具有某种共同特征的人所组成的一个群体...。",
+            options: ["A.团体", "B.常模团体", "C.受测人群", "D.样本"],
+            answer: 1,
+            analysis: "【答案】B\n【解析】常模团体。"
+        },
+        {
+            chapter: "第10章 测验法 (单选)",
+            type: "single",
+            question: "常模样本量的大小,一般最低不小于()。",
+            options: ["A.100或500", "B.800或1000", "C.20或25", "D.30或100"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】一般不小于30或100。"
+        },
+        {
+            chapter: "第10章 测验法 (单选)",
+            type: "single",
+            question: "常模分数又叫()。",
+            options: ["A.导出分数", "B.原始分数", "C.粗分数", "D.总体分数"],
+            answer: 0,
+            analysis: "【答案】A\n【解析】常模分数是导出分数。"
+        },
+        {
+            chapter: "第10章 测验法 (单选)",
+            type: "single",
+            question: "发展常模就是()。",
+            options: ["A.常模", "B.个人的分数", "C.团体的分数", "D.年龄量表"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】发展常模亦称年龄量表。"
+        },
+        {
+            chapter: "第10章 测验法 (单选)",
+            type: "single",
+            question: "对于某些特殊的群体来说...我们需要制订()。",
+            options: ["A.普通常模", "B.特殊常模", "C.一般常模", "D.剖面图"],
+            answer: 1,
+            analysis: "【答案】B\n【解析】特殊常模。"
+        },
+        {
+            chapter: "第10章 测验法 (单选)",
+            type: "single",
+            question: "对一个测验来说,通常()。",
+            options: ["A.只有一个常模团体", "B.有数个常模团体", "C.必须有一个以上的常模团体", "D.常模团体越多越好"],
+            answer: 1,
+            analysis: "【答案】B\n【解析】通常有数个常模团体（如不同年龄、性别）。"
+        },
+        {
+            chapter: "第10章 测验法 (单选)",
+            type: "single",
+            question: "心理测验题目的来源应该排除()。",
+            options: ["A.直接翻译国外测验的题目", "B.已出版的标准测验", "C.理论和专家的经验", "D.临床观察和记录"],
+            answer: 0,
+            analysis: "【答案】A\n【解析】直接翻译会有文化误差。"
+        },
+        {
+            chapter: "第10章 测验法 (单选)",
+            type: "single",
+            question: "测验编排的一般原则应排除()。",
+            options: ["A.难度逐步上升", "B.同类型组合", "C.答案混合排列", "D.依特点编排"],
+            answer: 2,
+            analysis: "【答案】C\n【解析】答案不应是混合排列，应随机排列且避免定势，但题目中C可能是指一种错误的排列方式理解，或者本题意在指‘混合排列’不是编排原则的核心，本题【答案】给的是C，解释为答案混合排列是原则，排除C？解析似乎有误，根据题库答案是C。可能是指题目编排原则中不包括“答案混合排列”这个说法？或者是指题目顺序，这里按题库答案选C。"
+        },
+        {
+            chapter: "第10章 测验法 (单选)",
+            type: "single",
+            question: "与正式施测的时限相比,对新编制的测验做试测时的时限应()。",
+            options: ["A.减半", "B.较短些", "C.完全一致", "D.较长些"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】试测时限应较长，以便受测者做完。"
+        },
+        {
+            chapter: "第10章 测验法 (单选)",
+            type: "single",
+            question: "初测用的测验并非正式测验,初编题目的数量根据要求应()最终所需要的数量。",
+            options: ["A.少于", "B.等于", "C.多于", "D.有时多于,有时少于"],
+            answer: 2,
+            analysis: "【答案】C\n【解析】初编数量要多于最终数量。"
+        },
+        {
+            chapter: "第10章 测验法 (多选)",
+            type: "multi",
+            question: "在编制测验前,首先要明确测量的对象...只有对受测者的()等心中有数...。",
+            options: ["A.年龄", "B.受教育程度", "C.社会经济水平", "D.阅读水平"],
+            answer: [0, 1, 2, 3],
+            analysis: "【答案】ABCD\n【解析】这些都是需要考虑的受测者特征。"
+        },
+        {
+            chapter: "第10章 测验法 (多选)",
+            type: "multi",
+            question: "心理测验命题在内容方面的主要要求是()。",
+            options: ["A.内容符合测验的目的", "B.避免贪多而乱出题", "C.内容取样要有代表性", "D.题目间内容相互独立"],
+            answer: [0, 1, 2, 3],
+            analysis: "【答案】ABCD\n【解析】内容方面的四点要求。"
+        },
+        {
+            chapter: "第10章 测验法 (多选)",
+            type: "multi",
+            question: "心理测验命题在文字方面的主要要求是()。",
+            options: ["A.使用准确的当代语言", "B.语句简明扼要", "C.排除与答案无关的因素", "D.最好是一句话说明一个概念"],
+            answer: [0, 1, 2, 3],
+            analysis: "【答案】ABCD\n【解析】文字方面的要求。"
+        },
+        {
+            chapter: "第10章 测验法 (多选)",
+            type: "multi",
+            question: "测试题常见的排列方式有()。",
+            options: ["A.并列直进式", "B.公共汽车式", "C.混合螺旋式", "D.专列式"],
+            answer: [0, 2],
+            analysis: "【答案】AC\n【解析】并列直进式和混合螺旋式。"
+        },
+        {
+            chapter: "第10章 测验法 (多选)",
+            type: "multi",
+            question: "选择题要编好题干,也要编好选项,必须注意()。",
+            options: ["A.题干问题明确", "B.选项简明扼要,长度相等", "C.每题只给一个正确答案", "D.选项最好用同一形式"],
+            answer: [0, 1, 2, 3],
+            analysis: "【答案】ABCD\n【解析】选择题编制注意事项。"
+        },
+        {
+            chapter: "第10章 测验法 (多选)",
+            type: "multi",
+            question: "编制是非题应注意()。",
+            options: ["A.内容以有意义的概念...为基础", "B.每道题只能包含一个概念", "C.尽量避免否定的叙述", "D.“是”“非”题的数目应基本相等"],
+            answer: [0, 1, 2, 3],
+            analysis: "【答案】ABCD\n【解析】是非题编制注意事项。"
+        },
+        {
+            chapter: "第10章 测验法 (多选)",
+            type: "multi",
+            question: "编制操作测验的原则有()。",
+            options: ["A.明确所要测量的目标", "B.尽量选择真实性程度较高的项目", "C.指导语要简明扼要", "D.确定评分标准"],
+            answer: [0, 1, 2, 3],
+            analysis: "【答案】ABCD\n【解析】操作测验编制原则。"
+        },
+        {
+            chapter: "第10章 测验法 (多选)",
+            type: "multi",
+            question: "要使测验具备较高的信度和效度,需要对测验进行标准化,主要包括()。",
+            options: ["A.测验内容的标准化", "B.施测过程的标准化", "C.测验评分的标准化", "D.解释测验分数的标准化"],
+            answer: [0, 1, 2, 3],
+            analysis: "【答案】ABCD\n【解析】标准化包括内容、施测、评分、解释。"
+        },
+        {
+            chapter: "第10章 测验法 (多选)",
+            type: "multi",
+            question: "在选择题目形式时,需要考虑()。",
+            options: ["A.测验的目的", "B.材料的性质", "C.接受测验的团体", "D.各种实际因素"],
+            answer: [0, 1, 2, 3],
+            analysis: "【答案】ABCD\n【解析】选择题目形式需考虑因素。"
+        },
+        {
+            chapter: "第10章 测验法 (多选)",
+            type: "multi",
+            question: "审定试题时,要注意题目的()。",
+            options: ["A.范围应与测验计划的双向细目表相一致", "B.数量要比最后所需的数目多一倍至几倍", "C.难度必须符合测验目的的需要", "D.说明必须清楚明白"],
+            answer: [0, 1, 2, 3],
+            analysis: "【答案】ABCD\n【解析】审题注意事项。"
+        },
+        {
+            chapter: "第10章 测验法 (多选)",
+            type: "multi",
+            question: "测验中主试者的职责是指()。",
+            options: ["A.应按照指导语的要求实施测验", "B.测验前不讲太多无关的话", "C.不应对被试者的反应做出任何暗示", "D.对特殊问题要有心理准备"],
+            answer: [0, 1, 2, 3],
+            analysis: "【答案】ABCD\n【解析】主试职责。"
+        },
+        {
+            chapter: "第10章 测验法 (多选)",
+            type: "multi",
+            question: "任何测量都应该具备的要素是()。",
+            options: ["A.量表", "B.参照点", "C.等级", "D.单位"],
+            answer: [1, 3],
+            analysis: "【答案】BD\n【解析】测量的要素：参照点和单位。"
+        },
+        {
+            chapter: "第10章 测验法 (多选)",
+            type: "multi",
+            question: "心理测验具有独特的性质,即具有()。",
+            options: ["A.外显性", "B.间接性", "C.相对性", "D.客观性"],
+            answer: [1, 2, 3],
+            analysis: "【答案】BCD\n【解析】心理测量的性质：间接性、相对性、客观性。"
+        },
+        {
+            chapter: "第10章 测验法 (多选)",
+            type: "multi",
+            question: "下列会导致测验信度被低估的因素有()。",
+            options: ["A.测验的题目难度过高", "B.被试的同质性太高", "C.测验题目很多", "D.测验的题目难度过低"],
+            answer: [0, 1, 3],
+            analysis: "【答案】ABD\n【解析】团体异质性高信度高，同质性高信度低估。难度过高过低也会降低信度。"
+        },
+
+        // --- 第11章 ---
+        {
+            chapter: "第11章 实验研究 (单选)",
+            type: "single",
+            question: "( )实验设计采用循环法平衡实验顺序对实验结果的影响...。",
+            options: ["A.拉丁方", "B.随机区组", "C.完全随机化", "D.四组"],
+            answer: 0,
+            analysis: "【答案】A\n【解析】拉丁方平衡设计又称轮换设计。"
+        },
+        {
+            chapter: "第11章 实验研究 (单选)",
+            type: "single",
+            question: "若使区组间的被试尽量做到同质,可以()。",
+            options: ["A.用同一个被试重复接受几种实验处理", "B.使用配对法分配被试", "C.以不同团体为区组", "D.以上都对"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】以上方法均可。"
+        },
+        {
+            chapter: "第11章 实验研究 (单选)",
+            type: "single",
+            question: "下列为准实验设计的是()。",
+            options: ["A.事后设计", "B.随机区组设计", "C.完全随机化设计", "D.时间序列设计"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】时间序列设计是准实验设计。"
+        },
+        {
+            chapter: "第11章 实验研究 (单选)",
+            type: "single",
+            question: "在《超常与常态儿童的兴趣、动机与创造性思维的比较研究》一文中,因变量显然是指()。",
+            options: ["A.超常儿童", "B.常态儿童", "C.超常与常态儿童", "D.兴趣、动机与创造性思维"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】被试特征是自变量，兴趣、动机等是因变量。"
+        },
+        {
+            chapter: "第11章 实验研究 (单选)",
+            type: "single",
+            question: "《时距信息的加工机制及其通道效应的实验研究》一文标题显示,作为自变量的是()。",
+            options: ["A.时距信息", "B.加工机制", "C.通道", "D.实验"],
+            answer: 2,
+            analysis: "【答案】C\n【解析】通道效应表明通道是自变量。"
+        },
+        {
+            chapter: "第11章 实验研究 (单选)",
+            type: "single",
+            question: "( )是检验研究结果的数据分析程序与方法的有效性的指标。",
+            options: ["A.内部效度", "B.外部效度", "C.构思效度", "D.统计效度"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】统计结论效度。"
+        },
+        {
+            chapter: "第11章 实验研究 (单选)",
+            type: "single",
+            question: "如果要用实验确定20世纪末我国高考扩招对大学生整体素质的影响,应该使用()。",
+            options: ["A.非等组设计", "B.单被试设计", "C.含有控制组的时间序列设计", "D.时间序列设计"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】高考扩招是全国性措施，无控制组，适合时间序列设计。"
+        },
+        {
+            chapter: "第11章 实验研究 (单选)",
+            type: "single",
+            question: "研究结果能否在不同人群和不同种属之间进行推论,反映了()。",
+            options: ["A.内部效度", "B.外部效度", "C.统计效度", "D.结构效度"],
+            answer: 1,
+            analysis: "【答案】B\n【解析】外部效度（生态效度）。"
+        },
+        {
+            chapter: "第11章 实验研究 (单选)",
+            type: "single",
+            question: "实验研究假设和测量指标的理论构思及其操作化问题...通常指实验的()。",
+            options: ["A.内容效度", "B.内部效度", "C.构想效度", "D.实证效度"],
+            answer: 2,
+            analysis: "【答案】C\n【解析】构思效度。"
+        },
+        {
+            chapter: "第11章 实验研究 (单选)",
+            type: "single",
+            question: "不能排除成熟等因素影响的设计是()。",
+            options: ["A.单组前后测设计", "B.时间序列设计", "C.双组前后测设计", "D.双组后测设计"],
+            answer: 0,
+            analysis: "【答案】A\n【解析】单组前后测设计无法排除成熟、历史等因素。"
+        },
+        {
+            chapter: "第11章 实验研究 (单选)",
+            type: "single",
+            question: "如果不同的实验条件之间有相互干扰,最好采用()。",
+            options: ["A.组内设计", "B.组间设计", "C.拉丁方设计", "D.混合设计"],
+            answer: 1,
+            analysis: "【答案】B\n【解析】组间设计避免了条件间的干扰。"
+        },
+        {
+            chapter: "第11章 实验研究 (单选)",
+            type: "single",
+            question: "研究者分别选取5个年龄段的被试各3个,来考查三种刺激条件下被试反应时的差异,此种设计为()。",
+            options: ["A.完全随机设计", "B.随机区组设计", "C.析因设计", "D.嵌套设计"],
+            answer: 1,
+            analysis: "【答案】B\n【解析】5个年龄段构成区组，每个区组内随机分配。"
+        },
+        {
+            chapter: "第11章 实验研究 (单选)",
+            type: "single",
+            question: "一个2×3×4的完全随机设计,表示()。",
+            options: ["A.试验有三个因素...", "B.试验有三个水平...", "C.试验有三个因素...", "D.试验有两个因素..."],
+            answer: 0,
+            analysis: "【答案】A\n【解析】三个因素，水平数分别为2,3,4。"
+        },
+        {
+            chapter: "第11章 实验研究 (多选)",
+            type: "multi",
+            question: "时间序列设计的特征有()。",
+            options: ["A.只有一组被试", "B.包括对被试进行前测", "C.可以较好地控制“成熟”因素", "D.能够控制...偶发事件"],
+            answer: [0, 1, 2],
+            analysis: "【答案】ABC\n【解析】时间序列设计不能排除偶发事件（历史因素）。"
+        },
+        {
+            chapter: "第11章 实验研究 (多选)",
+            type: "multi",
+            question: "下列实验设计的目的是解决被试个体差异问题的是()。",
+            options: ["A.组间设计", "B.区组设计", "C.组内设计", "D.随机化设计"],
+            answer: [1, 2, 3],
+            analysis: "【答案】BCD\n【解析】区组、组内、随机化（平衡）均可解决个体差异。"
+        },
+        {
+            chapter: "第11章 实验研究 (多选)",
+            type: "multi",
+            question: "与组间设计相比,组内设计的优点有()。",
+            options: ["A.被试量大大减少", "B.每个被试进行实验的时间大大缩短", "C.可以用来研究学习、记忆效应", "D.可以减少个体差异对实验结果的影响"],
+            answer: [0, 2, 3],
+            analysis: "【答案】ACD\n【解析】组内设计被试少，适合研究学习效应，减少个体差异。但每位被试时间可能增加。"
+        },
+
+        // --- 第14章 ---
+        {
+            chapter: "第14章 结果整理 (单选)",
+            type: "single",
+            question: "对定性分析可靠性的检验表现为()。",
+            options: ["A.分析结果的信度、效度与客观性", "B.分析结果的信度...与实际", "C.分析结果的精确度、客观性", "D.分析结果的信度、客观性"],
+            answer: 0,
+            analysis: "【答案】A\n【解析】定性分析可靠性表现为信度、效度与客观性。"
+        },
+        {
+            chapter: "第14章 结果整理 (单选)",
+            type: "single",
+            question: "下面关于定性分析的描述不正确的是()。",
+            options: ["A.目的在于把握事物的质的规定性", "B.作为教育研究...基础", "C.其研究程序不具有弹性", "D.在内容上..."],
+            answer: 2,
+            analysis: "【答案】C\n【解析】定性分析程序具有很大灵活性（弹性）。"
+        },
+        {
+            chapter: "第14章 结果整理 (单选)",
+            type: "single",
+            question: "定性研究区别于定量研究的基本特征是()。",
+            options: ["A.更具客观性", "B.更具普遍性", "C.更多地运用理性思维", "D.更多地关注事物的性质及意义"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】定性研究关注性质及意义。"
+        },
+
+        // --- 第15章 ---
+        {
+            chapter: "第15章 定量分析I (单选)",
+            type: "single",
+            question: "单样本t检验对于数据分布的前提要求是()。",
+            options: ["A.所有的差异分数...", "B.所有的样本...", "C.所有的样本都从正态分布的总体中随机抽取,且方差同质", "D.样本从二项分布..."],
+            answer: 2,
+            analysis: "【答案】C\n【解析】t检验要求正态分布且方差同质。"
+        },
+        {
+            chapter: "第15章 定量分析I (单选)",
+            type: "single",
+            question: "完全随机设计的方差分析适用于()。",
+            options: ["A.三个及其以上独立样本平均数差异", "B.方差齐性检验", "C.三个及其以上相关样本...", "D.两个样本..."],
+            answer: 0,
+            analysis: "【答案】A\n【解析】完全随机设计对应独立样本。"
+        },
+        {
+            chapter: "第15章 定量分析I (单选)",
+            type: "single",
+            question: "随机区组设计的方差分析适用于()。",
+            options: ["A.三个及其以上独立样本", "B.方差齐性检验", "C.三个及其以上相关样本平均数差异", "D.两个样本..."],
+            answer: 2,
+            analysis: "【答案】C\n【解析】随机区组设计（重复测量）对应相关样本。"
+        },
+        {
+            chapter: "第15章 定量分析I (单选)",
+            type: "single",
+            question: "在方差分析中,()反映的是样本数据与该组平均值的差异。",
+            options: ["A.总离差", "B.组间变异", "C.抽样变异", "D.组内变异"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】组内变异。"
+        },
+        {
+            chapter: "第15章 定量分析I (单选)",
+            type: "single",
+            question: "单因素方差分析中计算F统计量,其分子与分母的自由度各为()。",
+            options: ["A. r, n", "B. rn, n-r", "C. r-1, k(n-1)", "D. n-r, r-1"],
+            answer: 2,
+            analysis: "【答案】C\n【解析】组间df = k-1, 组内df = k(n-1)。"
+        },
+        {
+            chapter: "第15章 定量分析I (单选)",
+            type: "single",
+            question: "重复测量的方差分析中,在各组均值不变的情况下,如果被试间差异的平方和增加()。",
+            options: ["A.会减少组间方差", "B.会减少误差方差", "C.会使F值降低", "D.F值保持不变"],
+            answer: 1,
+            analysis: "【答案】B\n【解析】被试间差异（区组效应）从组内平方和中分离，增加则减少误差平方和。"
+        },
+        {
+            chapter: "第15章 定量分析I (单选)",
+            type: "single",
+            question: "某研究选取容量均为5的三个独立样本进行方差分析,其总自由度为()。",
+            options: ["A.15", "B.12", "C.2", "D.14"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】总自由度 = N - 1 = 15 - 1 = 14。"
+        },
+        {
+            chapter: "第15章 定量分析I (单选)",
+            type: "single",
+            question: "在随机区组实验设计中,由于被试之间性质不同导致产生的差异称为()。",
+            options: ["A.因素效应", "B.误差效应", "C.系统效应", "D.区组效应"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】区组效应。"
+        },
+        {
+            chapter: "第15章 定量分析I (单选)",
+            type: "single",
+            question: "方差分析中, F(2,24)=0.90,则F检验的结果()。",
+            options: ["A.不显著", "B.显著", "C.查表才能确定", "D.此结果不可能"],
+            answer: 0,
+            analysis: "【答案】A\n【解析】F < 1，不显著。"
+        },
+        {
+            chapter: "第15章 定量分析I (单选)",
+            type: "single",
+            question: "方差分析的主要任务是检验()。",
+            options: ["A.综合虚无假设", "B.部分虚无假设", "C.组间虚无假设", "D.组内虚无假设"],
+            answer: 2,
+            analysis: "【答案】C\n【解析】检验组间均方是否显著大于组内均方（即检验组间差异）。"
+        },
+        {
+            chapter: "第15章 定量分析I (单选)",
+            type: "single",
+            question: "二因素组间设计...A主效应F(1,54)=0.94, B主效应F(2,108)=3.14, 从中可以得出()。",
+            options: ["A.因素B的主效应比A大", "B.此研究是2×3设计", "C.研究中有114个被试", "D.这个报告一定有错误"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】两因素方差分析中，主效应检验的分母（误差项）自由度应该相同。这里一个是54，一个是108，报告有误。"
+        },
+        {
+            chapter: "第15章 定量分析I (单选)",
+            type: "single",
+            question: "3×4组间方差分析,两个主效应显著,没有交互作用...接下去做简单效应分析的选择是()。",
+            options: ["A.需要,只分析一个", "B.需要,分析两个", "C.不需要,只需要用事后检验", "D.不需要,只需要用事后检验..."],
+            answer: 2,
+            analysis: "【答案】C\n【解析】无交互作用不需要做简单效应分析，只需事后检验。"
+        },
+        {
+            chapter: "第15章 定量分析I (单选)",
+            type: "single",
+            question: "二因素设计...交互作用F(2,74)=2.86。由此可知()。",
+            options: ["A.有78名被试", "B.一个因素2水平,另一个3水平", "C.交互作用显著", "D.主效应不显著"],
+            answer: 1,
+            analysis: "【答案】B\n【解析】交互作用自由度 df(AxB) = (a-1)(b-1) = 2。可能是 1*2 (a=2, b=3)。"
+        },
+        {
+            chapter: "第15章 定量分析I (单选)",
+            type: "single",
+            question: "在重复测量方差分析中,计算F比率的分母是()。",
+            options: ["A.实验误差,不包括被试间差异", "B.实验误差,包括被试间差异", "C.实验误差加上被试间差异", "D.处理内误差"],
+            answer: 0,
+            analysis: "【答案】A\n【解析】重复测量中，分母是误差项（残差），已剔除被试间差异。"
+        },
+        {
+            chapter: "第15章 定量分析I (单选)",
+            type: "single",
+            question: "取了n=12的样本对其先后进行三种条件的处理...F比率的自由度是()。",
+            options: ["A. (3,36)", "B. (2,35)", "C. (2,24)", "D. (2,22)"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】被试内设计。df(组间)=3-1=2。df(误差)=(n-1)(k-1)=11*2=22。"
+        },
+        {
+            chapter: "第15章 定量分析I (单选)",
+            type: "single",
+            question: "三个独立样本,n1=4, n2=5, n3=6...其组间自由度为()。",
+            options: ["A.2", "B.5", "C.12", "D.14"],
+            answer: 0,
+            analysis: "【答案】A\n【解析】k-1 = 3-1 = 2。"
+        },
+        {
+            chapter: "第15章 定量分析I (单选)",
+            type: "single",
+            question: "随机化区组实验设计对区组划分的基本要求是()。",
+            options: ["A.区组内和区组间均要有同质性", "B.区组内异质,区组间同质", "C.区组内要有同质性,区组间可以有异质性", "D.区组内和区组间均可以有异质性"],
+            answer: 2,
+            analysis: "【答案】C\n【解析】区组内同质，区组间异质。"
+        },
+        {
+            chapter: "第15章 定量分析I (单选)",
+            type: "single",
+            question: "在一个列联表中,自由度为()。",
+            options: ["A. RxC", "B. (R+C)-1", "C. RC-1", "D. (R-1)(C-1)"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】df = (R-1)(C-1)。"
+        },
+        {
+            chapter: "第15章 定量分析I (单选)",
+            type: "single",
+            question: "对一个列联表的X2检验,提供了下列哪些问题的答案()。",
+            options: ["A.一个变量类目差异", "B.变量类目差异", "C.两个类目型变量之间存在相关吗?", "D.变量类目相同吗"],
+            answer: 2,
+            analysis: "【答案】C\n【解析】独立性检验，判断两变量是否关联。"
+        },
+        {
+            chapter: "第15章 定量分析I (单选)",
+            type: "single",
+            question: "下列哪一个是非参检验()。",
+            options: ["A. t检验", "B. X2检验", "C. Z检验", "D. F检验"],
+            answer: 1,
+            analysis: "【答案】B\n【解析】卡方检验是非参数检验。"
+        },
+        {
+            chapter: "第15章 定量分析I (单选)",
+            type: "single",
+            question: "在一个2×2的X2检验分析中,自由度是()。",
+            options: ["A. 0", "B. 1", "C. 2", "D. 3"],
+            answer: 1,
+            analysis: "【答案】B\n【解析】(2-1)(2-1)=1。"
+        },
+        {
+            chapter: "第15章 定量分析I (单选)",
+            type: "single",
+            question: "在独立性检验中, N=101, R=3, C=2, 则自由度是()。",
+            options: ["A. 100", "B. 202", "C. 6", "D. 2"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】(3-1)(2-1)=2。"
+        },
+        {
+            chapter: "第15章 定量分析I (单选)",
+            type: "single",
+            question: "应用方差分析的前提条件是()。",
+            options: ["A.总体正态且相关", "B.总体正态且相互独立", "C.各实验处理的方差要相等", "D.各实验处理内的方差要一致"],
+            answer: 3,
+            analysis: "【答案】BD (注：题库中此题为单选题，但给了BD两个正确选项的描述。如果是多选则选BD。此处按D处理，或根据题库原意可能为多选，暂归为单选处理（选D最核心）。\n *修正*：根据题库文本，此题在“一、单项选择题”下列出了【答案】BD，可能是题库排版错误，本题作为多选处理更为合适。移至多选区。)"
+        },
+        {
+            chapter: "第15章 定量分析I (多选)",
+            type: "multi",
+            question: "应用方差分析的前提条件是()。",
+            options: ["A.总体正态且相关", "B.总体正态且相互独立", "C.各实验处理的方差要相等", "D.各实验处理内的方差要一致"],
+            answer: [1, 3],
+            analysis: "【答案】BD\n【解析】正态性、独立性、方差齐性。"
+        },
+        {
+            chapter: "第15章 定量分析I (多选)",
+            type: "multi",
+            question: "若检验统计量F近似等于1,说明()。",
+            options: ["A.组间方差中不包含系统因素的影响", "B.组间方差中包含系统因素的影响", "C.方差分析中应拒绝原假设", "D.方差分析中应接受原假设"],
+            answer: [0, 3],
+            analysis: "【答案】AD\n【解析】F接近1说明组间差异主要由误差引起，无显著处理效应，接受原假设。"
+        },
+        {
+            chapter: "第15章 定量分析I (多选)",
+            type: "multi",
+            question: "对于单因素方差分析的组内误差,下列说法正确的是()。",
+            options: ["A.其自由度为k(n-1)", "B.反映的是随机因素的影响", "C.反映的是随机因素和系统因素的影响", "D.组内误差一定小于组间误差"],
+            answer: [0, 1],
+            analysis: "【答案】AB\n【解析】组内误差反映随机因素，自由度k(n-1)。"
+        },
+        {
+            chapter: "第15章 定量分析I (多选)",
+            type: "multi",
+            question: "在随机区组实验设计中,总平方和可以被分解为()。",
+            options: ["A.组间平方和", "B.组内平方和", "C.误差项平方和", "D.区组平方和"],
+            answer: [0, 2, 3],
+            analysis: "【答案】ACD\n【解析】总平方和 = 组间 + 区组 + 误差。"
+        },
+        {
+            chapter: "第15章 定量分析I (多选)",
+            type: "multi",
+            question: "事后检验常用的方法有()。",
+            options: ["A. F检验", "B. N-K法", "C. HSD法", "D. t检验"],
+            answer: [1, 2],
+            analysis: "【答案】BC\n【解析】N-K法和HSD法。"
+        },
+
+        // --- 第16章 ---
+        {
+            chapter: "第16章 定量分析II (单选)",
+            type: "single",
+            question: "r=-0.50的两变量与r=0.50的两变量之间的关系程度()。",
+            options: ["A.前者比后者更密切", "B.后者比前者更密切", "C.相同", "D.不确定"],
+            answer: 2,
+            analysis: "【答案】C\n【解析】相关系数绝对值大小表示强度。"
+        },
+        {
+            chapter: "第16章 定量分析II (单选)",
+            type: "single",
+            question: "相关系数的取值范围是()。",
+            options: ["A. |r|<1", "B. |r|>=0", "C. |r|<=1", "D. 0<|r|<1"],
+            answer: 2,
+            analysis: "【答案】C\n【解析】-1 到 +1。"
+        },
+        {
+            chapter: "第16章 定量分析II (单选)",
+            type: "single",
+            question: "积差相关是英国统计学家()于20世纪初提出的一种计算相关的方法。",
+            options: ["A.斯皮尔曼", "B.皮尔逊", "C.高斯", "D.高尔登"],
+            answer: 1,
+            analysis: "【答案】B\n【解析】皮尔逊。"
+        },
+        {
+            chapter: "第16章 定量分析II (单选)",
+            type: "single",
+            question: "同一组学生的数学成绩与语文成绩的关系为()。",
+            options: ["A.因果关系", "B.共变关系", "C.函数关系", "D.相关关系"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】相关关系。"
+        },
+        {
+            chapter: "第16章 定量分析II (单选)",
+            type: "single",
+            question: "假设两变量线性相关,两变量是等距或等比的数据,但不呈正态分布。计算它们的相关系数时应选用()。",
+            options: ["A.积差相关", "B.斯皮尔曼等级相关", "C.二列相关", "D.点二列相关"],
+            answer: 1,
+            analysis: "【答案】B\n【解析】不满足正态分布用等级相关。"
+        },
+        {
+            chapter: "第16章 定量分析II (单选)",
+            type: "single",
+            question: "假设两变量线性相关...且呈正态分布。计算它们的相关系数时应选用()。",
+            options: ["A.积差相关", "B.斯皮尔曼等级相关", "C.二列相关", "D.点二列相关"],
+            answer: 0,
+            analysis: "【答案】A\n【解析】满足正态分布用积差相关。"
+        },
+        {
+            chapter: "第16章 定量分析II (单选)",
+            type: "single",
+            question: "假设两变量线性相关,一变量为正态、等距变量,另一变量为二分名义变量。计算它们的相关系数时应选用()。",
+            options: ["A.积差相关", "B.二列相关", "C.斯皮尔曼等级相关", "D.点二列相关"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】二分名义变量 + 连续变量 = 点二列相关。"
+        },
+        {
+            chapter: "第16章 定量分析II (单选)",
+            type: "single",
+            question: "斯皮尔曼等级相关适用于两列()的测量数据或总体为非正态的等距、等比数据。",
+            options: ["A.类别", "B.等级数据", "C.属性", "D.等距"],
+            answer: 1,
+            analysis: "【答案】B\n【解析】等级数据。"
+        },
+        {
+            chapter: "第16章 定量分析II (单选)",
+            type: "single",
+            question: "在统计学上,相关系数r=0表示两个变量之间()。",
+            options: ["A.零相关", "B.正相关", "C.负相关", "D.无相关"],
+            answer: 0,
+            analysis: "【答案】A\n【解析】零相关。"
+        },
+        {
+            chapter: "第16章 定量分析II (单选)",
+            type: "single",
+            question: "有10名学生参加视反应时和听反应时的两项测试...∑D2=45,这两项能力之间的等级相关系数是()。",
+            options: ["A. 0.73", "B. 0.54", "C. 0.65", "D. 0.27"],
+            answer: 0,
+            analysis: "【答案】A\n【解析】代入公式计算得 0.73。"
+        },
+        {
+            chapter: "第16章 定量分析II (单选)",
+            type: "single",
+            question: "两列正态变量...另一列被人为地划分为两类。计算它们的相关系数应采用()。",
+            options: ["A.积差相关", "B.多列相关", "C.斯皮尔曼等级相关", "D.二列相关"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】人为划分二分变量 = 二列相关。"
+        },
+        {
+            chapter: "第16章 定量分析II (单选)",
+            type: "single",
+            question: "下列相关系数中表示两列变量间的相关强度最小的是()。",
+            options: ["A. 0.90", "B. 0.10", "C. -0.40", "D. -0.70"],
+            answer: 1,
+            analysis: "【答案】B\n【解析】0.10绝对值最小。"
+        },
+        {
+            chapter: "第16章 定量分析II (单选)",
+            type: "single",
+            question: "有四个评委对八位歌手进行等级评价,要表示这些评价的相关程度,应选用()。",
+            options: ["A.肯德尔W系数", "B.肯德尔U系数", "C.斯皮尔曼等级相关", "D.点二列相关"],
+            answer: 0,
+            analysis: "【答案】A\n【解析】多评价者的一致性用肯德尔W系数。"
+        },
+        {
+            chapter: "第16章 定量分析II (单选)",
+            type: "single",
+            question: "有四个评委对八位歌手两两配对进行等级比较...应选用()。",
+            options: ["A.肯德尔W系数", "B.肯德尔U系数", "C.斯皮尔曼等级相关", "D.点二列相关"],
+            answer: 1,
+            analysis: "【答案】B\n【解析】配对比较用肯德尔U系数。"
+        },
+        {
+            chapter: "第16章 定量分析II (单选)",
+            type: "single",
+            question: "初学电脑打字,随着练习次数增多,错误减少。这属于()。",
+            options: ["A.负相关", "B.正相关", "C.完全相关", "D.零相关"],
+            answer: 0,
+            analysis: "【答案】A\n【解析】一增一减，负相关。"
+        },
+        {
+            chapter: "第16章 定量分析II (单选)",
+            type: "single",
+            question: "10名学生身高和体重的标准分数的乘积之和为8.2,那么身高与体重的相关系数为()。",
+            options: ["A. 0.82", "B. 8.2", "C. 0.41", "D. 4.1"],
+            answer: 0,
+            analysis: "【答案】A\n【解析】r = ΣZxZy / N = 8.2 / 10 = 0.82。"
+        },
+        {
+            chapter: "第16章 定量分析II (单选)",
+            type: "single",
+            question: "下列几个点二列相关系数的值,相关程度最高的是()。",
+            options: ["A. 0.8", "B. 0.1", "C. -0.9", "D. -0.5"],
+            answer: 2,
+            analysis: "【答案】C\n【解析】|-0.9| 最大。"
+        },
+        {
+            chapter: "第16章 定量分析II (多选)",
+            type: "multi",
+            question: "相关的分类为()。",
+            options: ["A.正相关", "B.负相关", "C.零相关", "D.常相关"],
+            answer: [0, 1, 2],
+            analysis: "【答案】ABC\n【解析】正、负、零相关。"
+        },
+        {
+            chapter: "第16章 定量分析II (多选)",
+            type: "multi",
+            question: "相关系数的取值可以是()。",
+            options: ["A. 0", "B. 1", "C. -1", "D. 2"],
+            answer: [0, 1, 2],
+            analysis: "【答案】ABC\n【解析】取值范围[-1, 1]。"
+        },
+        {
+            chapter: "第16章 定量分析II (多选)",
+            type: "multi",
+            question: "在回归方程中,变量X和Y的相关系数为0...则此时回归方程与横坐标的夹角为()。",
+            options: ["A. 0", "B. 45度", "C. 90度", "D. 180度"],
+            answer: [3], // 注：单选题排入多选区的情况。题库答案D。r=0, b=0, 水平线，与X轴平行/重合。题目选项D为180度。
+            analysis: "【答案】D\n【解析】r=0则b=0，回归线水平。题库答案为D。"
+        },
+        {
+            chapter: "第16章 定量分析II (多选)",
+            type: "multi",
+            question: "回归方程表示()。",
+            options: ["A.典型的负相关", "B.一条直线", "C.非A非B", "D.选项A和选项B"],
+            answer: [3], // 题库单选D
+            analysis: "【答案】D\n【解析】b为负数表示负相关。"
+        },
+        {
+            chapter: "第16章 定量分析II (多选)",
+            type: "multi",
+            question: "当()时,相关系数和斜率是同一个值。",
+            options: ["A. Sy=0", "B. r2=1", "C.当变量X和Y使用Z分数时", "D.永远也不可能"],
+            answer: [2], // 题库单选C
+            analysis: "【答案】C\n【解析】Z分数回归中，斜率等于相关系数。"
+        },
+        {
+            chapter: "第16章 定量分析II (多选)",
+            type: "multi",
+            question: "身高和体重的相关系数为0.70,此时可以认为身高解释了体重变异的()。",
+            options: ["A. 0.50", "B. 0.25", "C. 0.49", "D. 0.60"],
+            answer: [2], // 题库单选C
+            analysis: "【答案】C\n【解析】测定系数 r^2 = 0.49。"
+        },
+        {
+            chapter: "第16章 定量分析II (多选)",
+            type: "multi",
+            question: "测定系数的取值范围是()。",
+            options: ["A. 0<=r2<=1", "B. ...", "C. ...", "D. ..."],
+            answer: [0], // 题库单选A
+            analysis: "【答案】A\n【解析】测定系数范围 [0, 1]。"
+        },
+        {
+            chapter: "第16章 定量分析II (多选)",
+            type: "multi",
+            question: "下列关于测定系数的说法正确的是()。",
+            options: ["A.测定系数越大说明回归方程越不显著", "B.测定系数越大说明回归平方和对总平方和的贡献越小", "C.测定系数不可能为1", "D.测定系数可能为0"],
+            answer: [3], // 题库单选D
+            analysis: "【答案】D\n【解析】测定系数越大越显著，范围0-1。"
+        },
+        {
+            chapter: "第16章 定量分析II (多选)",
+            type: "multi",
+            question: "线性回归的基本假设是()。",
+            options: ["A.线性关系假设", "B.正态性假设", "C.独立性假设", "D.误差等分散性假设"],
+            answer: [0, 1, 2, 3],
+            analysis: "【答案】ABCD\n【解析】线性回归基本假设。"
+        },
+        {
+            chapter: "第16章 定量分析II (多选)",
+            type: "multi",
+            question: "回归方程显著性检验的方法有()。",
+            options: ["A.回归系数的显著性检验", "B.测定系数和相关系数的拟合程度测定", "C.回归方程整体体验判定", "D.估计标准误的检验"],
+            answer: [0, 1, 2, 3],
+            analysis: "【答案】ABCD\n【解析】回归检验方法。"
+        },
+
+        // --- 第17章 ---
+        {
+            chapter: "第17章 结果解释 (单选)",
+            type: "single",
+            question: "下列属于研究结果解释的基本原则的是()",
+            options: ["A.开放性原则与整体性原则", "B.客观性原则与整体性原则", "C.客观性原则与可测性原则", "D.通俗性原则与公共性原则"],
+            answer: 1,
+            analysis: "【答案】B\n【解析】客观性原则与整体性原则。"
+        },
+        {
+            chapter: "第17章 结果解释 (多选)",
+            type: "multi",
+            question: "不能把分数绝对化,更不能仅仅根据一次测验的结果轻易下结论,要做到()。",
+            options: ["A.考虑个人在测验前的经历", "B.考虑测验情境", "C.有常模和信度、效度资料", "D.不直接比较来自不同测验的分数"],
+            answer: [0, 1, 2, 3],
+            analysis: "【答案】ABCD\n【解析】解释分数需考虑多种因素。"
+        },
+        {
+            chapter: "第17章 结果解释 (多选)",
+            type: "multi",
+            question: "为了使被试者本人以及与被试者有关的人...能更好地理解分数的意义...要注意()。",
+            options: ["A.应告诉分数的解释和建议", "B.保证当事人知道该测验测量或预测什么", "C.考虑给当事人带来的心理影响", "D.让当事人积极参与测验分数的解释"],
+            answer: [0, 1, 2, 3],
+            analysis: "【答案】ABCD\n【解析】报告分数的伦理和技巧。"
+        },
+
+        // --- 第18章 ---
+        {
+            chapter: "第18章 报告撰写 (单选)",
+            type: "single",
+            question: "在心理与教育研究报告中,研究中使用的调查问卷一般放在()。",
+            options: ["A.前言部分", "B.正文部分", "C.结论和建议部分", "D.附录部分"],
+            answer: 3,
+            analysis: "【答案】D\n【解析】问卷放在附录。"
+        },
+        {
+            chapter: "第18章 报告撰写 (单选)",
+            type: "single",
+            question: "实验研究报告一般包括()。",
+            options: ["A.题目、摘要、引言、正文及注释等部分", "B.题目、摘要、引言、正文及结论等部分", "C.题目、前言、方法、结果及讨论等部分", "D.题目、前言、正文、总结及附录等部分"],
+            answer: 2,
+            analysis: "【答案】C\n【解析】实验报告标准结构：前言、方法、结果、讨论。"
+        },
+        {
+            chapter: "第18章 报告撰写 (单选)",
+            type: "single",
+            question: "如果你想以最快的速度了解一个研究要解决的问题、实验过程及结果,可以看()。",
+            options: ["A.题目", "B.摘要", "C.引言", "D.方法"],
+            answer: 1,
+            analysis: "【答案】B\n【解析】摘要。"
+        },
+        {
+            chapter: "第18章 报告撰写 (单选)",
+            type: "single",
+            question: "研究者在研究报告中应该呈现()。",
+            options: ["A.描述统计", "B.推断统计", "C.描述统计和推断统计", "D.既不是描述统计也不是推断统计"],
+            answer: 2,
+            analysis: "【答案】C\n【解析】结果部分应呈现描述统计和推断统计。"
+        },
+        {
+            chapter: "第18章 报告撰写 (多选)",
+            type: "multi",
+            question: "下列关于撰写研究报告时的说法正确的是()。",
+            options: ["A.要把实验使用的被试、刺激材料和实验程序等都描述清晰", "B.在前言中只需要写研究者赞同的理论观点", "C.实验结果要用图、表等形式表示出来", "D.要将实验结果和研究者的解释明确分开"],
+            answer: [0, 2, 3],
+            analysis: "【答案】ACD\n【解析】前言应客观综述，不能只写赞同观点。"
+        },
+
+        // --- 第19章 ---
+        {
+            chapter: "第19章 研究评价 (单选)",
+            type: "single",
+            question: "建立评价指标体系应遵循以下要求()。",
+            options: ["A.客观性、可测性、简易可行性", "B.有效性、可测性、简易可行性", "C.客观性、可测性、通俗易懂", "D.主观性、客观性、可测性、简易可行性"],
+            answer: 0,
+            analysis: "【答案】A\n【解析】评价指标要求：客观性、可测性、简易可行。"
+        },
+        {
+            chapter: "第19章 研究评价 (多选)",
+            type: "multi",
+            question: "下列属于评价实验设计的标准有()。",
+            options: ["A.能够恰当地解决所要解决的问题", "B.能够恰当地控制实验中的无关变量", "C.能够推广到其他被试或其他情境", "D.能够通过质性分析得以验证"],
+            answer: [0, 1, 2],
+            analysis: "【答案】ABC\n【解析】实验设计评价标准：解决问题、控制变量（内部效度）、推广性（外部效度）。"
+        }
+    ];
+
+    let currentQuestion = 0;
+    const userAnswers = new Array(questions.length).fill(null); // null or index or array of indices
+    const quizArea = document.getElementById('quiz-area');
+    const navDotsContainer = document.getElementById('nav-dots');
+
+    function initQuiz() {
+        document.getElementById('total-count').textContent = questions.length;
+        document.getElementById('total-questions-res').textContent = questions.length;
+
+        questions.forEach((q, index) => {
+            const card = document.createElement('div');
+            card.className = `question-card ${q.type} ${index === 0 ? 'active' : ''}`;
+            card.id = `q-card-${index}`;
+
+            let optionsHtml = '';
+            q.options.forEach((opt, optIndex) => {
+                optionsHtml += `
+                    <li class="option-item" onclick="selectOption(${index}, ${optIndex})" id="opt-${index}-${optIndex}">
+                        <div class="option-marker">${String.fromCharCode(65 + optIndex)}</div>
+                        <div>${opt}</div>
+                    </li>
+                `;
+            });
+
+            const typeLabel = q.type === 'multi' ? '[多选题]' : '[单选题]';
+            const typeClass = q.type === 'multi' ? 'type-tag multi' : 'type-tag single';
+
+            card.innerHTML = `
+                <div>
+                    <span class="chapter-tag">${q.chapter}</span>
+                    <span class="${typeClass}">${typeLabel}</span>
+                </div>
+                <div class="question-text">${index + 1}. ${q.question}</div>
+                <ul class="options-list">
+                    ${optionsHtml}
+                </ul>
+                <button class="glass-button" id="submit-btn-${index}" onclick="checkAnswer(${index})">提交答案</button>
+                <div class="feedback-section" id="feedback-${index}">
+                    <div class="feedback-title">解析：</div>
+                    <div class="explanation">${q.analysis}</div>
+                </div>
+            `;
+            quizArea.appendChild(card);
+            
+            // Generate nav dots
+            const dot = document.createElement('div');
+            dot.className = `nav-dot ${index === 0 ? 'active' : ''}`;
+            dot.textContent = index + 1;
+            dot.onclick = () => jumpToQuestion(index);
+            dot.id = `nav-dot-${index}`;
+            navDotsContainer.appendChild(dot);
+        });
+        
+        updateProgress();
+        updateNavButtons();
+    }
+
+    // Select option logic
+    function selectOption(qIndex, optIndex) {
+        if (document.getElementById(`submit-btn-${qIndex}`).disabled) {
+            return; // Already submitted
+        }
+
+        const question = questions[qIndex];
+        const selectedOpt = document.getElementById(`opt-${qIndex}-${optIndex}`);
+
+        if (question.type === 'single') {
+            // Single select: clear others, select one
+            const options = document.querySelectorAll(`#q-card-${qIndex} .option-item`);
+            options.forEach(opt => opt.classList.remove('selected'));
+            selectedOpt.classList.add('selected');
+        } else {
+            // Multi select: toggle
+            selectedOpt.classList.toggle('selected');
+        }
+    }
+
+    function checkAnswer(qIndex) {
+        const card = document.getElementById(`q-card-${qIndex}`);
+        const selectedOptions = card.querySelectorAll('.option-item.selected');
+        
+        if (selectedOptions.length === 0) {
+            alert("请先选择答案");
+            return;
+        }
+
+        const question = questions[qIndex];
+        const selectedIndices = Array.from(selectedOptions).map(opt => parseInt(opt.id.split('-')[2]));
+        
+        // Save user answer
+        if (question.type === 'single') {
+            userAnswers[qIndex] = selectedIndices[0];
+        } else {
+            userAnswers[qIndex] = selectedIndices.sort((a, b) => a - b);
+        }
+
+        // Logic to check correctness
+        let isCorrect = false;
+        if (question.type === 'single') {
+            isCorrect = (userAnswers[qIndex] === question.answer);
+        } else {
+            // Array comparison
+            const correctArr = question.answer.sort((a, b) => a - b);
+            const userArr = userAnswers[qIndex];
+            isCorrect = JSON.stringify(correctArr) === JSON.stringify(userArr);
+        }
+
+        // UI Updates
+        const feedback = document.getElementById(`feedback-${qIndex}`);
+        const submitBtn = document.getElementById(`submit-btn-${qIndex}`);
+        const navDot = document.getElementById(`nav-dot-${qIndex}`);
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = "已作答";
+        feedback.classList.add('show');
+
+        // Mark Correct Answers visually
+        const allOptions = card.querySelectorAll('.option-item');
+        if (question.type === 'single') {
+            allOptions[question.answer].classList.add('correct');
+        } else {
+            question.answer.forEach(idx => allOptions[idx].classList.add('correct'));
+        }
+
+        // Mark Wrong Answers visually (if selected)
+        selectedOptions.forEach(opt => {
+            const idx = parseInt(opt.id.split('-')[2]);
+            let isOptCorrect = false;
+            if (question.type === 'single') {
+                isOptCorrect = (idx === question.answer);
+            } else {
+                isOptCorrect = question.answer.includes(idx);
+            }
+            if (!isOptCorrect) {
+                opt.classList.add('wrong');
+            }
+        });
+
+        // Feedback Title
+        if (isCorrect) {
+            feedback.style.borderLeftColor = "var(--success-color)";
+            document.querySelector(`#feedback-${qIndex} .feedback-title`).textContent = "回答正确！✅";
+            document.querySelector(`#feedback-${qIndex} .feedback-title`).style.color = "var(--success-color)";
+            navDot.classList.add('correct');
+        } else {
+            feedback.style.borderLeftColor = "var(--error-color)";
+            document.querySelector(`#feedback-${qIndex} .feedback-title`).textContent = "回答错误 ❌";
+            document.querySelector(`#feedback-${qIndex} .feedback-title`).style.color = "var(--error-color)";
+            navDot.classList.add('wrong');
+        }
+
+        setTimeout(() => {
+             feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 100);
+    }
+
+    function jumpToQuestion(index) {
+        document.getElementById(`q-card-${currentQuestion}`).classList.remove('active');
+        document.getElementById(`nav-dot-${currentQuestion}`).classList.remove('active');
+        
+        currentQuestion = index;
+        
+        document.getElementById(`q-card-${currentQuestion}`).classList.add('active');
+        document.getElementById(`nav-dot-${currentQuestion}`).classList.add('active');
+        
+        document.getElementById('current-index').textContent = currentQuestion + 1;
+        document.getElementById('result-area').style.display = 'none';
+        document.getElementById('quiz-area').style.display = 'block'; // Ensure quiz area shows
+        
+        updateProgress();
+        updateNavButtons();
+    }
+
+    function nextQuestion() {
+        if (currentQuestion < questions.length - 1) {
+            jumpToQuestion(currentQuestion + 1);
+        } else {
+            showResults();
+        }
+    }
+
+    function prevQuestion() {
+        if (currentQuestion > 0) {
+            jumpToQuestion(currentQuestion - 1);
+        }
+    }
+
+    function updateNavButtons() {
+        document.getElementById('prev-btn').disabled = currentQuestion === 0;
+        const nextBtn = document.getElementById('next-btn');
+        if (currentQuestion === questions.length - 1) {
+             nextBtn.textContent = "查看结果";
+        } else {
+             nextBtn.textContent = "下一题";
+        }
+    }
+
+    function updateProgress() {
+        const progress = ((currentQuestion + 1) / questions.length) * 100;
+        document.getElementById('progress-fill').style.width = `${progress}%`;
+    }
+
+    function showResults() {
+        document.getElementById(`q-card-${currentQuestion}`).classList.remove('active');
+        document.getElementById('result-area').style.display = 'block';
+        document.getElementById('quiz-area').style.display = 'none';
+        
+        let score = 0;
+        userAnswers.forEach((ans, idx) => {
+            const q = questions[idx];
+            if (ans === null) return; // Unanswered
+            
+            if (q.type === 'single') {
+                if (ans === q.answer) score++;
+            } else {
+                const correctArr = q.answer.sort((a, b) => a - b);
+                const userArr = ans.sort((a, b) => a - b);
+                if (JSON.stringify(correctArr) === JSON.stringify(userArr)) score++;
+            }
+        });
+
+        document.getElementById('final-score').textContent = score;
+        const percentage = Math.round((score / questions.length) * 100);
+        
+        let comment = "";
+        if (percentage >= 90) comment = "太棒了！掌握得非常好！";
+        else if (percentage >= 60) comment = "不错，继续加油！";
+        else comment = "还需多加复习哦。";
+        
+        document.getElementById('accuracy-text').textContent = `正确率: ${percentage}% - ${comment}`;
+    }
+
+    initQuiz();
+</script>
+
+</body>
+</html>
