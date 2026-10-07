@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="心理学本科课程笔记、模拟试题与记忆闪卡。">
-  <title>本科课程笔记及模拟试题 | PsyHub</title>
+  <title>本科课程笔记及模拟试题 | Noven</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,16 +36,47 @@
     .course-card { transition: transform .3s cubic-bezier(.16,1,.3,1), box-shadow .3s ease; }
     .course-card:hover { transform: translateY(-4px); box-shadow: 0 24px 60px rgba(15,23,42,.12); }
   </style>
+  <link rel="stylesheet" href="../assets/site-ui.css">
+  <script src="../assets/site-ui.js"></script>
+  <link rel="preload" href="../assets/fonts/noven-wordmark.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="../assets/fonts/noven-ui.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="../assets/fonts/noven-editorial-title.ttf" as="font" type="font/ttf" crossorigin>
 </head>
-<body>
-  <nav class="fixed z-50 top-4 left-1/2 -translate-x-1/2 w-[min(1080px,calc(100%-28px))] glass rounded-2xl px-4 py-3 flex items-center justify-between">
-    <a href="../index.html" class="font-bold tracking-tight text-zinc-900">PsyHub</a>
-    <div class="flex items-center gap-2 text-sm font-medium">
-      <a href="#notes" class="hidden sm:block px-3 py-2 rounded-xl hover:bg-white/70">课程笔记</a>
-      <a href="#tests" class="hidden sm:block px-3 py-2 rounded-xl hover:bg-white/70">模拟试题</a>
-      <a href="../index.html" class="px-3 py-2 rounded-xl bg-zinc-900 text-white">返回主站</a>
+<body class="site-ui" data-site-section="courses" data-site-page="courses">
+<!-- SITE SHELL START -->
+<a class="site-skip" href="#site-page-start">跳到正文</a>
+<div class="site-shell">
+  <nav class="site-navbar" aria-label="主导航">
+    <span class="site-glass-optics" aria-hidden="true"></span>
+    <a class="site-brand" href="../index.html" aria-label="Noven 心理学学习系统首页">
+      <span><span class="site-brand-name">Noven</span><span class="site-brand-caption">心理学学习系统</span></span>
+    </a>
+    <div class="site-nav-links"><a href="../index.html">总览</a>
+<a href="../undergraduate/index.html" aria-current="page">本科课程</a>
+<a href="../考研全攻略.html">考研备考</a>
+<a href="../刷题.html">练习题库</a>
+<a href="../psychology40/index.html">研究探索</a></div>
+    <div class="site-nav-actions">
+      <a class="site-calendar" href="../个人日历.html" aria-label="个人日历"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="4"/><path d="M8 3v4m8-4v4M4 11h16m-10 5h4"/></svg><span>日历</span></a>
+      <details class="site-menu">
+        <summary class="site-menu-toggle" aria-label="更多导航" aria-expanded="false" aria-controls="site-menu-panel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14M5 16h14"/></svg></summary>
+        <div class="site-menu-panel" id="site-menu-panel">
+          <div class="site-mobile-links"><span class="site-menu-label">学习空间</span><a href="../index.html">总览</a>
+<a href="../undergraduate/index.html" aria-current="page">本科课程</a>
+<a href="../考研全攻略.html">考研备考</a>
+<a href="../刷题.html">练习题库</a>
+<a href="../psychology40/index.html">研究探索</a><div class="site-menu-divider"></div></div>
+          <span class="site-menu-label">发现与规划</span><a href="../article.html?id=review">学习方法<small>文章与复习方法</small></a>
+<a href="../备考时间线.html">备考时间线<small>按阶段安排复习</small></a>
+<a href="../资源合辑.html">资源合辑<small>常用资料与学习资源</small></a>
+        </div>
+      </details>
     </div>
   </nav>
+</div>
+<div class="site-page-anchor" id="site-page-start" tabindex="-1"></div>
+<!-- SITE SHELL END -->
+
 
   <header class="max-w-6xl mx-auto px-6 pt-36 pb-16">
     <div class="max-w-3xl">
@@ -85,7 +116,7 @@
       </div>
       <div class="grid sm:grid-cols-2 gap-5">
         <a class="course-card glass rounded-2xl p-6 no-underline text-inherit" href="咨询心理学题库.html"><h3 class="font-semibold text-lg text-zinc-900">咨询心理学模拟试题</h3><p class="text-sm text-slate-500 mt-2">配套题目与答案解析。</p></a>
-        <a class="course-card glass rounded-2xl p-6 no-underline text-inherit" href="实验心理学题库.html"><h3 class="font-semibold text-lg text-zinc-900">实验心理学模拟试题</h3><p class="text-sm text-slate-500 mt-2">完整题库与进度记录。</p></a>
+        <a class="course-card glass rounded-2xl p-6 no-underline text-inherit" href="实验心理学题库.html"><h3 class="font-semibold text-lg text-zinc-900">实验心理学模拟试题</h3><p class="text-sm text-slate-500 mt-2">配套练习与原资料答案；待核对题暂不计分。</p></a>
         <a class="course-card glass rounded-2xl p-6 no-underline text-inherit" href="心理学研究方法题库.html"><h3 class="font-semibold text-lg text-zinc-900">研究方法模拟试题</h3><p class="text-sm text-slate-500 mt-2">研究方法专项练习。</p></a>
         <a class="course-card glass rounded-2xl p-6 no-underline text-inherit" href="心理健康教育题库.html"><h3 class="font-semibold text-lg text-zinc-900">心理健康教育模拟试题</h3><p class="text-sm text-slate-500 mt-2">课程重点与综合练习。</p></a>
       </div>

@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2024年 心理学专业基础综合真题 - 试题解析</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>
         window.MathJax = {
@@ -18,7 +17,7 @@
     <script src="2024_data_part2.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600&display=swap');
-        
+
         body {
             font-family: 'Inter', 'Noto Sans SC', sans-serif;
             background-color: #F8F7F4;
@@ -60,7 +59,7 @@
             color: #047857;
             font-weight: 500;
         }
-        
+
         .option-correct::after {
             content: "✔";
             position: absolute;
@@ -84,11 +83,49 @@
             border-radius: 4px;
         }
     </style>
+  <link rel="stylesheet" href="assets/site-ui.css">
+  <script src="assets/site-ui.js"></script>
+  <link rel="preload" href="assets/fonts/noven-wordmark.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/fonts/noven-ui.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/fonts/noven-editorial-title.ttf" as="font" type="font/ttf" crossorigin>
 </head>
-<body class="pb-24">
+<body class="pb-24 site-ui" data-site-section="practice" data-site-page="exam-paper">
+<!-- SITE SHELL START -->
+<a class="site-skip" href="#site-page-start">跳到正文</a>
+<div class="site-shell">
+  <nav class="site-navbar" aria-label="主导航">
+    <span class="site-glass-optics" aria-hidden="true"></span>
+    <a class="site-brand" href="index.html" aria-label="Noven 心理学学习系统首页">
+      <span><span class="site-brand-name">Noven</span><span class="site-brand-caption">心理学学习系统</span></span>
+    </a>
+    <div class="site-nav-links"><a href="index.html">总览</a>
+<a href="undergraduate/index.html">本科课程</a>
+<a href="考研全攻略.html">考研备考</a>
+<a href="刷题.html" aria-current="page">练习题库</a>
+<a href="psychology40/index.html">研究探索</a></div>
+    <div class="site-nav-actions">
+      <a class="site-calendar" href="个人日历.html" aria-label="个人日历"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="4"/><path d="M8 3v4m8-4v4M4 11h16m-10 5h4"/></svg><span>日历</span></a>
+      <details class="site-menu">
+        <summary class="site-menu-toggle" aria-label="更多导航" aria-expanded="false" aria-controls="site-menu-panel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14M5 16h14"/></svg></summary>
+        <div class="site-menu-panel" id="site-menu-panel">
+          <div class="site-mobile-links"><span class="site-menu-label">学习空间</span><a href="index.html">总览</a>
+<a href="undergraduate/index.html">本科课程</a>
+<a href="考研全攻略.html">考研备考</a>
+<a href="刷题.html" aria-current="page">练习题库</a>
+<a href="psychology40/index.html">研究探索</a><div class="site-menu-divider"></div></div>
+          <span class="site-menu-label">发现与规划</span><a href="article.html?id=review">学习方法<small>文章与复习方法</small></a>
+<a href="备考时间线.html">备考时间线<small>按阶段安排复习</small></a>
+<a href="资源合辑.html">资源合辑<small>常用资料与学习资源</small></a>
+        </div>
+      </details>
+    </div>
+  </nav>
+</div>
+<div class="site-page-anchor" id="site-page-start" tabindex="-1"></div>
+<!-- SITE SHELL END -->
 
     <!-- Sticky Header -->
-    <header class="sticky-header px-6 py-4 flex justify-between items-center shadow-sm">
+    <header class="site-context-bar sticky-header px-6 py-4 flex justify-between items-center shadow-sm">
         <div class="flex items-center gap-4">
             <a href="刷题.html" class="text-slate-500 hover:text-slate-800 transition-colors flex items-center gap-1">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -98,7 +135,7 @@
             </a>
             <h1 class="font-bold text-lg text-slate-800">2024年真题 - 答案解析</h1>
         </div>
-        
+
         <div class="text-sm text-slate-500">
             共 <span id="total-questions" class="font-bold text-slate-800">0</span> 题
         </div>
@@ -113,7 +150,7 @@
         const examData = [...examDataPart1, ...examDataPart2];
         const container = document.getElementById('analysis-container');
         const userAnswers = JSON.parse(localStorage.getItem('2024_exam_answers') || '{}');
-        
+
         // Update total count
         document.getElementById('total-questions').textContent = examData.length;
 
@@ -121,18 +158,18 @@
             const questionCard = document.createElement('div');
             questionCard.className = 'question-card';
             questionCard.id = `q${item.id}`;
-            
+
             let userAnswer = userAnswers[item.id];
             let isCorrect = false;
             let optionsHtml = '';
-            
+
             if (item.type === 'single') {
                 isCorrect = userAnswer === item.answer;
                 optionsHtml = item.options.map(opt => {
                     const optVal = opt.charAt(0);
                     let className = 'option-label flex items-center p-3 rounded-lg border border-slate-200 mb-2';
                     let iconHtml = '';
-                    
+
                     // Highlight correct answer
                     if (optVal === item.answer) {
                         className = 'option-label flex items-center p-3 rounded-lg border border-emerald-500 bg-emerald-50 mb-2';
@@ -143,28 +180,28 @@
                         className = 'option-label flex items-center p-3 rounded-lg border border-red-500 bg-red-50 mb-2';
                         iconHtml = '<span class="ml-auto text-red-600 font-bold">✘</span>';
                     }
-                    
+
                     return `<div class="${className}">
                                 <span class="text-slate-700 font-medium mr-2">${opt}</span>
                                 ${iconHtml}
                             </div>`;
                 }).join('');
-                
+
             } else if (item.type === 'multi') {
                 // userAnswer is array for multi
                 const userArr = Array.isArray(userAnswer) ? userAnswer : [];
                 const correctArr = item.answer; // Array
-                
+
                 // Check correctness (arrays must match exactly)
                 const userStr = [...userArr].sort().join('');
                 const correctStr = [...correctArr].sort().join('');
                 isCorrect = userStr === correctStr;
-                
+
                 optionsHtml = item.options.map(opt => {
                     const optVal = opt.charAt(0);
                     let className = 'option-label flex items-center p-3 rounded-lg border border-slate-200 mb-2';
                     let iconHtml = '';
-                    
+
                     if (correctArr.includes(optVal)) {
                          className = 'option-label flex items-center p-3 rounded-lg border border-emerald-500 bg-emerald-50 mb-2';
                          iconHtml = '<span class="ml-auto text-emerald-600 font-bold">✔</span>';
@@ -172,7 +209,7 @@
                          className = 'option-label flex items-center p-3 rounded-lg border border-red-500 bg-red-50 mb-2';
                          iconHtml = '<span class="ml-auto text-red-600 font-bold">✘</span>';
                     }
-                    
+
                     return `<div class="${className}">
                                 <span class="text-slate-700 font-medium mr-2">${opt}</span>
                                 ${iconHtml}
@@ -187,17 +224,17 @@
                     </div>
                  `;
             }
-            
+
             // Format text
             const questionText = formatText(item.question);
             const analysisText = formatText(item.analysis);
-            
+
             // Answer Display String for summary
             let answerDisplay = '';
             if (item.type === 'single') answerDisplay = item.answer;
             else if (item.type === 'multi') answerDisplay = item.answer.join('、');
             else answerDisplay = '见解析';
-            
+
             let userAnswerDisplay = '';
             if (item.type === 'single') userAnswerDisplay = userAnswer || '未作答';
             else if (item.type === 'multi') userAnswerDisplay = (userAnswer && userAnswer.join('、')) || '未作答';
@@ -211,11 +248,11 @@
                         ${item.type === 'multi' ? '<span class="text-sm text-indigo-500 font-normal ml-2">(多选题)</span>' : ''}
                     </div>
                 </div>
-                
+
                 <div class="pl-0 sm:pl-10 mb-6">
                     ${optionsHtml}
                 </div>
-                
+
                 <div class="pl-0 sm:pl-10">
                     ${(item.type === 'single' || item.type === 'multi') ? `
                     <div class="flex flex-wrap gap-4 text-sm mb-4">
@@ -227,7 +264,7 @@
                         </div>
                     </div>
                     ` : ''}
-                    
+
                     <div class="analysis-box">
                         <h4 class="text-sm font-bold text-indigo-600 mb-2 uppercase tracking-wide flex items-center gap-2">
                              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -241,7 +278,7 @@
                     </div>
                 </div>
             `;
-            
+
             container.appendChild(questionCard);
         });
 
@@ -255,18 +292,18 @@
         // Helper: Format Text (Markdown-like)
         function formatText(text) {
             if (!text) return '';
-            
+
             let lines = text.split('\n');
             let formattedHtml = '';
             let inTable = false;
             let tableRows = [];
-            
+
             for (let i = 0; i < lines.length; i++) {
                 let line = lines[i].trim();
-                
+
                 // Bold formatting
                 line = line.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
-                
+
                 // Table detection (lines starting and ending with |)
                 if (line.startsWith('|') && line.endsWith('|')) {
                     if (!inTable) {
@@ -284,22 +321,22 @@
                     formattedHtml += line + '<br>';
                 }
             }
-            
+
             if (inTable) {
                 formattedHtml += renderTable(tableRows);
             }
-            
+
             return formattedHtml;
         }
 
         function renderTable(rows) {
             if (rows.length === 0) return '';
-            
+
             let html = '<div class="overflow-x-auto my-4"><table class="min-w-full border-collapse border border-slate-300 text-sm text-left">';
-            
+
             // Check for separator
             let bodyStartIndex = 0;
-            
+
             if (rows.length > 1 && rows[1].includes('---')) {
                 // Header row
                 const headerCells = rows[0].split('|').slice(1, -1);
@@ -312,7 +349,7 @@
             } else {
                 bodyStartIndex = 0; // No header detected/supported this way
             }
-            
+
             html += '<tbody>';
             for (let i = bodyStartIndex; i < rows.length; i++) {
                 const cells = rows[i].split('|').slice(1, -1);
@@ -323,7 +360,7 @@
                 html += '</tr>';
             }
             html += '</tbody></table></div>';
-            
+
             return html;
         }
     </script>

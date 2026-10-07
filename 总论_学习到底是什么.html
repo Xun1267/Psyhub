@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>总论：学习到底是什么？ - 考研手账</title>
-    
+
     <!-- 字体引入 -->
     <!-- 霞鹜文楷 LXGW WenKai Screen -->
     <link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont/style.css" media="print" onload="this.media='all'">
@@ -12,10 +12,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-    
+
     <!-- 代码高亮 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-gist.min.css">
-    
+
     <style>
         :root {
             /* 颜色变量 */
@@ -26,7 +26,7 @@
             --accent-blue: #3498db; /* 标记蓝 */
             --accent-yellow: #f1c40f; /* 荧光笔黄 */
             --line-color: rgba(0,0,0,0.08);
-            
+
             /* 字体变量 */
             --font-serif: "LXGW WenKai Screen", "Lora", serif;
             --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -61,7 +61,7 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
             transition: all 0.3s ease;
         }
-        
+
         .nav-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -79,7 +79,7 @@
             text-decoration: none;
             position: relative;
         }
-        
+
         /* 胶带装饰效果 */
         .logo::after {
             content: '';
@@ -123,7 +123,7 @@
             transition: width 0.3s ease;
             opacity: 0.6;
         }
-        
+
         .nav-item:hover::after {
             width: 100%;
         }
@@ -191,7 +191,7 @@
             transform: rotate(2deg);
             z-index: 10;
         }
-        
+
         .card-tag::before {
             content: '';
             position: absolute;
@@ -252,7 +252,7 @@
             margin-bottom: 1em;
             position: relative;
         }
-        
+
         .markdown-body h2::after {
             content: '';
             display: block;
@@ -285,15 +285,15 @@
             color: var(--text-secondary);
             border-radius: 0 8px 8px 0;
         }
-        
+
         .markdown-body ul {
             padding-left: 1.5em;
         }
-        
+
         .markdown-body li {
             margin-bottom: 0.5em;
         }
-        
+
         .markdown-body li::marker {
             color: var(--accent-red);
             font-family: var(--font-hand);
@@ -305,12 +305,12 @@
                 grid-template-columns: 1fr;
                 gap: 2rem;
             }
-            
+
             aside {
                 position: relative;
                 top: 0;
             }
-            
+
             .card-list {
                 flex-direction: row;
                 overflow-x: auto;
@@ -321,16 +321,16 @@
                 scrollbar-width: none;
                 -ms-overflow-style: none;
             }
-            
+
             .card-list::-webkit-scrollbar {
                 display: none;
             }
-            
+
             .article-card {
                 min-width: 260px;
                 scroll-snap-align: start;
             }
-            
+
             .content-area {
                 padding: 1.5rem;
                 width: 100%;
@@ -338,17 +338,48 @@
             }
         }
     </style>
+  <link rel="stylesheet" href="assets/site-ui.css">
+  <script src="assets/site-ui.js"></script>
+  <link rel="preload" href="assets/fonts/noven-wordmark.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/fonts/noven-ui.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/fonts/noven-editorial-title.ttf" as="font" type="font/ttf" crossorigin>
 </head>
-<body>
-
-<header>
-    <div class="nav-container">
-        <a href="index.html" class="logo">Daily Study</a>
-        <nav class="nav-links">
-            <!-- 导航已移除 -->
-        </nav>
+<body class="site-ui" data-site-section="reading" data-site-page="reading">
+<!-- SITE SHELL START -->
+<a class="site-skip" href="#site-page-start">跳到正文</a>
+<div class="site-shell">
+  <nav class="site-navbar" aria-label="主导航">
+    <span class="site-glass-optics" aria-hidden="true"></span>
+    <a class="site-brand" href="index.html" aria-label="Noven 心理学学习系统首页">
+      <span><span class="site-brand-name">Noven</span><span class="site-brand-caption">心理学学习系统</span></span>
+    </a>
+    <div class="site-nav-links"><a href="index.html">总览</a>
+<a href="undergraduate/index.html">本科课程</a>
+<a href="考研全攻略.html">考研备考</a>
+<a href="刷题.html">练习题库</a>
+<a href="psychology40/index.html">研究探索</a></div>
+    <div class="site-nav-actions">
+      <a class="site-calendar" href="个人日历.html" aria-label="个人日历"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="4"/><path d="M8 3v4m8-4v4M4 11h16m-10 5h4"/></svg><span>日历</span></a>
+      <details class="site-menu">
+        <summary class="site-menu-toggle" aria-label="更多导航" aria-expanded="false" aria-controls="site-menu-panel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14M5 16h14"/></svg></summary>
+        <div class="site-menu-panel" id="site-menu-panel">
+          <div class="site-mobile-links"><span class="site-menu-label">学习空间</span><a href="index.html">总览</a>
+<a href="undergraduate/index.html">本科课程</a>
+<a href="考研全攻略.html">考研备考</a>
+<a href="刷题.html">练习题库</a>
+<a href="psychology40/index.html">研究探索</a><div class="site-menu-divider"></div></div>
+          <span class="site-menu-label">发现与规划</span><a href="article.html?id=review">学习方法<small>文章与复习方法</small></a>
+<a href="备考时间线.html">备考时间线<small>按阶段安排复习</small></a>
+<a href="资源合辑.html">资源合辑<small>常用资料与学习资源</small></a>
+        </div>
+      </details>
     </div>
-</header>
+  </nav>
+</div>
+<div class="site-page-anchor" id="site-page-start" tabindex="-1"></div>
+<!-- SITE SHELL END -->
+
+
 
 <main>
     <aside>
@@ -361,7 +392,7 @@
                     <span style="margin-left: 10px;">⏱️ 10 min read</span>
                 </div>
             </div>
-            
+
             <div class="article-card" onclick="window.location.href='抄笔记_到底有没有用.html'">
                 <div class="card-tag">Methodology</div>
                 <h3 class="card-title">笔记已死？抄笔记到底有没有用</h3>
@@ -370,7 +401,7 @@
                     <span style="margin-left: 10px;">⏱️ 8 min read</span>
                 </div>
             </div>
-            
+
             <!-- 占位卡片 -->
             <div class="article-card" style="opacity: 0.6;">
                 <div class="card-tag" style="background: #e0e0e0;">Coming Soon</div>
@@ -443,15 +474,15 @@
 
 ### **1.纳入记忆**
 
-所谓“纳入”，不是说我们看过一遍、抄过一遍，或者在书上划出了重点，而是说这些内容进入了我们自己的记忆之中。  
+所谓“纳入”，不是说我们看过一遍、抄过一遍，或者在书上划出了重点，而是说这些内容进入了我们自己的记忆之中。
 
 ### **2.提取内容**
 
-所谓“提取”，是指当书不在眼前、笔记不在手边的时候，我们仍然能够把需要的内容调动出来，而不是只能在看到原文时觉得熟悉。  
+所谓“提取”，是指当书不在眼前、笔记不在手边的时候，我们仍然能够把需要的内容调动出来，而不是只能在看到原文时觉得熟悉。
 
 ### **3.重组知识**
 
-所谓“重组”，是指这些知识进入记忆之后，并不是以原来的样子被原封不动地背出来，而是根据题目的要求、表达的目的，重新组织成合适的答案。  
+所谓“重组”，是指这些知识进入记忆之后，并不是以原来的样子被原封不动地背出来，而是根据题目的要求、表达的目的，重新组织成合适的答案。
 
 ### **4.应用知识**
 
@@ -461,11 +492,11 @@
 
 这也意味着，我们对学习的判断标准需要随之改变。过去，很多学生判断自己有没有学，靠的是一些非常直观的依据：我今天看了多少页，记了多少笔记，整理了多少文档，背了多少内容。但这些都更像是在衡量你对材料做了多少加工，却不一定能说明这些知识最后是否真的留在了你这里。
 
-真正值得问的问题应该是：  
+真正值得问的问题应该是：
 
-- **这些内容有没有进入我的记忆？**  
+- **这些内容有没有进入我的记忆？**
 
-- **当我离开材料之后，我还能不能把它们提取出来？**  
+- **当我离开材料之后，我还能不能把它们提取出来？**
 
 - **我能不能根据不同的问题重新组织它们，并把它们用出去？**
 
@@ -557,7 +588,7 @@
     // 初始化渲染
     document.addEventListener('DOMContentLoaded', () => {
         const container = document.getElementById('markdown-content');
-        
+
         // 配置 marked
         marked.setOptions({
             highlight: function(code, lang) {
@@ -572,10 +603,10 @@
 
         // 渲染 Markdown
         container.innerHTML = marked.parse(markdownText);
-        
+
         // 触发代码高亮（如果上面的 highlight 选项未触发）
         hljs.highlightAll();
-        
+
         // 图片懒加载处理 (虽然本文没图，但作为通用组件需要实现)
         const images = container.querySelectorAll('img');
         images.forEach(img => {

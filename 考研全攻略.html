@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>考研全攻略 - 心理学考研学习系统</title>
+    <title>考研全攻略 - 心理学学习系统</title>
     <meta name="description" content="心理学考研全攻略，包含学硕专硕区别、考试科目详解、择校指南、备考全流程及院校汇总。">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600&family=ZCOOL+QingKe+HuangYou&display=swap');
@@ -23,7 +23,7 @@
 
         @media (prefers-color-scheme: dark) {
             /* Basic dark mode support if system prefers it, though manual toggle requested */
-            /* We will stick to the light theme as default to match reference, 
+            /* We will stick to the light theme as default to match reference,
                but variables make it easy to switch */
         }
 
@@ -92,7 +92,7 @@
             display: inline-block;
             font-weight: normal;
         }
-        
+
         h1::after {
             content: '';
             position: absolute;
@@ -241,7 +241,7 @@
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-10px); }
         }
-        
+
         .anim-icon {
             width: 40px;
             height: 40px;
@@ -261,8 +261,46 @@
             }
         }
     </style>
+  <link rel="stylesheet" href="assets/site-ui.css">
+  <script src="assets/site-ui.js"></script>
+  <link rel="preload" href="assets/fonts/noven-wordmark.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/fonts/noven-ui.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/fonts/noven-editorial-title.ttf" as="font" type="font/ttf" crossorigin>
 </head>
-<body>
+<body class="site-ui" data-site-section="exam" data-site-page="guide">
+<!-- SITE SHELL START -->
+<a class="site-skip" href="#site-page-start">跳到正文</a>
+<div class="site-shell">
+  <nav class="site-navbar" aria-label="主导航">
+    <span class="site-glass-optics" aria-hidden="true"></span>
+    <a class="site-brand" href="index.html" aria-label="Noven 心理学学习系统首页">
+      <span><span class="site-brand-name">Noven</span><span class="site-brand-caption">心理学学习系统</span></span>
+    </a>
+    <div class="site-nav-links"><a href="index.html">总览</a>
+<a href="undergraduate/index.html">本科课程</a>
+<a href="考研全攻略.html" aria-current="page">考研备考</a>
+<a href="刷题.html">练习题库</a>
+<a href="psychology40/index.html">研究探索</a></div>
+    <div class="site-nav-actions">
+      <a class="site-calendar" href="个人日历.html" aria-label="个人日历"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="4"/><path d="M8 3v4m8-4v4M4 11h16m-10 5h4"/></svg><span>日历</span></a>
+      <details class="site-menu">
+        <summary class="site-menu-toggle" aria-label="更多导航" aria-expanded="false" aria-controls="site-menu-panel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14M5 16h14"/></svg></summary>
+        <div class="site-menu-panel" id="site-menu-panel">
+          <div class="site-mobile-links"><span class="site-menu-label">学习空间</span><a href="index.html">总览</a>
+<a href="undergraduate/index.html">本科课程</a>
+<a href="考研全攻略.html" aria-current="page">考研备考</a>
+<a href="刷题.html">练习题库</a>
+<a href="psychology40/index.html">研究探索</a><div class="site-menu-divider"></div></div>
+          <span class="site-menu-label">发现与规划</span><a href="article.html?id=review">学习方法<small>文章与复习方法</small></a>
+<a href="备考时间线.html">备考时间线<small>按阶段安排复习</small></a>
+<a href="资源合辑.html">资源合辑<small>常用资料与学习资源</small></a>
+        </div>
+      </details>
+    </div>
+  </nav>
+</div>
+<div class="site-page-anchor" id="site-page-start" tabindex="-1"></div>
+<!-- SITE SHELL END -->
 
     <!-- Back Button -->
     <a href="index.html" class="back-home" accesskey="m" aria-label="返回主菜单">
@@ -274,7 +312,7 @@
 
     <div class="container">
         <!-- content from `c:\Users\12047\Desktop\考研网\考研全攻略.md` -->
-        
+
         <header class="scroll-reveal">
             <h1>心理学考研指南</h1>
             <div class="intro">
@@ -291,13 +329,13 @@
                 </svg>
                 一、你的选择
             </h2>
-            
+
             <h3>1.1 我为什么要读研？读研 vs. 工作</h3>
             <p><strong>心理学本科毕业，通常能做什么？</strong></p>
             <ul>
                 <li>心理健康教师</li>
             </ul>
-            
+
             <p><strong>一个心理学硕士学位，能为你提供什么？</strong></p>
             <ul>
                 <li><strong>成为心理咨询师：</strong> 虽然本科也可以考取相关证书，但缺乏相关的咨询和督导经历，基本很难入职，但拥有硕士学位，能够获得实践机会，积累实战经验，成为真正具有咨询能力的咨询师。</li>
@@ -308,7 +346,7 @@
 
             <h3>1.2 学硕 vs. 专硕，哪种更适合我？</h3>
             <p>心理学考研分为专硕和学硕，其中专硕又分为全日制专硕和非全日制专硕。全日制需要每个工作日都待在学校进行学业学习（绝大部分同学选这个）；非全则是周末完成学业学习，一般针对在职的同学报考。</p>
-            
+
             <div class="table-container">
                 <table>
                     <thead>
@@ -412,7 +450,7 @@
             </h2>
 
             <h3>2.1 公共课：政治 & 英语 （总分各100）</h3>
-            
+
             <h4>思想政治理论 （政治）</h4>
             <p><strong>考什么？</strong> 主要由五部分构成：</p>
             <ol>
@@ -451,10 +489,10 @@
             </ol>
 
             <h3>2.2 专业课：心理学的核心战场 （总分300）</h3>
-            
+
             <h4>详解“312心理学专业基础综合” （统考）</h4>
             <p>如果你考的是采用312统考的学硕，那么恭喜你，你的复习范围非常明确。它主要考察以下七门学科：</p>
-            
+
             <div class="table-container">
                 <table>
                     <thead>
@@ -661,7 +699,7 @@
 
         <section class="scroll-reveal">
             <h2>附录</h2>
-            
+
             <h3>1. 学硕院校汇总</h3>
             <div class="table-container">
                 <table>

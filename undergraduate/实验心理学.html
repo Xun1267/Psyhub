@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>实验心理学 - PsyHub</title>
+    <title>实验心理学 - Noven</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="glassmorphism.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,19 +25,51 @@
         .toc-list { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
         .toc-list a { text-decoration: none; color: #111; font-family: 'SimSun','宋体','Noto Serif SC',serif; padding: 0.4rem 0.6rem; border-radius: 12px; background: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.6); }
         .toc-list a:hover { background: rgba(255,255,255,0.9); }
-        
+
     </style>
   <link rel="stylesheet" href="psyhub-theme.css">
+  <link rel="stylesheet" href="../assets/site-ui.css">
+  <script src="../assets/site-ui.js"></script>
+  <link rel="preload" href="../assets/fonts/noven-wordmark.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="../assets/fonts/noven-ui.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="../assets/fonts/noven-editorial-title.ttf" as="font" type="font/ttf" crossorigin>
 </head>
-<body>
+<body class="site-ui" data-site-section="courses" data-site-page="course-reader">
+<!-- SITE SHELL START -->
+<a class="site-skip" href="#site-page-start">跳到正文</a>
+<div class="site-shell">
+  <nav class="site-navbar" aria-label="主导航">
+    <span class="site-glass-optics" aria-hidden="true"></span>
+    <a class="site-brand" href="../index.html" aria-label="Noven 心理学学习系统首页">
+      <span><span class="site-brand-name">Noven</span><span class="site-brand-caption">心理学学习系统</span></span>
+    </a>
+    <div class="site-nav-links"><a href="../index.html">总览</a>
+<a href="../undergraduate/index.html" aria-current="page">本科课程</a>
+<a href="../考研全攻略.html">考研备考</a>
+<a href="../刷题.html">练习题库</a>
+<a href="../psychology40/index.html">研究探索</a></div>
+    <div class="site-nav-actions">
+      <a class="site-calendar" href="../个人日历.html" aria-label="个人日历"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="4"/><path d="M8 3v4m8-4v4M4 11h16m-10 5h4"/></svg><span>日历</span></a>
+      <details class="site-menu">
+        <summary class="site-menu-toggle" aria-label="更多导航" aria-expanded="false" aria-controls="site-menu-panel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14M5 16h14"/></svg></summary>
+        <div class="site-menu-panel" id="site-menu-panel">
+          <div class="site-mobile-links"><span class="site-menu-label">学习空间</span><a href="../index.html">总览</a>
+<a href="../undergraduate/index.html" aria-current="page">本科课程</a>
+<a href="../考研全攻略.html">考研备考</a>
+<a href="../刷题.html">练习题库</a>
+<a href="../psychology40/index.html">研究探索</a><div class="site-menu-divider"></div></div>
+          <span class="site-menu-label">发现与规划</span><a href="../article.html?id=review">学习方法<small>文章与复习方法</small></a>
+<a href="../备考时间线.html">备考时间线<small>按阶段安排复习</small></a>
+<a href="../资源合辑.html">资源合辑<small>常用资料与学习资源</small></a>
+        </div>
+      </details>
+    </div>
+  </nav>
+</div>
+<div class="site-page-anchor" id="site-page-start" tabindex="-1"></div>
+<!-- SITE SHELL END -->
 
-<nav class="psyhub-course-shell" aria-label="课程导航">
-  <a class="psyhub-course-brand" href="../index.html">PsyHub</a>
-  <div class="psyhub-course-links">
-    <a href="index.html">本科课程首页</a>
-    <a href="../index.html">返回主站</a>
-  </div>
-</nav>
+
     <a class="back-home-btn" href="index.html">🏠 返回首页</a>
     <main>
         <section class="section active">
@@ -177,7 +209,7 @@ Chapter1 实验心理学概述
 
 
 6. 实验报告的基本结构
- 
+
 ①题目
 ②作者姓名、单位
 ③摘要
@@ -188,7 +220,7 @@ Chapter1 实验心理学概述
 ⑧讨论
 ⑨结论
 ⑩参考文献
- 
+
 
 7. 指导语的标准
 （1）清楚、全面，避免使用专业术语
@@ -307,7 +339,7 @@ II 根据自变量的来源
 ①作业或任务变量：将作业或任务中的某个特征当作自变量来操纵
 ②环境自变量：发生改变的环境特征
 ③被试自变量
-（4）自变量的操纵 
+（4）自变量的操纵
 ①建立合适的操作定义
 ②确定自变量的数量及自变量的水平
 ③校准测量自变量的仪器
@@ -321,13 +353,13 @@ II 根据自变量的来源
 ③反应概率或频率
 ④反应的强度
 ⑤各种心理测验量表分数及评价者的评定分数
-（3）选择因变量指标的标准（良好因变量的特点） 
+（3）选择因变量指标的标准（良好因变量的特点）
 ①信度高：重复测量的结果的相似程度高
 ②效度高：因变量能真正反映所研究的心理现象
 ③客观，容易观察
 ④容易数量化，便于统计
 ⑤敏感性：能否精确地度量出自变量不同水平的反应变化，避免天花板和地板效应
-（4）如何精确客观地记录因变量变化 
+（4）如何精确客观地记录因变量变化
 ①建立反应的操作定义
 ②反应控制：通过指导语控制使被试反应确实发生在研究者感兴趣的因变量上
 ③校准测量因变量的仪器
@@ -551,7 +583,7 @@ D. 无法控制顺序效应
 实验组接受实验干预，控制组不接受实验干预
 （2）随机实验组-控制组前后测设计
 ①模式：
-      
+
 ②统计方法：对两组差异进行独立样本t检验
 （3）匹配组设计
 控制被试个体差异
@@ -562,14 +594,14 @@ D. 无法控制顺序效应
 （1）两水平被试内设计
 （2）多水平被试内设计
 
-3. 优缺点 
+3. 优缺点
 （1）被试间设计
- 
+
 优点：①排除各种处理条件间的干扰
-        ②被试实验任务少，易完成 
+        ②被试实验任务少，易完成
 缺点：①所需被试数量多
-        ②易出现分组偏差 
- 
+        ②易出现分组偏差
+
 （2）被试内设计
 优点：①排除被试差异
           ②节省被试，降低成本
@@ -628,10 +660,10 @@ D. 多组实验设计
 
 三、多因素实验设计
 1. 两因素完全随机设计
- 
+
 
 2. 两因素被试内设计
- 
+
 3. 混合设计
 
 4. 三因素设计
@@ -715,7 +747,7 @@ D. 只分析主效应，无需考虑交互作用
 （2）局限：要求撤销处理后被试行为能立即回归到基线水平。使用于处理效应短暂的情况，并且撤销处理设计实验伦理问题。
 （3）举例：新的训练方法能否提高足球技能
 
-5. 优缺点 
+5. 优缺点
 （1）优点：①只需要一个被试就可以验证处理和行为的因果关系
            ②比传统的被试组设计更灵活，具有可塑性
            ③结果表示简单
@@ -751,12 +783,12 @@ D. 只分析主效应，无需考虑交互作用
 3. 单组前-后测设计
 （1）特点：只有一个处理组，只给一次实验处理，但有一个前测成绩和后测成绩。
 （2）模式：
- 
+
 
 4. 单组时间序列设计
 （1）特点：对一组被试进行反复测量，然后引入一次实验处理，接着再次对被试进行反复测量，前测和后测的测量数目相等，时间间隔相等。
 （2）模式：
- 
+
 （3）优点：控制成熟效应
            降低测验效应
            减少统计回归
@@ -768,7 +800,7 @@ D. 只分析主效应，无需考虑交互作用
 5. 单组相等时间样本设计
 （1）特点：一个实验组，接受多次处理，测量多次，前测和后测的测量数目相等，时间间隔相等。
 （2）模式：
- 
+
 （3）优点：控制历史、测验、统计回归影响
 （4）缺点：外部效度低
            处理间断暴露实验目的
@@ -777,18 +809,18 @@ D. 只分析主效应，无需考虑交互作用
 6. 固定组比较设计
 （1）特点：有两个组，两组都有后测成绩，但实验组接受实验处理，二对照组不接受实验处理
 （2）模式：
- 
+
 
 7. 不相等处理对照组前后测设计
 （1）特点：有两个组，两组都有前后测成绩，且前测成绩不等，实验组接受实验处理，而对照组不接受实验处理。
 （2）模式：
- 
+
 （3）适用：适用于无法随机分组的现实场景
 
 8.不相等实验组前后测时间序列设计
 （1）特点：一个实验组和一个对照组。实验组只接受一次处理，测量多次，前测和后测的测量数目相等，时间间隔相等。对照组不接受处理外，其它测量与处理相同。
 （2）模式：
- 
+
 
 六、实验效度
 1. 内部效度
@@ -824,11 +856,11 @@ Chapter3 心理物理法
 I 习惯误差和期望误差
 ①习惯误差：在渐增系列中坚持报告无，在渐减系列中坚持报告有
 ②期望误差：在渐增系列中提前报告有，在渐减系列中提前报告无
- 
+
 ③控制方法：渐增渐减交替进行，随机选择每个序列的起点
 II 练习效应和疲劳效应
 ①检测方法：前一半次数的阈限平均值和后一半次数阈限平均值比较，进行差异显著性检验
- 
+
 ②控制方法：ABBA法，递增递减系列交替
 （3）差别感觉阈限测量
 ①每次呈现两个刺激，标准刺激不变，比较刺激有递增和递减系列
@@ -852,7 +884,7 @@ II 练习效应和疲劳效应
 ①5-7个距离相等的刺激，每个刺激呈现不少于50次
 ②被试被告有或无
 ③直线内插法：
- 
+
 ④平均Z分数法：将结果的p值转换为Z分数，求前三次和后三次的平均Z分数，使用两次S=S₀+Z·SD求出S₀
 （2）差别感觉阈限测量
 ①比较刺激时在标准刺激上下一段距离内的5-7个距离相等的刺激点
@@ -909,7 +941,7 @@ II 练习效应和疲劳效应
 1. 信号检测论的优势
 区分开辨别力和反应标准
 2. 信号和噪音
- 
+
 
 3. 感觉辨别力指数d’
 （1）含义：指个体的感觉辨别能力，变现为噪音分布和信号分布之间的分离程度
@@ -925,7 +957,7 @@ II 练习效应和疲劳效应
 5. ROC曲线（接受者操作特征曲线）
 （1）含义：当辨别力（感受性）恒定，被试在不同判断标准下，以判断结果的虚报率为横坐标，以击中率为纵坐标绘制的曲线
 （2）特征：
- 
+
 ①ROC曲线上的各点反映了被试在不同判断标准时的虚报率和击中率变化
 ②对于一条特定的ROC曲线来说，辨别力时恒定的，所以也叫等感受性曲线
 ③对角线代表辨别力等于0的一条线，也叫机遇线

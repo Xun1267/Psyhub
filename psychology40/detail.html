@@ -18,9 +18,47 @@
     .ps40-detail__chip { border:1px solid #e2e8f0; border-radius:999px; padding:6px 10px; font-size:12px; background:#fff; cursor:grab; }
     .dark body { background:#0b0f19; color:#e5e7eb; }
   </style>
+  <link rel="stylesheet" href="../assets/site-ui.css">
+  <script src="../assets/site-ui.js"></script>
+  <link rel="preload" href="../assets/fonts/noven-wordmark.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="../assets/fonts/noven-ui.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="../assets/fonts/noven-editorial-title.ttf" as="font" type="font/ttf" crossorigin>
 </head>
-<body>
-  <header class="ps40-detail__header px-6 py-4">
+<body class="site-ui" data-site-section="research" data-site-page="research">
+<!-- SITE SHELL START -->
+<a class="site-skip" href="#site-page-start">跳到正文</a>
+<div class="site-shell">
+  <nav class="site-navbar" aria-label="主导航">
+    <span class="site-glass-optics" aria-hidden="true"></span>
+    <a class="site-brand" href="../index.html" aria-label="Noven 心理学学习系统首页">
+      <span><span class="site-brand-name">Noven</span><span class="site-brand-caption">心理学学习系统</span></span>
+    </a>
+    <div class="site-nav-links"><a href="../index.html">总览</a>
+<a href="../undergraduate/index.html">本科课程</a>
+<a href="../考研全攻略.html">考研备考</a>
+<a href="../刷题.html">练习题库</a>
+<a href="../psychology40/index.html" aria-current="page">研究探索</a></div>
+    <div class="site-nav-actions">
+      <a class="site-calendar" href="../个人日历.html" aria-label="个人日历"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="4"/><path d="M8 3v4m8-4v4M4 11h16m-10 5h4"/></svg><span>日历</span></a>
+      <details class="site-menu">
+        <summary class="site-menu-toggle" aria-label="更多导航" aria-expanded="false" aria-controls="site-menu-panel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14M5 16h14"/></svg></summary>
+        <div class="site-menu-panel" id="site-menu-panel">
+          <div class="site-mobile-links"><span class="site-menu-label">学习空间</span><a href="../index.html">总览</a>
+<a href="../undergraduate/index.html">本科课程</a>
+<a href="../考研全攻略.html">考研备考</a>
+<a href="../刷题.html">练习题库</a>
+<a href="../psychology40/index.html" aria-current="page">研究探索</a><div class="site-menu-divider"></div></div>
+          <span class="site-menu-label">发现与规划</span><a href="../article.html?id=review">学习方法<small>文章与复习方法</small></a>
+<a href="../备考时间线.html">备考时间线<small>按阶段安排复习</small></a>
+<a href="../资源合辑.html">资源合辑<small>常用资料与学习资源</small></a>
+        </div>
+      </details>
+    </div>
+  </nav>
+</div>
+<div class="site-page-anchor" id="site-page-start" tabindex="-1"></div>
+<!-- SITE SHELL END -->
+  <header class="site-context-bar ps40-detail__header px-6 py-4">
     <div class="max-w-5xl mx-auto flex items-center justify-between">
       <nav class="text-sm text-slate-600">
         <a href="../index.html" class="hover:text-slate-900">首页</a>
@@ -80,11 +118,13 @@
       return /^\d{3}$/.test(seg)?seg:null;
     }
     function findItem(slug){ return psych40Data.find(x=>x.slug===slug); }
-    function goTo(slug){ history.pushState({id:slug},'', `/psychology40/${slug}`); location.search = `?id=${slug}`; }
+    function goTo(slug){ location.href = `detail.html?id=${encodeURIComponent(slug)}`; }
+    (() => {
     const slug = getIdFromUrl();
     const item = findItem(slug);
     if(!item){
-      location.href = '404.html';
+      location.replace('404.html');
+      return;
     }
     document.getElementById('crumb-title').textContent = item.title;
     document.getElementById('title').textContent = item.title;
@@ -93,7 +133,7 @@
       // Hide default header for process block to use custom numbered header
        const processHeader = document.getElementById('processBlock').querySelector('h2');
        if(processHeader) processHeader.style.display = 'none';
- 
+
        // Rename SVG header to continue numbering
        const svgHeader = document.getElementById('svgBlock').querySelector('h2');
        if(svgHeader) {
@@ -153,10 +193,10 @@
       document.getElementById('lead').innerHTML = `本页为统一模板示例。可在后台以 Markdown+短代码录入导语。`;
       document.getElementById('process').innerHTML = `<div>步骤描述区块可按后台配置拆分。</div>`;
     }
-    
+
     // SVG and Split Brain logic
     document.getElementById('svgBox').innerHTML = `<svg viewBox="0 0 120 40" class="w-full h-24"><circle cx="20" cy="20" r="12" fill="#6366f1"></circle><rect x="50" y="8" width="60" height="24" rx="6" fill="#94a3b8"></rect></svg>`;
-    
+
     // Load Split Brain Experiment if slug is 001
     if(item.slug === '001') {
       const script = document.createElement('script');
@@ -176,7 +216,7 @@
         <h2 class="text-xl font-bold mb-4">4. 原理解释</h2>
         <p class="mb-4 text-base leading-relaxed">在刚才的交互演示中，你可能会发现：当刺激物（如锤子）出现在被试的左视野时，他明明嘴上回答“我什么都没看见”，但如果让他遮住眼睛用左手去摸，却能精准地抓取该物品。</p>
         <p class="mb-4 text-base leading-relaxed">这种反差主要是因为连接左右脑的桥梁（胼胝体）被切断了，负责说话的左脑确实没收到视觉信号，而看见物品的右脑虽然是个“哑巴”，却掌握着左手的运动控制权。 为了彻底弄懂这个现象，我们结合神经传导通路，对左右视野的两种情境分别进行严谨的机制拆解：</p>
-        
+
         <div class="mt-6">
           <h3 class="text-lg font-bold mb-2 text-indigo-700">情境一：刺激呈现于右视野</h3>
           <div class="pl-4 border-l-4 border-indigo-200 mb-6">
@@ -205,7 +245,7 @@
         insightBlock.innerHTML = `
           <h2 class="text-xl font-bold mb-4">5. 结论</h2>
           <p class="mb-4 text-base leading-relaxed">通过斯佩里与其学生加扎尼加等人的系列裂脑研究，心理学界和认知神经科学界得出了几个具有里程碑意义的结论，彻底重塑了我们对人类大脑的认知：</p>
-          
+
           <div class="space-y-6">
               <div>
                   <h3 class="font-bold text-lg text-slate-800 mb-2">1. 大脑机能偏侧化</h3>
@@ -233,7 +273,7 @@
         critiqueSection.innerHTML = `
           <h2 class="text-xl font-bold mb-4">6. 批评与反思</h2>
           <p class="mb-4 text-base text-slate-700 leading-relaxed">多年来，学术界极少对斯佩里和加扎尼加等人在裂脑研究中得出的“大脑机能偏侧化”硬核生理数据产生质疑。然而，真正的批评与反思，集中在这些科学发现如何向大众文化与传媒传播的过程中。</p>
-          
+
           <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-6 rounded-r-lg">
               <p class="text-base text-red-800 font-medium mb-2">公众语境中的误读</p>
               <p class="text-sm text-red-700">“左右脑分工”被过度简化和夸大。如今，一种缺乏科学依据的说法被广泛接受：即人们可以被粗暴地划分为“左脑型人”（理智、逻辑）或“右脑型人”（感性、创造），甚至市面上充斥着大量宣称“开发特定半脑以提高某项技能”的伪科学训练法。</p>
@@ -263,7 +303,7 @@
           </div>
 
           <p class="text-base text-slate-700 leading-relaxed mb-4">事实上，几乎没有任何一项复杂的人类活动是仅凭大脑的某一个半球就能独立完成的。正如利维（1985）所强调的那样：</p>
-          
+
           <blockquote class="text-lg font-serif italic text-slate-600 border-l-4 border-slate-300 pl-4 py-2 my-4 bg-white/50">
               “那种流行的神话只是一种解释和愿望，并不是科学家的客观发现。正常人不会只有半个脑，也不会有两个脑，有的只是一个分化的大脑，大脑的每个半球都具有特定的功能。”
           </blockquote>
@@ -271,7 +311,7 @@
         insightBlock.parentNode.insertBefore(critiqueSection, insightBlock.nextSibling);
       }
     }
-    
+
     const quiz = document.getElementById('quiz');
     if(quiz) {
       quiz.innerHTML = `
@@ -299,7 +339,7 @@
     document.getElementById('prevBtn').onclick = ()=>goTo(prevSlug(item.slug));
     document.getElementById('nextBtn').onclick = ()=>goTo(nextSlug(item.slug));
     document.getElementById('dark-toggle').onclick = ()=>{ document.body.classList.toggle('dark'); };
-    window.onpopstate = (e)=>{ if(e.state?.id) location.search = `?id=${e.state.id}`; };
+    })();
   </script>
 </body>
 </html>

@@ -114,7 +114,7 @@
 
         .title { font-size: 26px; font-weight: 800; fill: var(--text-main); letter-spacing: 1px; }
         .item { font-size: 18px; fill: var(--text-sub); transition: all 0.3s ease; }
-        
+
         .item-group { cursor: pointer; }
         .item-group:hover .item { fill: var(--hover-blue); font-weight: 600; transform: translateX(6px); }
         .item-group:hover .bullet { fill: var(--hover-blue); r: 7; stroke: rgba(9, 132, 227, 0.2); stroke-width: 4; }
@@ -135,7 +135,7 @@
             animation: fadeIn 0.5s ease-out;
             padding-top: 20px;
         }
-        
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .linear-timeline {
@@ -278,7 +278,7 @@
             color: var(--text-sub);
             transition: color 0.2s;
         }
-        
+
         .h-content-list li:last-child { margin-bottom: 0; }
 
         .h-content-list li::before {
@@ -307,40 +307,40 @@
 
     /* 响应式调整 */
         @media (max-width: 768px) {
-            body { 
-                padding: 15px 10px; 
+            body {
+                padding: 15px 10px;
                 background-color: #f0f2f5; /* 略微加深背景增加对比 */
             }
-            .timeline-container { 
-                padding: 25px 15px 30px 15px; 
+            .timeline-container {
+                padding: 25px 15px 30px 15px;
                 border-radius: 16px;
                 min-height: auto;
                 box-shadow: 0 5px 20px rgba(0,0,0,0.03);
             }
-            
+
             /* 顶部交互区域优化 */
-            .view-toggle { 
-                margin-bottom: 30px; 
+            .view-toggle {
+                margin-bottom: 30px;
                 margin-top: 50px; /* 增加顶部间距给返回按钮 */
                 gap: 10px;
-            } 
-            .view-toggle button { 
-                padding: 10px 16px; 
-                font-size: 14px; 
+            }
+            .view-toggle button {
+                padding: 10px 16px;
+                font-size: 14px;
                 flex: 1; /* 按钮均分宽度 */
                 white-space: nowrap;
             }
-            
-            .back-home { 
-                top: 15px; 
-                left: 15px; 
+
+            .back-home {
+                top: 15px;
+                left: 15px;
                 padding: 8px 14px; /* 增大点击区域 */
-                font-size: 13px; 
+                font-size: 13px;
                 background: white;
                 box-shadow: 0 2px 8px rgba(0,0,0,0.05);
             }
             .back-home svg { width: 16px; height: 16px; }
-            
+
             /* 横向时间轴移动端优化 */
             .linear-timeline {
                 overflow-x: auto;
@@ -357,12 +357,12 @@
                 box-sizing: content-box; /* 确保 padding 不包含在 width 内 */
             }
             .linear-timeline::-webkit-scrollbar { display: none; } /* Chrome 隐藏滚动条 */
-            
+
             /* 修正移动端 flex 布局 */
             .segment {
                 flex: 0 0 auto !important;
             }
-            
+
             /* 调整移动端各阶段宽度，确保文字不折行 */
             .segment[data-target="content-stage1"] { width: 110px; }
             .segment[data-target="content-stage2"] { width: 180px; }
@@ -392,7 +392,7 @@
                 border-radius: 12px;
                 /* 增大文字尺寸，充分利用空间 */
             }
-            
+
             .h-content-list li {
                 font-size: 16px; /* 进一步增大正文 */
                 line-height: 1.6; /* 增加行距 */
@@ -404,17 +404,17 @@
             #view-vertical {
                 margin-top: -50px; /* 向上偏移，减少空白 */
             }
-            
+
             /* 纵向SVG视图字体进一步优化 */
-            #view-vertical svg text.title { 
+            #view-vertical svg text.title {
                 font-size: 36px; /* 再次放大标题 */
                 font-weight: bold;
-            } 
-            #view-vertical svg text.item { 
+            }
+            #view-vertical svg text.item {
                 font-size: 28px; /* 再次放大列表项 */
-            } 
+            }
             #view-vertical svg .bullet { r: 10; } /* 进一步放大圆点 */
-            
+
             /* 调整SVG视口宽度以适应屏幕 */
             #view-vertical svg {
                 min-height: 800px;
@@ -422,11 +422,49 @@
             }
         }
     </style>
+  <link rel="stylesheet" href="assets/site-ui.css">
+  <script src="assets/site-ui.js"></script>
+  <link rel="preload" href="assets/fonts/noven-wordmark.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/fonts/noven-ui.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/fonts/noven-editorial-title.ttf" as="font" type="font/ttf" crossorigin>
 </head>
-<body>
+<body class="site-ui" data-site-section="exam" data-site-page="timeline">
+<!-- SITE SHELL START -->
+<a class="site-skip" href="#site-page-start">跳到正文</a>
+<div class="site-shell">
+  <nav class="site-navbar" aria-label="主导航">
+    <span class="site-glass-optics" aria-hidden="true"></span>
+    <a class="site-brand" href="index.html" aria-label="Noven 心理学学习系统首页">
+      <span><span class="site-brand-name">Noven</span><span class="site-brand-caption">心理学学习系统</span></span>
+    </a>
+    <div class="site-nav-links"><a href="index.html">总览</a>
+<a href="undergraduate/index.html">本科课程</a>
+<a href="考研全攻略.html" aria-current="page">考研备考</a>
+<a href="刷题.html">练习题库</a>
+<a href="psychology40/index.html">研究探索</a></div>
+    <div class="site-nav-actions">
+      <a class="site-calendar" href="个人日历.html" aria-label="个人日历"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="4"/><path d="M8 3v4m8-4v4M4 11h16m-10 5h4"/></svg><span>日历</span></a>
+      <details class="site-menu">
+        <summary class="site-menu-toggle" aria-label="更多导航" aria-expanded="false" aria-controls="site-menu-panel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14M5 16h14"/></svg></summary>
+        <div class="site-menu-panel" id="site-menu-panel">
+          <div class="site-mobile-links"><span class="site-menu-label">学习空间</span><a href="index.html">总览</a>
+<a href="undergraduate/index.html">本科课程</a>
+<a href="考研全攻略.html" aria-current="page">考研备考</a>
+<a href="刷题.html">练习题库</a>
+<a href="psychology40/index.html">研究探索</a><div class="site-menu-divider"></div></div>
+          <span class="site-menu-label">发现与规划</span><a href="article.html?id=review">学习方法<small>文章与复习方法</small></a>
+<a href="备考时间线.html">备考时间线<small>按阶段安排复习</small></a>
+<a href="资源合辑.html">资源合辑<small>常用资料与学习资源</small></a>
+        </div>
+      </details>
+    </div>
+  </nav>
+</div>
+<div class="site-page-anchor" id="site-page-start" tabindex="-1"></div>
+<!-- SITE SHELL END -->
 
 <div class="timeline-container">
-    
+
     <!-- 返回首页 -->
     <a href="index.html" class="back-home">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -543,7 +581,7 @@
 
     <!-- 视图 2：新增的横向悬浮展开版本 -->
     <div id="view-horizontal" style="display: none;">
-        
+
         <!-- 直线时间轴 UI -->
         <div class="linear-timeline">
             <!-- 阶段1 (按时间跨度分配 flex 宽度) -->
@@ -553,14 +591,14 @@
                 <div class="node" style="left: 0;"><span class="node-text">起步</span></div>
                 <div class="node" style="left: 100%;"><span class="node-text">3月</span></div>
             </div>
-            
+
             <!-- 阶段2 -->
             <div class="segment" data-target="content-stage2" style="flex: 4;">
                 <div class="segment-line"></div>
                 <div class="segment-label">基础阶段</div>
                 <div class="node" style="left: 100%;"><span class="node-text">7月</span></div>
             </div>
-            
+
             <!-- 阶段3 (包含了7-8月和8-9月，8月在这个线段的中间) -->
             <div class="segment" data-target="content-stage3" style="flex: 2;">
                 <div class="segment-line"></div>
@@ -568,7 +606,7 @@
                 <div class="node" style="left: 50%;"><span class="node-text">8月</span></div>
                 <div class="node" style="left: 100%;"><span class="node-text">9月</span></div>
             </div>
-            
+
             <!-- 阶段4 (包含了9-10月和10-11月) -->
             <div class="segment" data-target="content-stage4" style="flex: 2;">
                 <div class="segment-line"></div>
@@ -576,7 +614,7 @@
                 <div class="node" style="left: 50%;"><span class="node-text">10月</span></div>
                 <div class="node" style="left: 100%;"><span class="node-text">11月</span></div>
             </div>
-            
+
             <!-- 阶段5 -->
             <div class="segment" data-target="content-stage5" style="flex: 1.5;">
                 <div class="segment-line"></div>
@@ -587,7 +625,7 @@
 
         <!-- 悬浮展示的内容区 -->
         <div class="content-display-area">
-            
+
             <div class="h-content-item active" id="content-stage1">
                 <ul class="h-content-list">
                     <li>坚定考研意向</li>

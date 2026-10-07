@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PsyHub - 个人备考手账</title>
+    <title>Noven - 个人备考手账</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Ma+Shan+Zheng&family=ZCOOL+QingKe+HuangYou&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
@@ -37,8 +37,8 @@
 
         /* 手账本容器 */
         .journal-book {
-            box-shadow: 
-                0 20px 25px -5px rgba(0, 0, 0, 0.1), 
+            box-shadow:
+                0 20px 25px -5px rgba(0, 0, 0, 0.1),
                 0 10px 10px -5px rgba(0, 0, 0, 0.04),
                 0 0 0 1px rgba(0,0,0,0.05); /* 边框 */
             background-color: var(--paper-bg);
@@ -136,11 +136,49 @@
             }
         }
     </style>
+  <link rel="stylesheet" href="assets/site-ui.css">
+  <script src="assets/site-ui.js"></script>
+  <link rel="preload" href="assets/fonts/noven-wordmark.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/fonts/noven-ui.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/fonts/noven-editorial-title.ttf" as="font" type="font/ttf" crossorigin>
 </head>
-<body class="min-h-screen flex flex-col items-center py-8">
+<body class="min-h-screen flex flex-col items-center py-8 site-ui" data-site-section="calendar" data-site-page="calendar">
+<!-- SITE SHELL START -->
+<a class="site-skip" href="#site-page-start">跳到正文</a>
+<div class="site-shell">
+  <nav class="site-navbar" aria-label="主导航">
+    <span class="site-glass-optics" aria-hidden="true"></span>
+    <a class="site-brand" href="index.html" aria-label="Noven 心理学学习系统首页">
+      <span><span class="site-brand-name">Noven</span><span class="site-brand-caption">心理学学习系统</span></span>
+    </a>
+    <div class="site-nav-links"><a href="index.html">总览</a>
+<a href="undergraduate/index.html">本科课程</a>
+<a href="考研全攻略.html">考研备考</a>
+<a href="刷题.html">练习题库</a>
+<a href="psychology40/index.html">研究探索</a></div>
+    <div class="site-nav-actions">
+      <a class="site-calendar" href="个人日历.html" aria-label="个人日历"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="4"/><path d="M8 3v4m8-4v4M4 11h16m-10 5h4"/></svg><span>日历</span></a>
+      <details class="site-menu">
+        <summary class="site-menu-toggle" aria-label="更多导航" aria-expanded="false" aria-controls="site-menu-panel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14M5 16h14"/></svg></summary>
+        <div class="site-menu-panel" id="site-menu-panel">
+          <div class="site-mobile-links"><span class="site-menu-label">学习空间</span><a href="index.html">总览</a>
+<a href="undergraduate/index.html">本科课程</a>
+<a href="考研全攻略.html">考研备考</a>
+<a href="刷题.html">练习题库</a>
+<a href="psychology40/index.html">研究探索</a><div class="site-menu-divider"></div></div>
+          <span class="site-menu-label">发现与规划</span><a href="article.html?id=review">学习方法<small>文章与复习方法</small></a>
+<a href="备考时间线.html">备考时间线<small>按阶段安排复习</small></a>
+<a href="资源合辑.html">资源合辑<small>常用资料与学习资源</small></a>
+        </div>
+      </details>
+    </div>
+  </nav>
+</div>
+<div class="site-page-anchor" id="site-page-start" tabindex="-1"></div>
+<!-- SITE SHELL END -->
 
     <!-- 顶部导航 -->
-    <nav class="w-full max-w-6xl px-4 mb-6 flex justify-between items-center">
+    <nav class="site-context-bar w-full max-w-6xl px-4 mb-6 flex justify-between items-center">
         <a href="index.html" class="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
             <span class="font-medium">返回首页</span>
@@ -193,15 +231,13 @@
             <button onclick="formatDoc('removeFormat')" class="tool-btn p-1.5 rounded hover:bg-slate-100 text-slate-600" title="橡皮擦 (清除格式)">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
             </button>
-            <button onclick="undo()" class="tool-btn p-1.5 rounded hover:bg-slate-100 text-slate-600" title="撤销">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path></svg>
-            </button>
         </div>
     </div>
 
+    <div id="storage-warning" hidden role="alert" class="w-full max-w-6xl mb-4 rounded-xl bg-amber-50 border border-amber-200 p-4 text-sm text-amber-900"></div>
     <!-- 主体内容 -->
     <main id="journal-container" class="journal-book w-full max-w-6xl min-h-[700px] rounded-2xl flex overflow-hidden relative">
-        
+
         <!-- 左侧装订线圈 (视觉装饰) -->
         <div class="absolute left-0 top-0 bottom-0 w-8 md:w-12 z-20 flex flex-col justify-evenly py-4 pointer-events-none">
             <div class="w-full h-4 bg-gradient-to-r from-gray-400 to-gray-200 rounded-r-lg shadow-md mb-4 transform -translate-x-1"></div>
@@ -226,17 +262,33 @@
         保存成功
     </div>
 
+    <script src="assets/calendar-data.js"></script>
     <script>
         // ================= 状态管理 =================
+        const storageKey = 'psy_note_calendar_data';
+        let dataLoadError = false;
+        let originalSavedData = null;
+        function defaultData() {
+            return {schemaVersion: 1, weekly: {}, monthly: {}, habits: {}, customTimeBlocks: ["08:00 - 09:00", "09:00 - 10:00", "10:00 - 11:00", "11:00 - 12:00", "14:00 - 15:00", "15:00 - 16:00", "16:00 - 17:00", "19:00 - 20:00", "20:00 - 21:00", "21:00 - 22:00"]};
+        }
+        function loadData() {
+            try {
+                originalSavedData = localStorage.getItem(storageKey);
+                return originalSavedData === null ? defaultData() : CalendarData.validate(JSON.parse(originalSavedData));
+            } catch (error) {
+                dataLoadError = true;
+                return defaultData();
+            }
+        }
+        function showStorageWarning(message) {
+            const warning = document.getElementById('storage-warning');
+            warning.textContent = message;
+            warning.hidden = !message;
+        }
         const state = {
             currentView: 'weekly', // weekly, monthly, habits
             currentDate: new Date(),
-            data: JSON.parse(localStorage.getItem('psy_note_calendar_data')) || {
-                weekly: {}, // key: "2026-W08", value: { "0-0": "text", ... }
-                monthly: {}, // key: "2026-M02", value: { "day-1": "text", ... }
-                habits: {}, // key: "2026-M02", value: { "habit-1": { name: "", checks: [] } }
-                customTimeBlocks: ["08:00 - 09:00", "09:00 - 10:00", "10:00 - 11:00", "11:00 - 12:00", "14:00 - 15:00", "15:00 - 16:00", "16:00 - 17:00", "19:00 - 20:00", "20:00 - 21:00", "21:00 - 22:00"]
-            },
+            data: loadData(),
             history: [] // 简单的撤销栈
         };
 
@@ -245,6 +297,7 @@
         // ================= 初始化 =================
         document.addEventListener('DOMContentLoaded', () => {
             render();
+            if (dataLoadError) showStorageWarning('本地记录暂时无法读取，原始数据未改动，自动保存已暂停。请先点击“导出”保留原始文件，再导入有效备份。');
             // 自动保存监听
             document.addEventListener('input', debounce(saveData, 1000));
         });
@@ -253,7 +306,7 @@
         function render() {
             const container = document.getElementById('page-content');
             const dateRangeEl = document.getElementById('current-date-range');
-            
+
             // 动画过渡
             container.parentElement.classList.add('page-flip-next');
             setTimeout(() => container.parentElement.classList.remove('page-flip-next'), 600);
@@ -303,13 +356,13 @@
             // 生成时间行
             timeBlocks.forEach((time, rIndex) => {
                 html += `<div class="grid grid-cols-8 border-b border-slate-200 min-h-[80px]">`;
-                
+
                 // 左侧时间块 (可编辑)
                 html += `
                     <div class="p-2 border-r border-slate-300 bg-slate-50 flex items-center justify-center group relative">
-                        <div contenteditable="true" 
+                        <div contenteditable="true"
                              class="font-en-hand text-lg text-slate-600 outline-none w-full text-center"
-                             onblur="updateTimeBlock(${rIndex}, this.innerText)">${time}</div>
+                             onblur="updateTimeBlock(${rIndex}, this.innerText)">${CalendarData.escape(time)}</div>
                         <div class="absolute right-1 top-1 opacity-0 group-hover:opacity-100 cursor-pointer text-slate-400" title="编辑时间段">✎</div>
                     </div>
                 `;
@@ -319,8 +372,8 @@
                     const cellId = `${rIndex}-${cIndex}`;
                     const content = weekData[cellId] || '';
                     html += `
-                        <div class="grid-cell p-2 font-hand text-lg text-slate-800 outline-none relative" 
-                             contenteditable="true" 
+                        <div class="grid-cell p-2 font-hand text-lg text-slate-800 outline-none relative"
+                             contenteditable="true"
                              data-cell-id="${cellId}"
                              data-view="weekly"
                              data-week-id="${weekId}"
@@ -343,7 +396,7 @@
                 </div>
                 </div>
             `;
-            
+
             container.innerHTML = html;
         }
 
@@ -351,7 +404,7 @@
         function renderMonthlyView(container, year, month) {
             const monthId = `${year}-M${month}`;
             const monthData = state.data.monthly[monthId] || {};
-            
+
             const firstDay = new Date(year, month - 1, 1);
             const lastDay = new Date(year, month, 0);
             const daysInMonth = lastDay.getDate();
@@ -372,12 +425,12 @@
                 const cellId = `day-${day}`;
                 const content = monthData[cellId] || '';
                 const isToday = isSameDay(new Date(year, month-1, day), new Date());
-                
+
                 html += `
                     <div class="border-b border-r border-slate-200 p-2 relative min-h-[100px] flex flex-col group hover:bg-white transition-colors ${isToday ? 'bg-amber-50' : ''}">
                         <span class="text-sm font-en-hand ${isToday ? 'text-amber-600 font-bold' : 'text-slate-400'} mb-1">${day}</span>
-                        <div contenteditable="true" 
-                             class="flex-1 font-hand text-base outline-none placeholder-text" 
+                        <div contenteditable="true"
+                             class="flex-1 font-hand text-base outline-none placeholder-text"
                              data-cell-id="${cellId}"
                              data-view="monthly"
                              data-month-id="${monthId}"
@@ -421,7 +474,7 @@
                 html += `
                     <tr>
                         <td class="p-2 border border-slate-300">
-                            <input type="text" value="${habit.name}" 
+                            <input type="text" value="${CalendarData.escape(habit.name)}"
                                    class="w-full bg-transparent font-hand text-lg outline-none"
                                    onchange="updateHabitName('${monthId}', ${hIndex}, this.value)">
                         </td>
@@ -451,7 +504,7 @@
         }
 
         // ================= 交互逻辑 =================
-        
+
         function switchView(view) {
             state.currentView = view;
             // 更新按钮状态
@@ -487,7 +540,7 @@
             const view = el.dataset.view;
             const id = el.dataset.cellId;
             const content = el.innerHTML;
-            
+
             if (view === 'weekly') {
                 const weekId = el.dataset.weekId;
                 if (!state.data.weekly[weekId]) state.data.weekly[weekId] = {};
@@ -497,7 +550,7 @@
                 if (!state.data.monthly[monthId]) state.data.monthly[monthId] = {};
                 state.data.monthly[monthId][id] = content;
             }
-            
+
             // 简单的撤销记录 (实际生产环境需要更复杂的 Diff 算法)
             // state.history.push(JSON.parse(JSON.stringify(state.data)));
         }
@@ -545,7 +598,7 @@
         }
 
         // ================= 工具函数 =================
-        
+
         function formatDoc(cmd, value) {
             document.execCommand(cmd, false, value);
             // 保持焦点在编辑框中
@@ -561,14 +614,15 @@
             }
         }
 
-        function undo() {
-            // 简化版撤销：实际应从 history 栈中恢复
-            alert('撤销功能暂未完全实现 (需配合复杂状态栈)');
-        }
-
         function saveData() {
-            localStorage.setItem('psy_note_calendar_data', JSON.stringify(state.data));
-            showToast();
+            if (dataLoadError) return;
+            try {
+                localStorage.setItem(storageKey, JSON.stringify(state.data));
+                showStorageWarning('');
+                showToast();
+            } catch (error) {
+                showStorageWarning('暂时无法保存到浏览器。当前内容仍在页面中，请先导出备份。');
+            }
         }
 
         function showToast() {
@@ -578,7 +632,8 @@
         }
 
         function exportData() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state.data));
+            const contents = dataLoadError && originalSavedData !== null ? originalSavedData : JSON.stringify(state.data);
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(contents);
             const downloadAnchorNode = document.createElement('a');
             downloadAnchorNode.setAttribute("href", dataStr);
             downloadAnchorNode.setAttribute("download", "psynote_calendar_backup.json");
@@ -592,32 +647,56 @@
             if (!file) return;
             const reader = new FileReader();
             reader.onload = function(e) {
+                const previousData = state.data;
+                let previousRaw;
+                let written = false;
                 try {
-                    const json = JSON.parse(e.target.result);
-                    state.data = json;
-                    saveData();
+                    const candidate = CalendarData.validate(JSON.parse(e.target.result));
+                    previousRaw = localStorage.getItem(storageKey);
+                    const backup = dataLoadError ? previousRaw : JSON.stringify(previousData);
+                    if (backup !== null) localStorage.setItem(storageKey + '_before_import', backup);
+                    localStorage.setItem(storageKey, JSON.stringify(candidate));
+                    written = true;
+                    state.data = candidate;
                     render();
+                    dataLoadError = false;
+                    originalSavedData = null;
+                    showStorageWarning('');
                     alert('导入成功！');
                 } catch (err) {
-                    alert('文件格式错误，请导入有效的 JSON 备份文件。');
+                    state.data = previousData;
+                    if (written) {
+                        try {
+                            if (previousRaw === null) localStorage.removeItem(storageKey);
+                            else localStorage.setItem(storageKey, previousRaw);
+                        } catch (storageError) {
+                            dataLoadError = true;
+                            showStorageWarning('恢复原记录时遇到保存错误，自动保存已暂停。导入前备份已保留在本浏览器中。');
+                        }
+                        render();
+                    }
+                    alert('导入未完成，请选择完整的日历备份，并确认浏览器允许保存数据。现有页面记录已保留。');
+                } finally {
+                    input.value = '';
                 }
             };
+            reader.onerror = () => { input.value = ''; alert('无法读取文件，请重新选择备份。'); };
             reader.readAsText(file);
         }
 
         function getWeekInfo(d) {
             const date = new Date(d);
-            const day = date.getDay() || 7; 
+            const day = date.getDay() || 7;
             date.setHours(0, 0, 0, 0);
             date.setDate(date.getDate() + 4 - day);
             const yearStart = new Date(date.getFullYear(), 0, 1);
             const weekNo = Math.ceil((((date - yearStart) / 86400000) + 1) / 7);
-            
+
             // 计算周一日期
             const start = new Date(d);
             const currentDay = start.getDay() || 7;
             start.setDate(start.getDate() - currentDay + 1);
-            
+
             return {
                 year: date.getFullYear(),
                 weekNum: weekNo,
