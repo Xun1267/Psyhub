@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
-    
+
     <style>
         /* * 核心样式系统 - 玻璃拟态与莫兰迪色系 */
         :root {
@@ -326,7 +326,7 @@
         .question-card {
             display: none;
         }
-        
+
         .question-card.active {
             display: block;
             animation: fadeIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -369,16 +369,49 @@
         }
     </style>
   <link rel="stylesheet" href="psyhub-theme.css">
+    <script src="../assets/quiz-safety.js"></script>
+  <link rel="stylesheet" href="../assets/site-ui.css">
+  <script src="../assets/site-ui.js"></script>
+  <link rel="preload" href="../assets/fonts/noven-wordmark.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="../assets/fonts/noven-ui.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="../assets/fonts/noven-editorial-title.ttf" as="font" type="font/ttf" crossorigin>
 </head>
-<body>
+<body class="site-ui" data-site-section="courses" data-site-page="course-quiz">
+<!-- SITE SHELL START -->
+<a class="site-skip" href="#site-page-start">跳到正文</a>
+<div class="site-shell">
+  <nav class="site-navbar" aria-label="主导航">
+    <span class="site-glass-optics" aria-hidden="true"></span>
+    <a class="site-brand" href="../index.html" aria-label="Noven 心理学学习系统首页">
+      <span><span class="site-brand-name">Noven</span><span class="site-brand-caption">心理学学习系统</span></span>
+    </a>
+    <div class="site-nav-links"><a href="../index.html">总览</a>
+<a href="../undergraduate/index.html" aria-current="page">本科课程</a>
+<a href="../考研全攻略.html">考研备考</a>
+<a href="../刷题.html">练习题库</a>
+<a href="../psychology40/index.html">研究探索</a></div>
+    <div class="site-nav-actions">
+      <a class="site-calendar" href="../个人日历.html" aria-label="个人日历"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="4"/><path d="M8 3v4m8-4v4M4 11h16m-10 5h4"/></svg><span>日历</span></a>
+      <details class="site-menu">
+        <summary class="site-menu-toggle" aria-label="更多导航" aria-expanded="false" aria-controls="site-menu-panel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14M5 16h14"/></svg></summary>
+        <div class="site-menu-panel" id="site-menu-panel">
+          <div class="site-mobile-links"><span class="site-menu-label">学习空间</span><a href="../index.html">总览</a>
+<a href="../undergraduate/index.html" aria-current="page">本科课程</a>
+<a href="../考研全攻略.html">考研备考</a>
+<a href="../刷题.html">练习题库</a>
+<a href="../psychology40/index.html">研究探索</a><div class="site-menu-divider"></div></div>
+          <span class="site-menu-label">发现与规划</span><a href="../article.html?id=review">学习方法<small>文章与复习方法</small></a>
+<a href="../备考时间线.html">备考时间线<small>按阶段安排复习</small></a>
+<a href="../资源合辑.html">资源合辑<small>常用资料与学习资源</small></a>
+        </div>
+      </details>
+    </div>
+  </nav>
+</div>
+<div class="site-page-anchor" id="site-page-start" tabindex="-1"></div>
+<!-- SITE SHELL END -->
 
-<nav class="psyhub-course-shell" aria-label="课程导航">
-  <a class="psyhub-course-brand" href="../index.html">PsyHub</a>
-  <div class="psyhub-course-links">
-    <a href="index.html">本科课程首页</a>
-    <a href="../index.html">返回主站</a>
-  </div>
-</nav>
+
 
 <a class="glass-button back-home-btn" href="#">🏠 实验心理学</a>
 
@@ -819,15 +852,16 @@
 
     // 状态管理
     let currentQuestionIndex = 0;
-    const userAnswers = new Array(questions.length).fill(null); 
-    
+    const userAnswers = new Array(questions.length).fill(null);
+
     // 初始化 DOM
     const quizArea = document.getElementById('quiz-area');
     const navDotsContainer = document.getElementById('nav-dots');
     const prevBtn = document.getElementById('prev-btn');
     const nextBtn = document.getElementById('next-btn');
-    
+
     function init() {
+        QuizSafety.showStatus(quizArea, questions);
         document.getElementById('total-count').textContent = questions.length;
         renderQuestions();
         renderNavDots();
@@ -856,7 +890,7 @@
                 `;
             });
 
-            const actionHtml = `
+            const actionHtml = !QuizSafety.hasAnswer(q) ? QuizSafety.pendingAction(q) : `
                 <button class="glass-button" id="submit-btn-${index}" onclick="submitAnswer(${index})" style="width:100%; margin-top:15px; color: white; background: var(--morandi-blue);">
                     确认答案
                 </button>
@@ -891,7 +925,7 @@
 
     window.handleOptionClick = function(qIndex, optIndex) {
         const btn = document.getElementById(`submit-btn-${qIndex}`);
-        if (btn.disabled) return;
+        if (!btn || btn.disabled) return;
 
         const q = questions[qIndex];
         const optEl = document.getElementById(`opt-${qIndex}-${optIndex}`);
@@ -907,9 +941,10 @@
 
     window.submitAnswer = function(qIndex) {
         const q = questions[qIndex];
+        if (!QuizSafety.hasAnswer(q) || userAnswers[qIndex] !== null) return;
         const card = document.getElementById(`q-card-${qIndex}`);
         const selectedEls = card.querySelectorAll('.option-item.selected');
-        
+
         if (selectedEls.length === 0) {
             alert('请先选择答案');
             return;
@@ -932,7 +967,7 @@
         } else {
             userAns = selectedIndices.sort((a, b) => a - b);
         }
-        
+
         userAnswers[qIndex] = userAns;
 
         let isCorrect = false;
@@ -944,13 +979,13 @@
 
         const feedback = document.getElementById(`feedback-${qIndex}`);
         const navDot = document.getElementById(`nav-dot-${qIndex}`);
-        
+
         feedback.classList.add('show');
         feedback.style.borderLeftColor = isCorrect ? 'var(--success-color)' : 'var(--error-color)';
-        
+
         const allOpts = card.querySelectorAll('.option-item');
         const correctIndices = Array.isArray(q.answer) ? q.answer : [q.answer];
-        
+
         correctIndices.forEach(idx => {
             allOpts[idx].classList.add('correct');
         });
@@ -973,12 +1008,12 @@
     window.jumpToQuestion = function(index) {
         document.getElementById(`q-card-${currentQuestionIndex}`).classList.remove('active');
         document.getElementById(`nav-dot-${currentQuestionIndex}`).classList.remove('active');
-        
+
         currentQuestionIndex = index;
-        
+
         document.getElementById(`q-card-${currentQuestionIndex}`).classList.add('active');
         document.getElementById(`nav-dot-${currentQuestionIndex}`).classList.add('active');
-        
+
         updateUI();
     };
 
@@ -1004,7 +1039,7 @@
 
     function updateUI() {
         document.getElementById('current-index').textContent = currentQuestionIndex + 1;
-        
+
         const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
         document.getElementById('progress-fill').style.width = `${progress}%`;
 
@@ -1040,7 +1075,7 @@
     function showResults() {
         document.getElementById('quiz-area').style.display = 'none';
         document.getElementById('result-area').style.display = 'block';
-        
+
         let score = 0;
         userAnswers.forEach((ans, idx) => {
             if (ans === null) return;
@@ -1052,76 +1087,64 @@
         });
 
         document.getElementById('final-score').textContent = score;
-        
-        const total = questions.length;
-        const acc = Math.round((score / total) * 100);
-        
+
+        const total = questions.filter(q => QuizSafety.hasAnswer(q)).length;
+        const acc = (total ? Math.round((score / total) * 100) : 0);
+
         let comment = "继续加油！";
         if (acc > 90) comment = "太棒了！掌握得非常好！";
         else if (acc > 60) comment = "基础不错，注意查漏补缺。";
-        
+
         document.getElementById('accuracy-text').innerHTML = `
-            共 ${total} 题，答对 <span style="color:var(--success-color);font-weight:bold;">${score}</span> 题<br>
+            可评分 ${total} 题（待核对 ${questions.length - total} 题），答对 <span style="color:var(--success-color);font-weight:bold;">${score}</span> 题<br>
             正确率：${acc}%<br>
             ${comment}
         `;
     }
 
-    async function appendFromMD() {
+    async function loadOriginalAnswers() {
         try {
-            const res = await fetch('实验心理学题目答案解析.md');
-            if (!res.ok) return;
-            const text = await res.text();
-            const lines = text.split(/\r?\n/);
-            const ansIdx = lines.findIndex(l => l.trim() === '答案');
-            const answerMap = new Map();
-            for (let i = (ansIdx >= 0 ? ansIdx + 1 : lines.length); i < lines.length; i++) {
-                const m = lines[i].match(/^(\d+)\.\s*([A-D])(?:\s*(.+))?/);
-                if (m) {
-                    const num = parseInt(m[1], 10);
-                    answerMap.set(num, { letter: m[2], explain: (m[3] || '').trim() });
+            const response = await fetch('实验心理学题目答案解析.md');
+            if (!response.ok) throw new Error('答案资料加载失败');
+            const lines = (await response.text()).split(/\r?\n/);
+            const answerStart = lines.findIndex(line => line.trim() === '答案');
+            if (answerStart < 0) throw new Error('未找到答案段落');
+            const sourceQuestions = new Map();
+            for (const line of lines.slice(0, answerStart)) {
+                const match = line.trim().match(/^(\d+)[.、]\s*(.+)/);
+                if (match) sourceQuestions.set(Number(match[1]), match[2]);
+            }
+            const answers = new Map();
+            for (const line of lines.slice(answerStart + 1)) {
+                const match = line.trim().match(/^(\d+)[.、]\s*([A-D])(?:\s*)(.*)$/);
+                if (!match) continue;
+                const id = Number(match[1]);
+                const entry = {answer: match[2].charCodeAt(0) - 65, analysis: match[3]};
+                if (answers.has(id)) entry.conflict = true;
+                answers.set(id, entry);
+            }
+            const normalize = value => value.replace(/\s+/g, '');
+            for (const question of questions) {
+                const entry = answers.get(question.id);
+                if (!entry) continue;
+                if (normalize(sourceQuestions.get(question.id) || '') !== normalize(question.question)) {
+                    question.reviewReason = '题干与答案资料中的题目不一致';
+                    continue;
                 }
-            }
-            const questionsToAppend = [];
-            for (let i = 0; i < (ansIdx >= 0 ? ansIdx : lines.length); i++) {
-                const qMatch = lines[i].match(/^(\d+)\.\s*(.+)/);
-                if (!qMatch) continue;
-                const id = parseInt(qMatch[1], 10);
-                if (id <= 200) continue;
-                const questionText = qMatch[2].trim();
-                const opts = [];
-                for (let k = 1; k <= 4 && i + k < lines.length; k++) {
-                    const optLine = lines[i + k];
-                    const om = optLine.match(/^[A-D]\.\s*(.+)/);
-                    if (om) {
-                        const letter = String.fromCharCode(64 + k);
-                        opts.push(`${letter}. ${om[1].trim()}`);
-                    }
+                if (entry.conflict || /部分正确/.test(entry.analysis)) {
+                    question.reviewReason = '原资料答案存在歧义';
+                    continue;
                 }
-                if (opts.length !== 4) continue;
-                const ansInfo = answerMap.get(id);
-                if (!ansInfo) continue;
-                const idxMap = { 'A': 0, 'B': 1, 'C': 2, 'D': 3 };
-                const answerIndex = idxMap[ansInfo.letter];
-                const analysisText = `【答案】${ansInfo.letter}${ansInfo.explain ? '：' + ansInfo.explain : ''}`;
-                questionsToAppend.push({
-                    id,
-                    chapter: "综合练习 (单选)",
-                    type: "single",
-                    question: questionText,
-                    options: opts,
-                    answer: answerIndex,
-                    analysis: analysisText
-                });
+                question.answer = entry.answer;
+                question.analysis = QuizSafety.escape(entry.analysis || '原资料未提供详细解析');
             }
-            if (questionsToAppend.length) {
-                questions.push(...questionsToAppend);
-            }
-        } catch (e) {}
+        } catch (error) {
+            questions.forEach(question => { question.reviewReason = '答案资料暂时无法加载，请刷新后重试'; });
+        }
     }
 
-    window.addEventListener('DOMContentLoaded', async () => {       
-        // await appendFromMD();
+    window.addEventListener('DOMContentLoaded', async () => {
+        await loadOriginalAnswers();
         const tc = document.getElementById('total-count');
         if (tc) tc.textContent = String(questions.length);
         const h1 = document.querySelector('header h1');

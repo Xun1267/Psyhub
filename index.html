@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PsyHub - 本地化心理学考研工具台</title>
+    <title>Noven · 心理学学习系统</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600&family=ZCOOL+QingKe+HuangYou&display=swap');
@@ -13,7 +13,6 @@
             background-color: #F8F7F4; /* 燕麦暖白色 */
             color: #3f3f46;
             overflow-x: hidden;
-            scroll-behavior: smooth;
         }
 
         .font-artistic {
@@ -27,15 +26,18 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background-image: 
+            background-image:
+                radial-gradient(ellipse at 5% 5%, rgba(204,227,222,.7), transparent 55%),
+                radial-gradient(ellipse at 95% 95%, rgba(226,217,243,.6), transparent 60%),
                 linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px),
                 linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px);
-            background-size: 32px 32px;
+            background-size: auto, auto, 32px 32px, 32px 32px;
             z-index: -3;
         }
 
         /* 氛围光晕 */
         .ambient-blob {
+            display: none;
             position: fixed;
             border-radius: 50%;
             filter: blur(100px);
@@ -56,25 +58,24 @@
         /* 液态毛玻璃 (Liquid Glass) */
         .liquid-glass {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.3) 100%);
-            backdrop-filter: blur(24px) saturate(160%);
-            -webkit-backdrop-filter: blur(24px) saturate(160%);
             border-top: 1px solid rgba(255, 255, 255, 1);
             border-left: 1px solid rgba(255, 255, 255, 1);
             border-right: 1px solid rgba(255, 255, 255, 0.4);
             border-bottom: 1px solid rgba(255, 255, 255, 0.4);
-            box-shadow: inset 0 0 16px rgba(255, 255, 255, 0.5), 
+            box-shadow: inset 0 0 16px rgba(255, 255, 255, 0.5),
                         0 10px 30px -10px rgba(0, 0, 0, 0.05);
         }
 
-        .card-hover { transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
+        nav > .liquid-glass { background: rgba(255,255,255,.92); backdrop-filter: blur(8px); }
+        .card-hover { transition: transform 180ms ease-out, box-shadow 180ms ease-out; }
         .card-hover:hover {
             transform: translateY(-4px);
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.5) 100%);
-            box-shadow: inset 0 0 24px rgba(255, 255, 255, 0.8), 
+            box-shadow: inset 0 0 24px rgba(255, 255, 255, 0.8),
                         0 16px 40px -12px rgba(0, 0, 0, 0.08);
         }
 
-        .btn-solid { background: #27272a; color: #ffffff; transition: all 0.3s ease; }
+        .btn-solid { background: #27272a; color: #ffffff; transition: background-color 180ms ease, transform 160ms ease-out; }
         .btn-solid:hover { background: #3f3f46; transform: scale(0.98); }
 
         /* SVG 连线动画 */
@@ -82,16 +83,12 @@
             opacity: 0;
             transform: translateY(18px) scale(0.985);
             transform-origin: center;
-            animation: svg-in 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: svg-in .25s ease-out forwards;
             animation-delay: var(--enter-delay, 0s);
-            will-change: transform, opacity;
         }
 
         .svg-bubble {
             transform-origin: center;
-            animation: node-float 8s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
-            animation-delay: calc(var(--enter-delay, 0s) + 1.45s);
-            will-change: transform;
         }
 
         .svg-node:hover .svg-bubble,
@@ -168,7 +165,7 @@
             0% { transform: translateY(0px); }
             100% { transform: translateY(-6px); }
         }
-        .svg-line { stroke-dasharray: 60; animation: dash-flow 22s linear infinite; }
+        .svg-line { stroke-dasharray: 60; }
         @keyframes dash-flow { to { stroke-dashoffset: -600; } }
 
         @keyframes svg-in {
@@ -178,7 +175,7 @@
         .page-enter {
             opacity: 0;
             transform: translateY(18px);
-            animation: page-in 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: page-in .25s ease-out forwards;
             animation-delay: var(--enter-delay, 0s);
         }
 
@@ -187,7 +184,7 @@
         }
 
         @media (prefers-reduced-motion: reduce) {
-            .page-enter, .svg-node, .svg-bubble {
+            .page-enter, .svg-node, .svg-bubble, .svg-line, .ambient-blob {
                 animation: none !important;
                 opacity: 1 !important;
                 transform: none !important;
@@ -196,9 +193,8 @@
 
         /* 滚动丝滑浮现特效 (Scroll Reveal) */
         .reveal-up {
-            opacity: 0;
-            transform: translateY(40px) scale(0.96);
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); /* 苹果级丝滑曲线 */
+            opacity: 1;
+            transform: none;
         }
         .reveal-up.active {
             opacity: 1;
@@ -210,18 +206,59 @@
 
         /* 移动端菜单过渡动画 */
         #mobile-menu {
-            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
-            max-height: 0;
-            opacity: 0;
-            overflow: hidden;
+            display: none;
         }
         #mobile-menu.open {
-            max-height: 300px; /* 足够容纳所有菜单项的高度 */
-            opacity: 1;
+            display: flex;
+            max-height: calc(100dvh - 110px);
+            overflow-y: auto;
+            overscroll-behavior: contain;
         }
+        #mobile-menu > * { flex-shrink: 0; }
+        a:focus-visible, button:focus-visible { outline: 2px solid #475569; outline-offset: 4px; }
+        @media (min-width: 1024px) { #mobile-menu.open { display: none; } }
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0s !important; } }
     </style>
+  <link rel="stylesheet" href="assets/site-ui.css">
+  <script src="assets/site-ui.js"></script>
+  <link rel="preload" href="assets/fonts/noven-wordmark.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/fonts/noven-ui.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/fonts/noven-editorial-title.ttf" as="font" type="font/ttf" crossorigin>
 </head>
-<body>
+<body class="site-ui" data-site-section="home" data-site-page="home">
+<!-- SITE SHELL START -->
+<a class="site-skip" href="#site-page-start">跳到正文</a>
+<div class="site-shell">
+  <nav class="site-navbar" aria-label="主导航">
+    <span class="site-glass-optics" aria-hidden="true"></span>
+    <a class="site-brand" href="index.html" aria-label="Noven 心理学学习系统首页">
+      <span><span class="site-brand-name">Noven</span><span class="site-brand-caption">心理学学习系统</span></span>
+    </a>
+    <div class="site-nav-links"><a href="index.html" aria-current="page">总览</a>
+<a href="undergraduate/index.html">本科课程</a>
+<a href="考研全攻略.html">考研备考</a>
+<a href="刷题.html">练习题库</a>
+<a href="psychology40/index.html">研究探索</a></div>
+    <div class="site-nav-actions">
+      <a class="site-calendar" href="个人日历.html" aria-label="个人日历"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="4"/><path d="M8 3v4m8-4v4M4 11h16m-10 5h4"/></svg><span>日历</span></a>
+      <details class="site-menu">
+        <summary class="site-menu-toggle" aria-label="更多导航" aria-expanded="false" aria-controls="site-menu-panel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14M5 16h14"/></svg></summary>
+        <div class="site-menu-panel" id="site-menu-panel">
+          <div class="site-mobile-links"><span class="site-menu-label">学习空间</span><a href="index.html" aria-current="page">总览</a>
+<a href="undergraduate/index.html">本科课程</a>
+<a href="考研全攻略.html">考研备考</a>
+<a href="刷题.html">练习题库</a>
+<a href="psychology40/index.html">研究探索</a><div class="site-menu-divider"></div></div>
+          <span class="site-menu-label">发现与规划</span><a href="article.html?id=review">学习方法<small>文章与复习方法</small></a>
+<a href="备考时间线.html">备考时间线<small>按阶段安排复习</small></a>
+<a href="资源合辑.html">资源合辑<small>常用资料与学习资源</small></a>
+        </div>
+      </details>
+    </div>
+  </nav>
+</div>
+<div class="site-page-anchor" id="site-page-start" tabindex="-1"></div>
+<!-- SITE SHELL END -->
 
     <!-- 背景层 -->
     <div class="grid-bg"></div>
@@ -230,80 +267,19 @@
     <div class="ambient-blob blob-3"></div>
 
     <!-- 导航栏 -->
-    <nav class="fixed w-full z-50 top-4 px-4 sm:px-6 flex justify-center">
-        <div class="liquid-glass w-full max-w-6xl rounded-2xl px-6 py-3 flex flex-col lg:flex-row justify-between items-center relative page-enter" style="--enter-delay: 0.05s;">
-            <div class="w-full lg:w-auto flex justify-between items-center">
-                <div class="flex items-center gap-2 font-semibold text-lg text-slate-800 tracking-tight">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-slate-700">
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                        <path d="M3 9h18M9 21V9"></path>
-                    </svg>
-                    PsyHub
-                </div>
-                
-                <!-- 移动端汉堡菜单按钮 -->
-                <button id="mobile-menu-btn" class="lg:hidden text-slate-700 focus:outline-none p-2">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
-            </div>
-            
-            <!-- 桌面端菜单 -->
-            <div class="hidden lg:flex gap-7 text-sm text-slate-600 font-medium absolute left-1/2 transform -translate-x-1/2">
-                <a href="考研全攻略.html" class="hover:text-slate-900 transition-colors">考研全攻略</a>
-                <a href="个人日历.html" class="hover:text-slate-900 transition-colors">个人日历</a>
-                <a href="资源合辑.html" class="hover:text-slate-900 transition-colors">资源合辑</a>
-                <a href="备考时间线.html" class="hover:text-slate-900 transition-colors">备考时间线</a>
-                <a href="刷题.html" class="hover:text-slate-900 transition-colors">真题刷题</a>
-                <a href="psychology40/index.html" class="hover:text-slate-900 transition-colors" title="40项心理学研究">40项心理学研究</a>
-                <a href="undergraduate/index.html" class="hover:text-slate-900 transition-colors">本科课程</a>
-            </div>
 
-            <!-- 右侧Logo/用户名 (桌面端显示) -->
-            <div class="hidden lg:flex items-center pr-2">
-                <span class="font-artistic text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-700 to-slate-500 tracking-wider cursor-default select-none relative">
-                    Xun
-                </span>
-            </div>
-
-            <!-- 移动端下拉菜单 -->
-            <div id="mobile-menu" class="w-full lg:hidden flex flex-col gap-4 text-sm text-slate-600 font-medium mt-2 items-center">
-                <div class="w-full h-px bg-slate-200/50 my-1"></div>
-                <a href="考研全攻略.html" class="hover:text-slate-900 transition-colors py-2 w-full text-center">考研全攻略</a>
-                <a href="个人日历.html" class="hover:text-slate-900 transition-colors py-2 w-full text-center">个人日历</a>
-                <a href="资源合辑.html" class="hover:text-slate-900 transition-colors py-2 w-full text-center">资源合辑</a>
-                <a href="备考时间线.html" class="hover:text-slate-900 transition-colors py-2 w-full text-center">备考时间线</a>
-                <a href="刷题.html" class="hover:text-slate-900 transition-colors py-2 w-full text-center">真题刷题</a>
-                <a href="psychology40/index.html" class="hover:text-slate-900 transition-colors py-2 w-full text-center" title="40项心理学研究">40项心理学研究</a>
-                <a href="undergraduate/index.html" class="hover:text-slate-900 transition-colors py-2 w-full text-center">本科课程</a>
-                 <div class="py-2 w-full text-center">
-                    <span class="font-artistic text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-700 to-slate-500 tracking-wider">
-                        Xun
-                    </span>
-                </div>
-            </div>
-        </div>
-    </nav>
 
     <!-- 主体区域 -->
     <main class="relative pt-32 lg:pt-36 pb-20 min-h-[85vh] flex items-center">
         <div class="max-w-6xl mx-auto px-6 w-full lg:flex lg:items-center lg:gap-16 flex-col lg:flex-row">
-            
+
             <!-- 左侧：实用导向面板 (在移动端放在下方) -->
             <div class="w-full lg:w-1/2 mb-12 lg:mb-0 mt-8 lg:mt-0 page-enter" style="--enter-delay: 0.15s;">
-                <h1 class="text-4xl sm:text-5xl lg:text-7xl font-normal text-slate-800 leading-tight mb-5 tracking-wide text-center lg:text-left" style="font-family: 'ZCOOL QingKe HuangYou', cursive;">
-                    心理学考研<br/>学习系统
-                </h1>
-                <p class="text-base text-slate-600 mb-8 max-w-md leading-relaxed mx-auto lg:mx-0 text-center lg:text-left">
-                    当前专为 312 统考设计。结构化备考指南、院校情报筛选与个人备考日历，构建你的专属复习知识库。
-                </p>
-                
-                <div class="flex flex-wrap gap-4 mb-10 justify-center lg:justify-start">
-                    <button onclick="window.location.href='备考时间线.html'" class="btn-solid px-6 py-3 rounded-xl font-medium flex items-center gap-2 shadow-lg shadow-zinc-200 text-sm sm:text-base">
-                        查看备考时间线
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                    </button>
+                <p class="site-hero-kicker">NOVEN / PSYCHOLOGY NOTES</p>
+                <h1 class="site-hero-title">心理学<br><span>学习系统</span></h1>
+                <div class="site-hero-actions">
+                    <a class="site-primary" href="undergraduate/index.html">浏览本科课程 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m9 5 7 7-7 7"/></svg></a>
+                    <a class="site-secondary" href="考研全攻略.html">开始备考 <span aria-hidden="true">↗</span></a>
                 </div>
 
                 <!-- 动态时间进度看板 -->
@@ -328,17 +304,17 @@
             <div class="w-full lg:w-1/2 flex justify-center relative mb-8 lg:mb-0 page-enter" style="--enter-delay: 0.25s;">
                 <!-- 扩大画布至600x600，并添加响应式类确保不溢出 -->
                 <svg viewBox="-24 -24 648 648" fill="none" xmlns="http://www.w3.org/2000/svg" class="relative z-10 drop-shadow-md w-full max-w-[400px] lg:max-w-[600px] h-auto mx-auto">
-                    
+
                     <!-- 自由连接线 (扩大40%间距后重新计算的坐标) -->
                     <g stroke="#cbd5e1" stroke-width="1.5" stroke-linecap="round" class="svg-line">
                         <path d="M132 104 L468 76" /> <path d="M132 104 L384 272" /> <path d="M132 104 L90 328" />
                         <path d="M384 272 L468 76" /> <path d="M384 272 L496 454" /> <path d="M384 272 L286 524" />
                         <path d="M496 454 L286 524" /> <path d="M286 524 L118 496" /> <path d="M118 496 L90 328" />
-                        <path d="M90 328 L286 524" stroke-dasharray="4 6" stroke="#e2e8f0" /> 
+                        <path d="M90 328 L286 524" stroke-dasharray="4 6" stroke="#e2e8f0" />
                     </g>
 
                     <!-- 节点大小保持极致艺术落差感，位置向外围拓展40% -->
-                    
+
                     <!-- 1. 普心 (绝对核心, 占据左上主视野) -->
                     <g class="svg-node" data-key="puxin" tabindex="0" style="--enter-delay: 0.20s;">
                         <g class="svg-bubble">
@@ -346,7 +322,7 @@
                         </g>
                         <text x="132" y="114" font-family="sans-serif" font-size="33" font-weight="600" fill="#3f3f46" text-anchor="middle">普心</text>
                     </g>
-                    
+
                     <!-- 2. 实验 (方法论核心, 中心偏右) -->
                     <g class="svg-node" data-key="shiyan" tabindex="0" style="--enter-delay: 0.30s;">
                         <g class="svg-bubble">
@@ -354,7 +330,7 @@
                         </g>
                         <text x="384" y="280" font-family="sans-serif" font-size="28" font-weight="600" fill="#52525b" text-anchor="middle">实验</text>
                     </g>
-                    
+
                     <!-- 3. 社心 (右上角外围) -->
                     <g class="svg-node" data-key="shexin" tabindex="0" style="--enter-delay: 0.40s;">
                         <g class="svg-bubble">
@@ -362,7 +338,7 @@
                         </g>
                         <text x="468" y="82" font-family="sans-serif" font-size="21" font-weight="500" fill="#71717a" text-anchor="middle">社心</text>
                     </g>
-                    
+
                     <!-- 4. 统计 (右下角拓展) -->
                     <g class="svg-node" data-key="tongji" tabindex="0" style="--enter-delay: 0.50s;">
                         <g class="svg-bubble">
@@ -370,7 +346,7 @@
                         </g>
                         <text x="496" y="462" font-family="sans-serif" font-size="27" font-weight="500" fill="#52525b" text-anchor="middle">统计</text>
                     </g>
-                    
+
                     <!-- 5. 测量 (底部深处) -->
                     <g class="svg-node" data-key="celiang" tabindex="0" style="--enter-delay: 0.60s;">
                         <g class="svg-bubble">
@@ -378,7 +354,7 @@
                         </g>
                         <text x="286" y="531" font-family="sans-serif" font-size="24" font-weight="500" fill="#71717a" text-anchor="middle">测量</text>
                     </g>
-                    
+
                     <!-- 6. 教心 (左侧外围) -->
                     <g class="svg-node" data-key="jiaoxin" tabindex="0" style="--enter-delay: 0.70s;">
                         <g class="svg-bubble">
@@ -386,7 +362,7 @@
                         </g>
                         <text x="90" y="335" font-family="sans-serif" font-size="22" font-weight="500" fill="#71717a" text-anchor="middle">教心</text>
                     </g>
-                    
+
                     <!-- 7. 发心 (左下角拓展) -->
                     <g class="svg-node" data-key="faxin" tabindex="0" style="--enter-delay: 0.80s;">
                         <g class="svg-bubble">
@@ -408,13 +384,13 @@
 
     <!-- 工具模块索引区 -->
     <section class="max-w-6xl mx-auto px-6 pb-24" id="module-section">
-        <h2 class="text-xl font-bold text-slate-800 mb-6 pl-2 border-l-4 border-slate-700 reveal-up">系统功能模块</h2>
-        
+        <h2 class="text-xl font-bold text-slate-800 mb-6 pl-2 border-l-4 border-slate-700 reveal-up">学习空间</h2>
+
 
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
-            <div class="liquid-glass rounded-2xl p-6 card-hover cursor-pointer reveal-up delay-100 h-full flex flex-col justify-between group relative overflow-hidden" onclick="window.location.href='undergraduate/index.html'">
+            <a class="liquid-glass rounded-2xl p-6 card-hover cursor-pointer reveal-up delay-100 h-full flex flex-col justify-between group relative overflow-hidden" href="undergraduate/index.html">
                 <div class="absolute top-0 right-0 w-56 h-56 bg-gradient-to-br from-emerald-50 to-cyan-50 rounded-full blur-3xl opacity-80 -translate-y-1/2 translate-x-1/3 group-hover:scale-110 transition-transform duration-700"></div>
                 <div class="relative z-10">
                     <div class="flex justify-between items-start mb-4">
@@ -430,9 +406,9 @@
                     <span class="text-[10px] font-medium text-slate-400 border border-slate-200 px-1.5 py-0.5 rounded">#课程笔记</span>
                     <span class="text-[10px] font-medium text-slate-400 border border-slate-200 px-1.5 py-0.5 rounded">#模拟试题</span>
                 </div>
-            </div>
+            </a>
 
-            <div class="liquid-glass rounded-2xl p-6 card-hover cursor-pointer reveal-up delay-100 h-full flex flex-col justify-between group relative overflow-hidden" onclick="window.location.href='psychology40/index.html'">
+            <a class="liquid-glass rounded-2xl p-6 card-hover cursor-pointer reveal-up delay-100 h-full flex flex-col justify-between group relative overflow-hidden" href="psychology40/index.html">
                 <div class="absolute top-0 right-0 w-56 h-56 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-full blur-3xl opacity-70 -translate-y-1/2 translate-x-1/3 group-hover:scale-110 transition-transform duration-700"></div>
                 <div class="relative z-10">
                     <div class="flex justify-between items-start mb-4">
@@ -448,9 +424,9 @@
                     <span class="text-[10px] font-medium text-slate-400 border border-slate-200 px-1.5 py-0.5 rounded">#互动实验</span>
                     <span class="text-[10px] font-medium text-slate-400 border border-slate-200 px-1.5 py-0.5 rounded">#认知基础</span>
                 </div>
-            </div>
+            </a>
 
-            <div class="liquid-glass rounded-2xl p-6 card-hover cursor-pointer reveal-up delay-100 h-full flex flex-col justify-between group" onclick="window.location.href='312考试大纲.html'">
+            <a class="liquid-glass rounded-2xl p-6 card-hover cursor-pointer reveal-up delay-100 h-full flex flex-col justify-between group" href="312考试大纲.html">
                 <div>
                     <div class="flex justify-between items-start mb-4">
                         <div class="w-10 h-10 rounded-xl bg-white/60 border border-white flex items-center justify-center text-slate-700">
@@ -464,9 +440,9 @@
                     <span class="text-[10px] font-medium text-slate-400 border border-slate-200 px-1.5 py-0.5 rounded">#考纲</span>
                     <span class="text-[10px] font-medium text-slate-400 border border-slate-200 px-1.5 py-0.5 rounded">#四科框架</span>
                 </div>
-            </div>
+            </a>
 
-            <div class="liquid-glass rounded-2xl p-6 card-hover cursor-pointer reveal-up delay-200 h-full flex flex-col justify-between group relative overflow-hidden" onclick="window.location.href='article.html?id=metacognition'">
+            <a class="liquid-glass rounded-2xl p-6 card-hover cursor-pointer reveal-up delay-200 h-full flex flex-col justify-between group relative overflow-hidden" href="article.html?id=metacognition">
                 <div class="absolute top-0 right-0 w-56 h-56 bg-gradient-to-br from-amber-50 to-orange-50 rounded-full blur-3xl opacity-70 -translate-y-1/2 translate-x-1/3 group-hover:scale-110 transition-transform duration-700"></div>
                 <div class="relative z-10">
                     <div class="flex justify-between items-start mb-4">
@@ -482,9 +458,9 @@
                     <span class="text-[10px] font-medium text-slate-400 border border-slate-200 px-1.5 py-0.5 rounded">#深度学习</span>
                     <span class="text-[10px] font-medium text-slate-400 border border-slate-200 px-1.5 py-0.5 rounded">#底层逻辑</span>
                 </div>
-            </div>
+            </a>
 
-            <div class="liquid-glass rounded-2xl p-6 card-hover cursor-pointer reveal-up delay-200 h-full flex flex-col justify-between group relative overflow-hidden" onclick="window.location.href='article.html?id=methodology'">
+            <a class="liquid-glass rounded-2xl p-6 card-hover cursor-pointer reveal-up delay-200 h-full flex flex-col justify-between group relative overflow-hidden" href="article.html?id=methodology">
                 <div class="absolute top-0 right-0 w-56 h-56 bg-gradient-to-br from-cyan-50 to-blue-50 rounded-full blur-3xl opacity-70 -translate-y-1/2 translate-x-1/3 group-hover:scale-110 transition-transform duration-700"></div>
                 <div class="relative z-10">
                     <div class="flex justify-between items-start mb-4">
@@ -500,9 +476,9 @@
                     <span class="text-[10px] font-medium text-slate-400 border border-slate-200 px-1.5 py-0.5 rounded">#高效笔记</span>
                     <span class="text-[10px] font-medium text-slate-400 border border-slate-200 px-1.5 py-0.5 rounded">#学习方法</span>
                 </div>
-            </div>
+            </a>
 
-            <div class="liquid-glass rounded-2xl p-6 card-hover cursor-pointer reveal-up delay-200 h-full flex flex-col justify-between group relative overflow-hidden" onclick="window.location.href='article.html?id=mindmap'">
+            <a class="liquid-glass rounded-2xl p-6 card-hover cursor-pointer reveal-up delay-200 h-full flex flex-col justify-between group relative overflow-hidden" href="article.html?id=mindmap">
                 <div class="absolute top-0 right-0 w-56 h-56 bg-gradient-to-br from-rose-50 to-pink-50 rounded-full blur-3xl opacity-70 -translate-y-1/2 translate-x-1/3 group-hover:scale-110 transition-transform duration-700"></div>
                 <div class="relative z-10">
                     <div class="flex justify-between items-start mb-4">
@@ -518,9 +494,9 @@
                     <span class="text-[10px] font-medium text-slate-400 border border-slate-200 px-1.5 py-0.5 rounded">#思维导图</span>
                     <span class="text-[10px] font-medium text-slate-400 border border-slate-200 px-1.5 py-0.5 rounded">#结构化</span>
                 </div>
-            </div>
+            </a>
 
-            <div class="liquid-glass rounded-2xl p-6 card-hover cursor-pointer reveal-up delay-200 h-full flex flex-col justify-between group relative overflow-hidden" onclick="window.location.href='article.html?id=review'">
+            <a class="liquid-glass rounded-2xl p-6 card-hover cursor-pointer reveal-up delay-200 h-full flex flex-col justify-between group relative overflow-hidden" href="article.html?id=review">
                 <div class="absolute top-0 right-0 w-56 h-56 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-full blur-3xl opacity-70 -translate-y-1/2 translate-x-1/3 group-hover:scale-110 transition-transform duration-700"></div>
                 <div class="relative z-10">
                     <div class="flex justify-between items-start mb-4">
@@ -536,7 +512,7 @@
                     <span class="text-[10px] font-medium text-slate-400 border border-slate-200 px-1.5 py-0.5 rounded">#复习</span>
                     <span class="text-[10px] font-medium text-slate-400 border border-slate-200 px-1.5 py-0.5 rounded">#提取</span>
                 </div>
-            </div>
+            </a>
 
             <div class="liquid-glass rounded-2xl p-6 card-hover cursor-pointer reveal-up delay-200 h-full flex flex-col justify-between group relative overflow-hidden" onclick="window.open('https://zuobuwan.online', '_blank')">
                 <div class="absolute top-0 right-0 w-56 h-56 bg-gradient-to-br from-sky-50 to-emerald-50 rounded-full blur-3xl opacity-70 -translate-y-1/2 translate-x-1/3 group-hover:scale-110 transition-transform duration-700"></div>
@@ -556,7 +532,7 @@
                 </div>
             </div>
 
-            <div class="liquid-glass rounded-2xl p-6 card-hover cursor-pointer reveal-up delay-200 h-full flex flex-col justify-between group relative overflow-hidden" onclick="window.location.href='考研全攻略.html'">
+            <a class="liquid-glass rounded-2xl p-6 card-hover cursor-pointer reveal-up delay-200 h-full flex flex-col justify-between group relative overflow-hidden" href="考研全攻略.html">
                 <div class="absolute top-0 right-0 w-56 h-56 bg-gradient-to-br from-purple-50 to-indigo-50 rounded-full blur-3xl opacity-70 -translate-y-1/2 translate-x-1/3 group-hover:scale-110 transition-transform duration-700"></div>
                 <div class="relative z-10">
                     <div class="flex justify-between items-start mb-4">
@@ -571,9 +547,9 @@
                 <div class="relative z-10 flex gap-2">
                     <span class="text-[10px] font-medium text-slate-400 border border-slate-200 px-1.5 py-0.5 rounded">#新手必读</span>
                 </div>
-            </div>
+            </a>
 
-            <div class="liquid-glass rounded-2xl p-6 card-hover cursor-pointer reveal-up delay-200 h-full flex flex-col justify-between group" onclick="window.location.href='个人日历.html'">
+            <a class="liquid-glass rounded-2xl p-6 card-hover cursor-pointer reveal-up delay-200 h-full flex flex-col justify-between group" href="个人日历.html">
                 <div>
                     <div class="flex justify-between items-start mb-4">
                         <div class="w-10 h-10 rounded-xl bg-white/60 border border-white flex items-center justify-center text-slate-700">
@@ -586,9 +562,9 @@
                 <div class="flex gap-2">
                     <span class="text-[10px] font-medium text-slate-400 border border-slate-200 px-1.5 py-0.5 rounded">#计划管理</span>
                 </div>
-            </div>
+            </a>
 
-            <div class="liquid-glass rounded-2xl p-6 card-hover cursor-pointer reveal-up delay-300 h-full flex flex-col justify-between group" onclick="window.location.href='资源合辑.html'">
+            <a class="liquid-glass rounded-2xl p-6 card-hover cursor-pointer reveal-up delay-300 h-full flex flex-col justify-between group" href="资源合辑.html">
                 <div>
                     <div class="flex justify-between items-start mb-4">
                         <div class="w-10 h-10 rounded-xl bg-white/60 border border-white flex items-center justify-center text-slate-700">
@@ -601,9 +577,9 @@
                 <div class="flex gap-2">
                     <span class="text-[10px] font-medium text-slate-400 border border-slate-200 px-1.5 py-0.5 rounded">#资料库</span>
                 </div>
-            </div>
+            </a>
 
-            <div class="liquid-glass rounded-2xl p-6 card-hover cursor-pointer reveal-up delay-400 h-full flex flex-col justify-between group" onclick="window.location.href='刷题.html'">
+            <a class="liquid-glass rounded-2xl p-6 card-hover cursor-pointer reveal-up delay-400 h-full flex flex-col justify-between group" href="刷题.html">
                 <div>
                     <div class="flex justify-between items-start mb-4">
                         <div class="w-10 h-10 rounded-xl bg-white/60 border border-white flex items-center justify-center text-slate-700">
@@ -616,9 +592,9 @@
                 <div class="flex gap-2">
                     <span class="text-[10px] font-medium text-slate-400 border border-slate-200 px-1.5 py-0.5 rounded">#真题练习</span>
                 </div>
-            </div>
+            </a>
 
-            <div class="liquid-glass rounded-2xl p-6 card-hover cursor-pointer reveal-up delay-400 h-full flex flex-col justify-between group relative overflow-hidden" onclick="window.location.href='章节习题.html'">
+            <a class="liquid-glass rounded-2xl p-6 card-hover cursor-pointer reveal-up delay-400 h-full flex flex-col justify-between group relative overflow-hidden" href="章节习题.html">
                 <div class="absolute top-0 right-0 w-56 h-56 bg-gradient-to-br from-emerald-50 to-lime-50 rounded-full blur-3xl opacity-80 -translate-y-1/2 translate-x-1/3 group-hover:scale-110 transition-transform duration-700"></div>
                 <div class="relative z-10">
                     <div class="flex justify-between items-start mb-4">
@@ -634,7 +610,7 @@
                     <span class="text-[10px] font-medium text-slate-400 border border-slate-200 px-1.5 py-0.5 rounded">#章节题</span>
                     <span class="text-[10px] font-medium text-slate-400 border border-slate-200 px-1.5 py-0.5 rounded">#提取练习</span>
                 </div>
-            </div>
+            </a>
         </div>
     </section>
 
@@ -643,15 +619,15 @@
         document.addEventListener('DOMContentLoaded', () => {
             const now = new Date();
             const currentYear = now.getFullYear();
-            
+
             // 设定每年的考研初试日期（通常在12月20日左右）
-            const examDate = new Date(currentYear, 11, 20); 
+            const examDate = new Date(currentYear, 11, 20);
             // 设定全年的复习起点（设定为1月1日，便于计算全年全局进度）
             const startDate = new Date(currentYear, 0, 1);
-            
+
             let targetExamDate = examDate;
             let cycleStartDate = startDate;
-            
+
             // 如果今天已经超过今年的考研日，进度条自动切换到明年
             if (now > examDate) {
                 targetExamDate = new Date(currentYear + 1, 11, 20);
@@ -660,19 +636,19 @@
 
             const totalTime = targetExamDate - cycleStartDate;
             let elapsedTime = now - cycleStartDate;
-            
+
             if (elapsedTime < 0) elapsedTime = 0;
-            
+
             let percent = (elapsedTime / totalTime) * 100;
             if (percent > 100) percent = 100;
             if (percent < 0) percent = 0;
-            
+
             const daysLeft = Math.ceil((targetExamDate - now) / (1000 * 60 * 60 * 24));
             const finalPercent = Math.round(percent);
 
             setTimeout(() => {
                 document.getElementById('progress-bar').style.width = finalPercent + '%';
-                
+
                 let current = 0;
                 if (finalPercent > 0) {
                     const interval = setInterval(() => {
@@ -684,94 +660,10 @@
                         document.getElementById('progress-text').innerText = current + '%';
                     }, 15);
                 }
-                
+
                 document.getElementById('days-left').innerText = `距初试约 ${daysLeft} 天`;
                 document.getElementById('target-year').innerText = `考研复习进度`;
             }, 300);
-        });
-
-        // 滚动动画观察器 (Intersection Observer)
-        document.addEventListener('DOMContentLoaded', () => {
-            const observerOptions = {
-                root: null,
-                rootMargin: '0px',
-                threshold: 0.15 // 元素露出 15% 时触发动画
-            };
-
-            const observer = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                        observer.unobserve(entry.target); // 动画只触发一次，避免上下滚动反复闪烁
-                    }
-                });
-            }, observerOptions);
-
-            const revealElements = document.querySelectorAll('.reveal-up');
-            revealElements.forEach(el => observer.observe(el));
-
-            // 移动端菜单控制
-            const menuBtn = document.getElementById('mobile-menu-btn');
-            const mobileMenu = document.getElementById('mobile-menu');
-
-            if (menuBtn && mobileMenu) {
-                menuBtn.addEventListener('click', () => {
-                    mobileMenu.classList.toggle('open');
-                });
-            }
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            const finePointer = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
-
-            if (prefersReducedMotion || !finePointer) return;
-
-            let targetY = window.scrollY;
-            let currentY = window.scrollY;
-            let rafId = null;
-
-            const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
-
-            const animate = () => {
-                rafId = window.requestAnimationFrame(() => {
-                    const diff = targetY - currentY;
-                    currentY += diff * 0.12;
-
-                    if (Math.abs(diff) < 0.5) {
-                        currentY = targetY;
-                        window.scrollTo(0, currentY);
-                        rafId = null;
-                        return;
-                    }
-
-                    window.scrollTo(0, currentY);
-                    animate();
-                });
-            };
-
-            window.addEventListener('wheel', (e) => {
-                if (e.ctrlKey) return;
-                if (Math.abs(e.deltaY) < 40) return;
-
-                e.preventDefault();
-
-                const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-                targetY = clamp(targetY + e.deltaY, 0, maxScroll);
-
-                if (rafId === null) animate();
-            }, { passive: false });
-
-            window.addEventListener('scroll', () => {
-                if (rafId !== null) return;
-                targetY = window.scrollY;
-                currentY = window.scrollY;
-            }, { passive: true });
-
-            window.addEventListener('resize', () => {
-                targetY = window.scrollY;
-                currentY = window.scrollY;
-            });
         });
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -835,7 +727,7 @@
                 if (y + tRect.height > wrapRect.height) {
                     y = clientY - wrapRect.top - tRect.height - 10; // 改为显示在鼠标上方
                 }
-                
+
                 // 确保不溢出左侧和顶部
                 x = Math.max(10, x);
                 y = Math.max(10, y);
@@ -852,14 +744,14 @@
                 node.classList.add('tooltip-active');
                 tooltipTitle.innerHTML = content.title; // 改为 innerHTML 以支持星星颜色
                 tooltipBody.innerHTML = content.body;
-                
+
                 // 先定位（设为 invisible 以便获取尺寸但不显示），再显示
                 tooltip.classList.add('invisible');
                 tooltip.classList.add('open');
-                
+
                 // 强制重绘以确保尺寸正确
-                tooltip.offsetHeight; 
-                
+                tooltip.offsetHeight;
+
                 positionTooltip(clientX, clientY);
                 tooltip.classList.remove('invisible');
             };

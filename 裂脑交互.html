@@ -12,19 +12,19 @@
             padding: 20px;
             background: #f5f5f5;
         }
-        
+
         .container {
             background: white;
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        
+
         h1 {
             text-align: center;
             color: #333;
         }
-        
+
         .experiment-area {
             display: flex;
             flex-direction: column;
@@ -32,7 +32,7 @@
             gap: 30px;
             margin: 30px 0;
         }
-        
+
         .items-pool {
             display: flex;
             gap: 20px;
@@ -42,35 +42,35 @@
             flex-wrap: wrap;
             justify-content: center;
         }
-        
+
         .item {
             width: 60px;
             height: 60px;
             cursor: move;
             transition: transform 0.2s;
         }
-        
+
         .item:hover {
             transform: scale(1.1);
         }
-        
+
         .item.dragging {
             opacity: 0.5;
         }
-        
+
         #experiment-svg {
             border: 2px solid #ddd;
             border-radius: 8px;
             background: white;
         }
-        
+
         .controls {
             display: flex;
             gap: 15px;
             justify-content: center;
             margin-top: 20px;
         }
-        
+
         button {
             padding: 12px 24px;
             font-size: 16px;
@@ -79,25 +79,25 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-        
+
         .test-btn {
             background: #4CAF50;
             color: white;
         }
-        
+
         .test-btn:hover {
             background: #45a049;
         }
-        
+
         .reset-btn {
             background: #f44336;
             color: white;
         }
-        
+
         .reset-btn:hover {
             background: #da190b;
         }
-        
+
         .response {
             margin-top: 20px;
             padding: 20px;
@@ -106,96 +106,134 @@
             min-height: 60px;
             display: none;
         }
-        
+
         .response.show {
             display: block;
         }
-        
+
         .response h3 {
             margin-top: 0;
             color: #856404;
         }
-        
+
         .instructions {
             background: #e3f2fd;
             padding: 15px;
             border-radius: 8px;
             margin-bottom: 20px;
         }
-        
+
         .instructions h3 {
             margin-top: 0;
             color: #1976d2;
         }
-        
+
         .drop-zone {
             cursor: pointer;
         }
     </style>
+  <link rel="stylesheet" href="assets/site-ui.css">
+  <script src="assets/site-ui.js"></script>
+  <link rel="preload" href="assets/fonts/noven-wordmark.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/fonts/noven-ui.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/fonts/noven-editorial-title.ttf" as="font" type="font/ttf" crossorigin>
 </head>
-<body>
+<body class="site-ui" data-site-section="research" data-site-page="research">
+<!-- SITE SHELL START -->
+<a class="site-skip" href="#site-page-start">跳到正文</a>
+<div class="site-shell">
+  <nav class="site-navbar" aria-label="主导航">
+    <span class="site-glass-optics" aria-hidden="true"></span>
+    <a class="site-brand" href="index.html" aria-label="Noven 心理学学习系统首页">
+      <span><span class="site-brand-name">Noven</span><span class="site-brand-caption">心理学学习系统</span></span>
+    </a>
+    <div class="site-nav-links"><a href="index.html">总览</a>
+<a href="undergraduate/index.html">本科课程</a>
+<a href="考研全攻略.html">考研备考</a>
+<a href="刷题.html">练习题库</a>
+<a href="psychology40/index.html" aria-current="page">研究探索</a></div>
+    <div class="site-nav-actions">
+      <a class="site-calendar" href="个人日历.html" aria-label="个人日历"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="4"/><path d="M8 3v4m8-4v4M4 11h16m-10 5h4"/></svg><span>日历</span></a>
+      <details class="site-menu">
+        <summary class="site-menu-toggle" aria-label="更多导航" aria-expanded="false" aria-controls="site-menu-panel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14M5 16h14"/></svg></summary>
+        <div class="site-menu-panel" id="site-menu-panel">
+          <div class="site-mobile-links"><span class="site-menu-label">学习空间</span><a href="index.html">总览</a>
+<a href="undergraduate/index.html">本科课程</a>
+<a href="考研全攻略.html">考研备考</a>
+<a href="刷题.html">练习题库</a>
+<a href="psychology40/index.html" aria-current="page">研究探索</a><div class="site-menu-divider"></div></div>
+          <span class="site-menu-label">发现与规划</span><a href="article.html?id=review">学习方法<small>文章与复习方法</small></a>
+<a href="备考时间线.html">备考时间线<small>按阶段安排复习</small></a>
+<a href="资源合辑.html">资源合辑<small>常用资料与学习资源</small></a>
+        </div>
+      </details>
+    </div>
+  </nav>
+</div>
+<div class="site-page-anchor" id="site-page-start" tabindex="-1"></div>
+<!-- SITE SHELL END -->
     <div class="container">
         <h1>🧠 裂脑实验演示</h1>
-        
+
         <div class="instructions">
             <h3>实验说明：</h3>
             <p>1. 从下方物品池中拖动物品到屏幕的左侧或右侧</p>
             <p>2. 点击"测试反应"按钮，观察被试的口头报告</p>
             <p>3. <strong>关键原理</strong>：右视野（屏幕右侧）→ 左脑 → 可以口头报告；左视野（屏幕左侧）→ 右脑 → 无法口头报告</p></div>
-        
+
         <div class="experiment-area">
             <svg id="experiment-svg" width="800" height="500" viewBox="0 0 800 500">
                 <!-- 背景 -->
                 <rect width="800" height="500" fill="#fafafa"/>
-                
+
                 <!--屏幕区域 -->
                 <rect x="150" y="50" width="500" height="200" fill="white" stroke="#333" stroke-width="3" rx="5"/>
-                
+
                 <!-- 中央注视点 -->
                 <circle cx="400" cy="150" r="8" fill="red"/>
                 <text x="400" y="185" text-anchor="middle" font-size="14" fill="#666">注视点</text>
-                
+
                 <!-- 左右视野分界线 -->
                 <line x1="400" y1="50" x2="400" y2="250" stroke="#999" stroke-width="2" stroke-dasharray="5,5"/>
-                
+
                 <!-- 左视野标签 -->
                 <text x="275" y="35" text-anchor="middle" font-size="16" fill="#666">左视野 → 右脑</text>
-                
+
                 <!-- 右视野标签 -->
                 <text x="525" y="35" text-anchor="middle" font-size="16" fill="#666">右视野 → 左脑</text>
-                
+
                 <!-- 左侧放置区-->
                 <rect id="left-drop-zone" x="170" y="70" width="210" height="160" fill="rgba(255,200,200,0.2)" stroke="rgba(255,100,100,0.5)" stroke-width="2" stroke-dasharray="5,5" rx="5" class="drop-zone"/>
                 <text x="275" y="160" text-anchor="middle" font-size="14" fill="#999" opacity="0.7">拖放物品到这里</text>
-                
+
                 <!-- 右侧放置区 -->
-                <rect id="right-drop-zone" x="420" y="70" width="210" height="160" fill="rgba(200,255,200,0.2)" 
+                <rect id="right-drop-zone" x="420" y="70" width="210" height="160" fill="rgba(200,255,200,0.2)"
                       stroke="rgba(100,255,100,0.5)" stroke-width="2" stroke-dasharray="5,5" rx="5" class="drop-zone"/>
                 <text x="525" y="160" text-anchor="middle" font-size="14" fill="#999" opacity="0.7">拖放物品到这里</text>
-                
+
                 <!-- 被试者头部 -->
                 <ellipse cx="400" cy="380" rx="80" ry="90" fill="#ffd7a8" stroke="#333" stroke-width="2"/>
-                
+
                 <!-- 大脑分割线 -->
                 <line x1="400" y1="300" x2="400" y2="450" stroke="#666" stroke-width="3"/>
-                
+
                 <!-- 左脑标签 -->
                 <text x="340" y="380" text-anchor="middle" font-size="14" fill="#333">右脑</text>
                 <text x="340" y="400" text-anchor="middle" font-size="12" fill="#666">(无语言)</text>
-                
+
                 <!-- 右脑标签 -->
                 <text x="460" y="380" text-anchor="middle" font-size="14" fill="#333">左脑</text>
                 <text x="460" y="400" text-anchor="middle" font-size="12" fill="#666">(语言中枢)</text>
-                
+
                 <!-- 眼睛 -->
                 <ellipse cx="370" cy="350" rx="12" ry="15" fill="white" stroke="#333" stroke-width="2"/>
                 <circle cx="370" cy="352" r="6" fill="#333"/>
                 <ellipse cx="430" cy="350" rx="12" ry="15" fill="white" stroke="#333" stroke-width="2"/>
                 <circle cx="430" cy="352" r="6" fill="#333"/>
-                
+
                 <!-- 嘴巴 -->
                 <path d="M 370 420 Q 400 435 430 420" stroke="#333" stroke-width="2" fill="none"/>
-                
+
                 <!-- 物品容器组 -->
                 <g id="placed-items"></g>
             </svg>
@@ -207,7 +245,7 @@
                         <text x="30" y="52" text-anchor="middle" font-size="10" fill="#333">坚果</text>
                     </svg>
                 </div>
-                
+
                 <div class="item" draggable="true" data-item="hat">
                     <svg width="60" height="60" viewBox="0 0 60 60">
                         <rect x="15" y="25" width="30" height="15" fill="#4169E1" stroke="#000" stroke-width="1.5"/>
@@ -215,7 +253,7 @@
                         <text x="30" y="52" text-anchor="middle" font-size="10" fill="#333">帽子</text>
                     </svg>
                 </div>
-                
+
                 <div class="item" draggable="true" data-item="book">
                     <svg width="60" height="60" viewBox="0 0 60 60">
                         <rect x="18" y="20" width="24" height="18" fill="#DC143C" stroke="#000" stroke-width="1.5"/>
@@ -223,7 +261,7 @@
                         <text x="30" y="52" text-anchor="middle" font-size="10" fill="#333">书</text>
                     </svg>
                 </div>
-                
+
                 <div class="item" draggable="true" data-item="cup">
                     <svg width="60" height="60" viewBox="0 0 60 60">
                         <path d="M 20 25 L 22 38 L 38 38 L 40 25 Z" fill="#FFD700" stroke="#000" stroke-width="1.5"/>
@@ -232,7 +270,7 @@
                         <text x="30" y="52" text-anchor="middle" font-size="10" fill="#333">杯子</text>
                     </svg>
                 </div>
-                
+
                 <div class="item" draggable="true" data-item="band">
                     <svg width="60" height="60" viewBox="0 0 60 60">
                         <rect x="15" y="28" width="30" height="6" rx="3" fill="#FF69B4" stroke="#000" stroke-width="1.5"/>
@@ -241,19 +279,19 @@
                         <text x="30" y="52" text-anchor="middle" font-size="10" fill="#333">发带</text>
                     </svg>
                 </div></div>
-            
+
             <div class="controls">
                 <button class="test-btn" onclick="testResponse()">🧪 测试反应</button>
                 <button class="reset-btn" onclick="resetExperiment()">🔄 重置实验</button>
             </div>
-            
+
             <div id="response" class="response">
                 <h3>被试的口头报告：</h3>
                 <p id="response-text"></p>
             </div>
         </div>
     </div>
-    
+
     <script>
         let currentItem = null;
         let itemPosition = null; // 'left' or 'right'
@@ -264,51 +302,51 @@
                 e.dataTransfer.effectAllowed = 'copy';
                 e.dataTransfer.setData('text/plain', item.dataset.item);
             });
-            
+
             item.addEventListener('dragend', (e) => {
                 item.classList.remove('dragging');
             });
         });
-        
+
         // SVG放置区域处理
         const svg = document.getElementById('experiment-svg');
         const leftZone = document.getElementById('left-drop-zone');
         const rightZone = document.getElementById('right-drop-zone');
         const placedItems = document.getElementById('placed-items');
-        
+
         function setupDropZone(zone, position) {
             zone.addEventListener('dragover', (e) => {
                 e.preventDefault();
                 e.dataTransfer.dropEffect = 'copy';
                 zone.setAttribute('fill', position === 'left' ? 'rgba(255,200,200,0.5)' : 'rgba(200,255,200,0.5)');
             });
-            
+
             zone.addEventListener('dragleave', (e) => {
                 zone.setAttribute('fill', position === 'left' ? 'rgba(255,200,200,0.2)' : 'rgba(200,255,200,0.2)');
             });
-            
+
             zone.addEventListener('drop', (e) => {
                 e.preventDefault();
                 const itemType = e.dataTransfer.getData('text/plain');
                 placeItem(itemType, position);zone.setAttribute('fill', position === 'left' ? 'rgba(255,200,200,0.2)' : 'rgba(200,255,200,0.2)');
             });
         }
-        
+
         setupDropZone(leftZone, 'left');
         setupDropZone(rightZone, 'right');
-        
+
         function placeItem(itemType, position) {
             // 清除之前的物品
             placedItems.innerHTML = '';
-            
+
             currentItem = itemType;
             itemPosition = position;
-            
+
             const x = position === 'left' ? 275 : 525;
             const y = 130;
-            
+
             let itemSVG = '';
-            
+
             switch(itemType) {
                 case 'nut':
                     itemSVG = `
@@ -352,9 +390,9 @@
                     `;
                     break;
             }
-            
+
             placedItems.innerHTML = itemSVG;
-            
+
             // 隐藏提示文字
             document.querySelectorAll('#experiment-svg text[opacity="0.7"]').forEach(text => {
                 text.style.display = 'none';
@@ -362,13 +400,13 @@
             // 隐藏之前的响应
             document.getElementById('response').classList.remove('show');
         }
-        
+
         function testResponse() {
             if (!currentItem || !itemPosition) {
                 alert('请先将物品放置到屏幕的左侧或右侧！');
                 return;
             }
-            
+
             const itemNames = {
                 'nut': '坚果',
                 'hat': '帽子',
@@ -376,10 +414,10 @@
                 'cup': '杯子',
                 'band': '发带'
             };
-            
+
             const responseDiv = document.getElementById('response');
             const responseText = document.getElementById('response-text');
-            
+
             if (itemPosition === 'right') {
                 // 右视野 → 左脑 → 可以口头报告
                 responseText.innerHTML = `
@@ -394,15 +432,15 @@
                     但如果让被试用左手（由右脑控制）指认物品，他们可以正确选择${itemNames[currentItem]}！</em>
                 `;
             }
-            
+
             responseDiv.classList.add('show');}
-        
+
         function resetExperiment() {
             placedItems.innerHTML = '';
             currentItem = null;
             itemPosition = null;
             document.getElementById('response').classList.remove('show');
-            
+
             // 显示提示文字
             document.querySelectorAll('#experiment-svg text[opacity="0.7"]').forEach(text => {
                 text.style.display = 'block';

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>抄笔记：到底有没有用？ - 考研手账</title>
-    
+
     <!-- 字体引入 -->
     <!-- 霞鹜文楷 LXGW WenKai Screen -->
     <link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont/style.css" media="print" onload="this.media='all'">
@@ -12,10 +12,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-    
+
     <!-- 代码高亮 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-gist.min.css">
-    
+
     <style>
         :root {
             /* 颜色变量 */
@@ -26,7 +26,7 @@
             --accent-blue: #3498db; /* 标记蓝 */
             --accent-yellow: #f1c40f; /* 荧光笔黄 */
             --line-color: rgba(0,0,0,0.08);
-            
+
             /* 字体变量 */
             --font-serif: "LXGW WenKai Screen", "Lora", serif;
             --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -61,7 +61,7 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
             transition: all 0.3s ease;
         }
-        
+
         .nav-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -79,7 +79,7 @@
             text-decoration: none;
             position: relative;
         }
-        
+
         /* 胶带装饰效果 */
         .logo::after {
             content: '';
@@ -123,7 +123,7 @@
             transition: width 0.3s ease;
             opacity: 0.6;
         }
-        
+
         .nav-item:hover::after {
             width: 100%;
         }
@@ -191,7 +191,7 @@
             transform: rotate(2deg);
             z-index: 10;
         }
-        
+
         .card-tag::before {
             content: '';
             position: absolute;
@@ -252,7 +252,7 @@
             margin-bottom: 1em;
             position: relative;
         }
-        
+
         .markdown-body h2::after {
             content: '';
             display: block;
@@ -285,15 +285,15 @@
             color: var(--text-secondary);
             border-radius: 0 8px 8px 0;
         }
-        
+
         .markdown-body ul {
             padding-left: 1.5em;
         }
-        
+
         .markdown-body li {
             margin-bottom: 0.5em;
         }
-        
+
         .markdown-body li::marker {
             color: var(--accent-red);
             font-family: var(--font-hand);
@@ -305,12 +305,12 @@
                 grid-template-columns: 1fr;
                 gap: 2rem;
             }
-            
+
             aside {
                 position: relative;
                 top: 0;
             }
-            
+
             .card-list {
                 flex-direction: row;
                 overflow-x: auto;
@@ -321,16 +321,16 @@
                 scrollbar-width: none;
                 -ms-overflow-style: none;
             }
-            
+
             .card-list::-webkit-scrollbar {
                 display: none;
             }
-            
+
             .article-card {
                 min-width: 260px;
                 scroll-snap-align: start;
             }
-            
+
             .content-area {
                 padding: 1.5rem;
                 width: 100%;
@@ -338,17 +338,48 @@
             }
         }
     </style>
+  <link rel="stylesheet" href="assets/site-ui.css">
+  <script src="assets/site-ui.js"></script>
+  <link rel="preload" href="assets/fonts/noven-wordmark.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/fonts/noven-ui.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/fonts/noven-editorial-title.ttf" as="font" type="font/ttf" crossorigin>
 </head>
-<body>
-
-<header>
-    <div class="nav-container">
-        <a href="index.html" class="logo">Daily Study</a>
-        <nav class="nav-links">
-            <!-- 导航已移除 -->
-        </nav>
+<body class="site-ui" data-site-section="reading" data-site-page="reading">
+<!-- SITE SHELL START -->
+<a class="site-skip" href="#site-page-start">跳到正文</a>
+<div class="site-shell">
+  <nav class="site-navbar" aria-label="主导航">
+    <span class="site-glass-optics" aria-hidden="true"></span>
+    <a class="site-brand" href="index.html" aria-label="Noven 心理学学习系统首页">
+      <span><span class="site-brand-name">Noven</span><span class="site-brand-caption">心理学学习系统</span></span>
+    </a>
+    <div class="site-nav-links"><a href="index.html">总览</a>
+<a href="undergraduate/index.html">本科课程</a>
+<a href="考研全攻略.html">考研备考</a>
+<a href="刷题.html">练习题库</a>
+<a href="psychology40/index.html">研究探索</a></div>
+    <div class="site-nav-actions">
+      <a class="site-calendar" href="个人日历.html" aria-label="个人日历"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="4"/><path d="M8 3v4m8-4v4M4 11h16m-10 5h4"/></svg><span>日历</span></a>
+      <details class="site-menu">
+        <summary class="site-menu-toggle" aria-label="更多导航" aria-expanded="false" aria-controls="site-menu-panel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14M5 16h14"/></svg></summary>
+        <div class="site-menu-panel" id="site-menu-panel">
+          <div class="site-mobile-links"><span class="site-menu-label">学习空间</span><a href="index.html">总览</a>
+<a href="undergraduate/index.html">本科课程</a>
+<a href="考研全攻略.html">考研备考</a>
+<a href="刷题.html">练习题库</a>
+<a href="psychology40/index.html">研究探索</a><div class="site-menu-divider"></div></div>
+          <span class="site-menu-label">发现与规划</span><a href="article.html?id=review">学习方法<small>文章与复习方法</small></a>
+<a href="备考时间线.html">备考时间线<small>按阶段安排复习</small></a>
+<a href="资源合辑.html">资源合辑<small>常用资料与学习资源</small></a>
+        </div>
+      </details>
     </div>
-</header>
+  </nav>
+</div>
+<div class="site-page-anchor" id="site-page-start" tabindex="-1"></div>
+<!-- SITE SHELL END -->
+
+
 
 <main>
     <aside>
@@ -361,7 +392,7 @@
                     <span style="margin-left: 10px;">⏱️ 10 min read</span>
                 </div>
             </div>
-            
+
             <div class="article-card active" onclick="scrollToTop()">
                 <div class="card-tag">Methodology</div>
                 <h3 class="card-title">笔记已死？抄笔记到底有没有用</h3>
@@ -370,7 +401,7 @@
                     <span style="margin-left: 10px;">⏱️ 8 min read</span>
                 </div>
             </div>
-            
+
             <!-- 占位卡片 -->
             <div class="article-card" style="opacity: 0.6;">
                 <div class="card-tag" style="background: #e0e0e0;">Coming Soon</div>
@@ -421,10 +452,10 @@
 
 但问题也恰恰在这里。既然笔记首先完成的是这些任务，那它的写法就不应该是对原材料的整段搬运。换句话说，如果一份笔记只是把 PPT 上的一整段话原封不动地抄下来，甚至课堂上来不及写完，还先拍照保存，准备课后再慢慢补抄，那么它完成的仍然主要只是“保存材料”这件事，而不是更高质量地筛选和压缩信息。研究也提示，逐字转录式记笔记更容易停留在浅层加工，而不是把信息用自己的方式重新组织。
 
-所以，真正适合用来做笔记的内容，应该更接近这些东西：  
+所以，真正适合用来做笔记的内容，应该更接近这些东西：
 
-- 它是一个概念的核心意思；  
-- 它是几个关键词之间的关系；  
+- 它是一个概念的核心意思；
+- 它是几个关键词之间的关系；
 - 它是后续一看到就能提醒自己展开回忆的提示线索。
 
 从这个意义上说，笔记记得好不好，首先就取决于你有没有把它记成一种**便于后续回顾和使用的压缩材料**，而不是单纯把眼前的内容再誊抄一次。
@@ -435,7 +466,7 @@
 
 这也就意味着，真正值得追问的已经不是“要不要记笔记”，而是：**怎样才能让记笔记这件事，真正变成一种有效的学习方法？**
 
-**第一步，把笔记记成可提取的样子**  
+**第一步，把笔记记成可提取的样子**
 笔记不是教材或 PPT 的副本。正确的做法是，把内容压缩成便于后续提取的结构、关键词和提示线索，而不是逐字抄写整段原文。这样，笔记就可以在未来成为你从记忆中提取信息的线索，而不仅仅是用来看的材料。
 
 这一点听起来并不复杂，但真正落到一页 PPT 上时，很多学生还是会下意识地回到原来的做法：看到屏幕上的定义和解释，就一整段一整段地往笔记本上搬。问题在于，这样写出来的东西看起来很完整，实际上却更像是把材料换了一个地方保存下来，而不是把它压缩成便于后续回忆的形式。
@@ -444,7 +475,7 @@
 
 比如上面这一页 PPT，如果让很多学生来记，他们最自然的写法往往会是这样：
 
->正式群体是指组织结构确定的、职责明确的群体。  正式群体中，组织协作体系通常是通过权责体系和命令链条、规则等非人格化的因素来实现的。  
+>正式群体是指组织结构确定的、职责明确的群体。  正式群体中，组织协作体系通常是通过权责体系和命令链条、规则等非人格化的因素来实现的。
 >非正式群体是指那些既没有正式结构，也不是由组织确定的群体，他们的存在是员工为了满足社会交往的需要而自然形成的。
 
 这样的笔记看上去没有遗漏什么，甚至会让人觉得“记得很全”。但它的问题也很明显：它几乎仍然保持着 PPT 原本的表达方式，真正突出出来的不是知识结构，而是材料原文。你以后再看这份笔记时，很容易还是停留在“重新读一遍”上，而不是根据几个关键点把内容自己提取出来。
@@ -463,7 +494,7 @@
 
 这样一来，这页笔记就不再是对原文的誊抄，而是被压缩成了几个之后可以直接拿来回忆的点。你以后看到“正式群体”和“非正式群体”这两个标题，看到下面这些关键词，就应该能够顺着它们把完整意思自己展开，而不是再依赖原来的整段句子。
 
-**第二步，把笔记直接做成提取工具**  
+**第二步，把笔记直接做成提取工具**
 把笔记记成可提取的样子，只是第一步。真正的关键，是让它**从材料整理工具，变成能够主动提取和检验知识的工具**。如果只是写好笔记再翻来翻去，它依旧只是一份材料副本，对学习帮助有限。
 
 一个核心问题是：在笔记上挖空，回忆时如果想不起来怎么办？很多学生的直觉可能是“再去抄一份完整笔记”。但这样做完全没有解决提取的问题，只是把重复整理的过程延长。更有效的方法，是**在第一次记笔记时就把提取机制设计进去**。
@@ -491,7 +522,7 @@
 
 > 核心原则是：笔记主体提供提示和结构，空白用于回忆，答案在页下方或边角供核对。笔记从被动材料，变成主动学习工具。
 
-**第三步，把笔记推向作答训练**  
+**第三步，把笔记推向作答训练**
 把笔记做成可提取的工具只是第二步。最终目的，是让笔记不仅帮你回忆，还能帮助你在考试或作业中**真正组织答案**。这一步，重点在于把笔记内容**问题化**，并留出操作空间。
 
 还是以刚才的 PPT 为例：
@@ -525,9 +556,9 @@
 而真正有用的笔记，是在经过连续三个步骤后形成的：
 
 1. **先记成可提取的样子**：压缩信息、保留结构、关键词和提示线索。
-    
+
 2. **再变成提取工具**：挖空、回忆、核对，形成回忆—检查循环。
-    
+
 3. **推向作答训练**：问题化改写，留出空间自测，模拟考试或作答场景。
 
 我要向你发出一个倡议：从现在起，不要再机械地抄写和整理笔记。每一次记笔记，都要主动思考：**我能否用它回忆内容？我能否用它检验自己？我能否用它组织答案？** 把笔记从材料记录改造成提取和作答工具，让它真正成为你学习的助推器，而不仅仅是桌面上的文字堆积。
@@ -538,7 +569,7 @@
     // 初始化渲染
     document.addEventListener('DOMContentLoaded', () => {
         const container = document.getElementById('markdown-content');
-        
+
         // 配置 marked
         marked.setOptions({
             highlight: function(code, lang) {
@@ -553,10 +584,10 @@
 
         // 渲染 Markdown
         container.innerHTML = marked.parse(markdownText);
-        
+
         // 触发代码高亮（如果上面的 highlight 选项未触发）
         hljs.highlightAll();
-        
+
         // 图片懒加载处理 (虽然本文没图，但作为通用组件需要实现)
         const images = container.querySelectorAll('img');
         images.forEach(img => {

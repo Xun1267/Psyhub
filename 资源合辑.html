@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PsyHub - 资源合辑</title>
+    <title>Noven - 资源合辑</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=ZCOOL+QingKe+HuangYou&display=swap');
@@ -67,7 +67,7 @@
             font-weight: 600;
             letter-spacing: 0.025em;
         }
-        
+
         .btn-icon {
             width: 36px; height: 36px;
             display: flex; align-items: center; justify-content: center;
@@ -83,7 +83,7 @@
             transform: translateY(20px);
         }
         @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
-        
+
         .delay-1 { animation-delay: 0.1s; }
         .delay-2 { animation-delay: 0.2s; }
         .delay-3 { animation-delay: 0.3s; }
@@ -92,8 +92,46 @@
             font-family: 'Dancing Script', cursive;
         }
     </style>
+  <link rel="stylesheet" href="assets/site-ui.css">
+  <script src="assets/site-ui.js"></script>
+  <link rel="preload" href="assets/fonts/noven-wordmark.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/fonts/noven-ui.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/fonts/noven-editorial-title.ttf" as="font" type="font/ttf" crossorigin>
 </head>
-<body class="min-h-screen pb-20">
+<body class="min-h-screen pb-20 site-ui" data-site-section="resources" data-site-page="resources">
+<!-- SITE SHELL START -->
+<a class="site-skip" href="#site-page-start">跳到正文</a>
+<div class="site-shell">
+  <nav class="site-navbar" aria-label="主导航">
+    <span class="site-glass-optics" aria-hidden="true"></span>
+    <a class="site-brand" href="index.html" aria-label="Noven 心理学学习系统首页">
+      <span><span class="site-brand-name">Noven</span><span class="site-brand-caption">心理学学习系统</span></span>
+    </a>
+    <div class="site-nav-links"><a href="index.html">总览</a>
+<a href="undergraduate/index.html">本科课程</a>
+<a href="考研全攻略.html">考研备考</a>
+<a href="刷题.html">练习题库</a>
+<a href="psychology40/index.html">研究探索</a></div>
+    <div class="site-nav-actions">
+      <a class="site-calendar" href="个人日历.html" aria-label="个人日历"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="4"/><path d="M8 3v4m8-4v4M4 11h16m-10 5h4"/></svg><span>日历</span></a>
+      <details class="site-menu">
+        <summary class="site-menu-toggle" aria-label="更多导航" aria-expanded="false" aria-controls="site-menu-panel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14M5 16h14"/></svg></summary>
+        <div class="site-menu-panel" id="site-menu-panel">
+          <div class="site-mobile-links"><span class="site-menu-label">学习空间</span><a href="index.html">总览</a>
+<a href="undergraduate/index.html">本科课程</a>
+<a href="考研全攻略.html">考研备考</a>
+<a href="刷题.html">练习题库</a>
+<a href="psychology40/index.html">研究探索</a><div class="site-menu-divider"></div></div>
+          <span class="site-menu-label">发现与规划</span><a href="article.html?id=review">学习方法<small>文章与复习方法</small></a>
+<a href="备考时间线.html">备考时间线<small>按阶段安排复习</small></a>
+<a href="资源合辑.html">资源合辑<small>常用资料与学习资源</small></a>
+        </div>
+      </details>
+    </div>
+  </nav>
+</div>
+<div class="site-page-anchor" id="site-page-start" tabindex="-1"></div>
+<!-- SITE SHELL END -->
 
     <!-- 背景层 -->
     <div class="grid-bg"></div>
@@ -102,38 +140,11 @@
     <div class="ambient-blob blob-3"></div>
 
     <!-- 导航栏 -->
-    <nav class="fixed w-full z-50 top-4 px-4 sm:px-6 flex justify-center">
-        <div class="glass-card w-full max-w-6xl rounded-2xl px-6 py-3 flex flex-col lg:flex-row justify-between items-center relative reveal-up">
-            <div class="w-full lg:w-auto flex justify-between items-center">
-                <a href="index.html" class="flex items-center gap-2 font-semibold text-lg text-slate-800 tracking-tight">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-slate-700">
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                        <path d="M3 9h18M9 21V9"></path>
-                    </svg>
-                    PsyHub <span class="text-slate-400 font-normal">/ Resources</span>
-                </a>
-            </div>
-            
-            <!-- 桌面端菜单 -->
-            <div class="hidden lg:flex gap-7 text-sm text-slate-600 font-medium absolute left-1/2 transform -translate-x-1/2">
-                <a href="考研全攻略.html" class="hover:text-slate-900 transition-colors">考研全攻略</a>
-                <a href="个人日历.html" class="hover:text-slate-900 transition-colors">个人日历</a>
-                <a href="资源合辑.html" class="text-slate-900 font-bold">资源合辑</a>
-                <a href="备考时间线.html" class="hover:text-slate-900 transition-colors">备考时间线</a>
-            </div>
 
-            <!-- 右侧Logo/用户名 -->
-            <div class="hidden lg:flex items-center pr-2">
-                <span class="font-artistic text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-700 to-slate-500 tracking-wider cursor-default select-none relative">
-                    Xun
-                </span>
-            </div>
-        </div>
-    </nav>
 
     <!-- 主内容区 -->
     <main class="max-w-6xl mx-auto px-6 pt-36">
-        
+
         <!-- 头部标题 -->
         <header class="mb-12 text-center reveal-up">
             <h1 class="text-4xl md:text-5xl font-normal text-slate-800 mb-4 tracking-wide" style="font-family: 'ZCOOL QingKe HuangYou', cursive;">资源合辑</h1>
@@ -148,7 +159,7 @@
             <!-- Card 1: 网课 (可点击) -->
             <div onclick="window.open('https://pan.baidu.com/s/1g0zn_BSi95wqzRq-dznuag?pwd=1111', '_blank')" class="glass-card rounded-2xl p-8 flex flex-col h-full group cursor-pointer relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-48 h-48 bg-indigo-50 rounded-full blur-3xl opacity-50 -translate-y-1/2 translate-x-1/3 group-hover:scale-110 transition-transform duration-700"></div>
-                
+
                 <div class="relative z-10">
                     <div class="flex justify-between items-start mb-6">
                         <div class="w-16 h-16 rounded-2xl bg-indigo-50 text-indigo-500 flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform duration-300">
@@ -156,13 +167,13 @@
                         </div>
                         <span class="tag-pill bg-indigo-100 text-indigo-700 px-3 py-1">2026 全程班</span>
                     </div>
-                    
+
                     <h3 class="text-2xl font-bold text-slate-800 mb-3 group-hover:text-indigo-600 transition-colors">网课资源</h3>
                     <p class="text-slate-500 mb-6 leading-relaxed">
                         包含 312 统考基础、强化、冲刺全阶段视频课程。
                         <br><span class="text-xs text-slate-400 mt-2 block">提取码：1111</span>
                     </p>
-                    
+
                     <div class="mt-auto pt-4 border-t border-slate-100 flex items-center text-indigo-600 font-medium group-hover:translate-x-1 transition-transform">
                         前往百度网盘下载
                         <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
@@ -178,13 +189,13 @@
                     </div>
                     <span class="tag-pill bg-slate-100 text-slate-500 px-3 py-1">Coming Soon</span>
                 </div>
-                
+
                 <h3 class="text-2xl font-bold text-slate-800 mb-3">学霸笔记</h3>
                 <p class="text-slate-500 mb-6 leading-relaxed">
                     核心考点、逻辑框架与背诵口诀汇总。
                     <br><span class="text-xs text-slate-400 mt-2 block">正在整理中...</span>
                 </p>
-                
+
                 <div class="mt-auto pt-4 border-t border-slate-100 flex items-center text-slate-400 font-medium">
                     敬请期待
                 </div>

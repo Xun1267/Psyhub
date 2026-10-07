@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>心理测量学 - PsyHub</title>
+    <title>心理测量学 - Noven</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="glassmorphism.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,16 +30,48 @@
         .hidden { display: none; }
     </style>
       <link rel="stylesheet" href="psyhub-theme.css">
+  <link rel="stylesheet" href="../assets/site-ui.css">
+  <script src="../assets/site-ui.js"></script>
+  <link rel="preload" href="../assets/fonts/noven-wordmark.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="../assets/fonts/noven-ui.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="../assets/fonts/noven-editorial-title.ttf" as="font" type="font/ttf" crossorigin>
 </head>
-<body>
+<body class="site-ui" data-site-section="courses" data-site-page="course-reader">
+<!-- SITE SHELL START -->
+<a class="site-skip" href="#site-page-start">跳到正文</a>
+<div class="site-shell">
+  <nav class="site-navbar" aria-label="主导航">
+    <span class="site-glass-optics" aria-hidden="true"></span>
+    <a class="site-brand" href="../index.html" aria-label="Noven 心理学学习系统首页">
+      <span><span class="site-brand-name">Noven</span><span class="site-brand-caption">心理学学习系统</span></span>
+    </a>
+    <div class="site-nav-links"><a href="../index.html">总览</a>
+<a href="../undergraduate/index.html" aria-current="page">本科课程</a>
+<a href="../考研全攻略.html">考研备考</a>
+<a href="../刷题.html">练习题库</a>
+<a href="../psychology40/index.html">研究探索</a></div>
+    <div class="site-nav-actions">
+      <a class="site-calendar" href="../个人日历.html" aria-label="个人日历"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="4"/><path d="M8 3v4m8-4v4M4 11h16m-10 5h4"/></svg><span>日历</span></a>
+      <details class="site-menu">
+        <summary class="site-menu-toggle" aria-label="更多导航" aria-expanded="false" aria-controls="site-menu-panel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14M5 16h14"/></svg></summary>
+        <div class="site-menu-panel" id="site-menu-panel">
+          <div class="site-mobile-links"><span class="site-menu-label">学习空间</span><a href="../index.html">总览</a>
+<a href="../undergraduate/index.html" aria-current="page">本科课程</a>
+<a href="../考研全攻略.html">考研备考</a>
+<a href="../刷题.html">练习题库</a>
+<a href="../psychology40/index.html">研究探索</a><div class="site-menu-divider"></div></div>
+          <span class="site-menu-label">发现与规划</span><a href="../article.html?id=review">学习方法<small>文章与复习方法</small></a>
+<a href="../备考时间线.html">备考时间线<small>按阶段安排复习</small></a>
+<a href="../资源合辑.html">资源合辑<small>常用资料与学习资源</small></a>
+        </div>
+      </details>
+    </div>
+  </nav>
+</div>
+<div class="site-page-anchor" id="site-page-start" tabindex="-1"></div>
+<!-- SITE SHELL END -->
 
-<nav class="psyhub-course-shell" aria-label="课程导航">
-  <a class="psyhub-course-brand" href="../index.html">PsyHub</a>
-  <div class="psyhub-course-links">
-    <a href="index.html">本科课程首页</a>
-    <a href="../index.html">返回主站</a>
-  </div>
-</nav>
+
     <a class="back-home-btn" href="index.html">🏠 返回首页</a>
     <main>
         <section class="section active">
@@ -155,7 +187,7 @@
 1. 测量的定义
 测量是根据一定的法则对事物及其属性进行数量化确定的过程。
 
-2. 测量的要素： 
+2. 测量的要素：
 （1）参照点
 ①绝对参照点：有绝对零点
 ②相对参照点：有相对零点
@@ -307,9 +339,9 @@
  信度又叫可靠性，指的是多次测量结果的稳定性与一致性程度
 （2）操作定义
   ①一组测量分数的真分数变异与总变异（实得分数变异）之比
-  ;   
+  ;
   ②一个被试团体真分数与实得分数的相关系数的平方
-  
+
   ③一个测验与它的任何一个“平行测验”的相关系数
 
 2. 关于信度
@@ -331,19 +363,19 @@
 
 4. 根据测验的信度和被试实得分数来估计真分数所在置信区间
 （1）求出测量的标准误
-  
+
 （2）估计真分数所在置信区间
-  
-  
+
+
 
 
 5. 根据信度可以确定不同测验分数之间是否存在显著差异
 （1）将原始分数转换成T分数
 \ \ \ \ \ \ T=50+10Z
 （2）求出差异的标准误
-  
+
 （3）差异的显著性检验
-  
+
 
 6. 信度的种类
 信度类型	含义	应用条件	影响因素（误差来源）	估计方法
@@ -357,10 +389,10 @@
 不同评分者对同一批答卷评分的一致性程度	衡量评分者间差异	评分者间的评分标准差异	两人：积差相关/等级相关；多人：克伦巴赫α/肯德尔和谐系数
 
 7. 重测信度的计算
- 
+
 
 8. 复本信度的计算
- 
+
 
 9. 等值性测验的要求
   具有相同的内容范围、题型、题量、指导语和时限并且由相同或相近的平均数和标准差。
@@ -378,12 +410,12 @@ r_{xx}=2\left(1-\frac{Sa^2+Sb^2}{S_t^2}\right)
 Sa^2：所有被试一半测验分数的方差
 Sb^2：所有被试另一半测验分数的方差
 S_t^2：所有被试整个测验总分的方差
- 
+
 （3）卢仑公式
 r_{xx}=1-\frac{S_d^2}{S_t^2}
 S_d^2：所有被试两半测验上分数之差的方差
 S_t^2：所有被试整个测验总分的方差
- 
+
 12. 库德里查森信度系数的计算
 适用于二分法计分或0，1计分的题目
 r_{xx}=\left(\frac{K}{K-1}\right)\left(\frac{1-K\bar{p\bar{q}}}{S_t^2}\right)
@@ -391,7 +423,7 @@ K：测验题目数
 \bar{p}：题目的平均通过率
 \bar{q}：题目的平均失败率
 S_t^2：所有被试整个测验总分的方差
- 
+
 
 
 
@@ -441,7 +473,7 @@ r_{XX}：原测验的信度
  又叫有效性，是指一个测验或量表实际能测出其所要测量的心理特质的程度，反映了测量结果的正确性程度
 （2）操作定义
  在一列测量中，与测量目的有关的真实变异数与总变异的比率
- 
+
 
 2. 效度的特点
 （1）效度说明的是一组或一列测量的特性，而不是某个单独测量的特性
@@ -454,8 +486,8 @@ r_{XX}：原测验的信度
 （2）效度受信度的制约：r_{xy}^2\le r_{xx}
 4. 效度的种类
 效度类型
-内容效度 
-构想效度 
+内容效度
+构想效度
 效标关联效度
 
 含义
@@ -541,7 +573,7 @@ MTMM矩阵：综合相容与区分效度
 （3）考察测验的实证效度
 （4）实验控制法
 （5）多种特质多种方法矩阵MTMM
- 
+
 主对角线：信度
 下划线：相容效度
 实线三角形：区分效度
@@ -583,7 +615,7 @@ MTMM矩阵：综合相容与区分效度
 （3）命中率
 ①正命中率：\\frac{A}{A+B}（被测验选出来的人中真正选对的人数比率）
 ②总命中率：\\frac{A+D}{A+B+C+D}（正确决策的次数与总决策次数之比）
- 
+
 （4）基础率、灵敏度、确认度和功利率
 ①基础率：符合筛选要求的群体在整个人群总体中所占的比率
 ②灵敏度：所有真正符合要求的人能被测验鉴别出来的人数比率
@@ -657,12 +689,12 @@ MTMM矩阵：综合相容与区分效度
 P=\\frac{R}{N}
 ②高低分组法
 P=\\frac{1}{2}\\left(\\frac{R_H}{N_H}+\\frac{R_L}{N_L}\\right)
- 
+
 （2）非二分法记分项目的难度
 P=\\frac{\\bar{X}}{X_{max}}
 （3）难度校正
 CP=\\frac{KP-1}{K-1}
- 
+
 
 4. 难度对测验的影响
 （1）难度影响测验分数的分布形态
@@ -707,21 +739,21 @@ CP=\\frac{KP-1}{K-1}
 11. 区分度的计算方法
 （1）鉴别指数法（高低分组法）
 ①二分法记分项目的区分度：D=P_H-P_L=\\frac{R_H-R_L}{N}
- 
+
 ②非二分法记分项目的区分度：D=\\frac{{\\overline{X}}_H-{\\overline{X}}_L}{X_{max}}
- 
+
 ③独立样本t检验
 （2）相关法：项目得分与测验总分的相关
 前提条件：①测验效度高  ②排除共变关系
 ①积差相关
 ②点二列相关
- 
+
 ③二列相关
 ④\\varphi相关
 （3）项目特征曲线
 纵轴：难度
 曲线坡度：区分度
- 
+
 
 12. 如何理解区分度的相对性
 ①用不同的计算方法，所得区分度值不同
@@ -802,7 +834,7 @@ CET=500+70Z
 （2）年级量表
 把学生的测验成绩与各年级学生的平均成绩比较得到的量表
 年级当量：把学生的测验成绩与各年级学生的平均成绩比较，看他相当于几年级的水平，这个最能代表学生水平的年级
-年级当量的计算： 
+年级当量的计算：
 （3）发展顺序量表
 为检查婴幼儿心理发展是否正常而设计，以婴幼儿代表性行为出现的时间为衡量标准
 最早的发展顺序量表：格赛尔发展量表

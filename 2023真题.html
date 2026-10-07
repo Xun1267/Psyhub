@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2023年 心理学专业基础综合真题 - 模拟考试</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>
         window.MathJax = {
@@ -17,7 +16,7 @@
     <script src="2023_data.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600&display=swap');
-        
+
         body {
             font-family: 'Inter', 'Noto Sans SC', sans-serif;
             background-color: #F8F7F4;
@@ -72,11 +71,49 @@
             margin-right: 8px;
         }
     </style>
+  <link rel="stylesheet" href="assets/site-ui.css">
+  <script src="assets/site-ui.js"></script>
+  <link rel="preload" href="assets/fonts/noven-wordmark.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/fonts/noven-ui.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/fonts/noven-editorial-title.ttf" as="font" type="font/ttf" crossorigin>
 </head>
-<body class="pb-24">
+<body class="pb-24 site-ui" data-site-section="practice" data-site-page="exam-paper">
+<!-- SITE SHELL START -->
+<a class="site-skip" href="#site-page-start">跳到正文</a>
+<div class="site-shell">
+  <nav class="site-navbar" aria-label="主导航">
+    <span class="site-glass-optics" aria-hidden="true"></span>
+    <a class="site-brand" href="index.html" aria-label="Noven 心理学学习系统首页">
+      <span><span class="site-brand-name">Noven</span><span class="site-brand-caption">心理学学习系统</span></span>
+    </a>
+    <div class="site-nav-links"><a href="index.html">总览</a>
+<a href="undergraduate/index.html">本科课程</a>
+<a href="考研全攻略.html">考研备考</a>
+<a href="刷题.html" aria-current="page">练习题库</a>
+<a href="psychology40/index.html">研究探索</a></div>
+    <div class="site-nav-actions">
+      <a class="site-calendar" href="个人日历.html" aria-label="个人日历"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="4"/><path d="M8 3v4m8-4v4M4 11h16m-10 5h4"/></svg><span>日历</span></a>
+      <details class="site-menu">
+        <summary class="site-menu-toggle" aria-label="更多导航" aria-expanded="false" aria-controls="site-menu-panel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14M5 16h14"/></svg></summary>
+        <div class="site-menu-panel" id="site-menu-panel">
+          <div class="site-mobile-links"><span class="site-menu-label">学习空间</span><a href="index.html">总览</a>
+<a href="undergraduate/index.html">本科课程</a>
+<a href="考研全攻略.html">考研备考</a>
+<a href="刷题.html" aria-current="page">练习题库</a>
+<a href="psychology40/index.html">研究探索</a><div class="site-menu-divider"></div></div>
+          <span class="site-menu-label">发现与规划</span><a href="article.html?id=review">学习方法<small>文章与复习方法</small></a>
+<a href="备考时间线.html">备考时间线<small>按阶段安排复习</small></a>
+<a href="资源合辑.html">资源合辑<small>常用资料与学习资源</small></a>
+        </div>
+      </details>
+    </div>
+  </nav>
+</div>
+<div class="site-page-anchor" id="site-page-start" tabindex="-1"></div>
+<!-- SITE SHELL END -->
 
     <!-- Sticky Header with Timer -->
-    <header class="sticky-header px-6 py-4 flex justify-between items-center shadow-sm">
+    <header class="site-context-bar sticky-header px-6 py-4 flex justify-between items-center shadow-sm">
         <div class="flex items-center gap-4">
             <a href="刷题.html" class="text-slate-500 hover:text-slate-800 transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -85,7 +122,7 @@
             </a>
             <h1 class="font-bold text-lg text-slate-800 hidden sm:block">2023年 心理学考研真题模拟</h1>
         </div>
-        
+
         <div class="flex items-center gap-6">
             <div class="flex items-center gap-2 text-slate-600 bg-slate-100 px-3 py-1.5 rounded-lg">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -100,7 +137,7 @@
     </header>
 
     <main class="max-w-4xl mx-auto px-6 py-8">
-        
+
         <!-- Progress Bar -->
         <div class="mb-8">
             <div class="flex justify-between text-xs text-slate-500 mb-2">
@@ -133,7 +170,7 @@
                 const questionCard = document.createElement('div');
                 questionCard.className = 'question-card';
                 questionCard.id = `q${item.id}`;
-                
+
                 let inputHtml = '';
                 if (item.type === 'single') {
                     inputHtml = item.options.map((opt, i) => `
@@ -176,7 +213,7 @@
                 `;
                 examForm.appendChild(questionCard);
             });
-            
+
             // Trigger MathJax typeset
             if (window.MathJax) {
                 // Wait a tick to ensure DOM is ready
@@ -184,25 +221,25 @@
                     window.MathJax.typesetPromise && window.MathJax.typesetPromise();
                 }, 100);
             }
-            
+
             updateProgressDisplay();
         }
 
         // Helper: Format Text (Markdown-like)
         function formatText(text) {
             if (!text) return '';
-            
+
             let lines = text.split('\n');
             let formattedHtml = '';
             let inTable = false;
             let tableRows = [];
-            
+
             for (let i = 0; i < lines.length; i++) {
                 let line = lines[i].trim();
-                
+
                 // Bold formatting
                 line = line.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
-                
+
                 // Table detection (lines starting and ending with |)
                 if (line.startsWith('|') && line.endsWith('|')) {
                     if (!inTable) {
@@ -220,22 +257,22 @@
                     formattedHtml += line + '<br>';
                 }
             }
-            
+
             if (inTable) {
                 formattedHtml += renderTable(tableRows);
             }
-            
+
             return formattedHtml;
         }
 
         function renderTable(rows) {
             if (rows.length === 0) return '';
-            
+
             let html = '<div class="overflow-x-auto my-4"><table class="min-w-full border-collapse border border-slate-300 text-sm text-left">';
-            
+
             // Check for separator
             let bodyStartIndex = 0;
-            
+
             if (rows.length > 1 && rows[1].includes('---')) {
                 // Header row
                 const headerCells = rows[0].split('|').slice(1, -1);
@@ -248,7 +285,7 @@
             } else {
                 bodyStartIndex = 0; // No header detected/supported this way
             }
-            
+
             html += '<tbody>';
             for (let i = bodyStartIndex; i < rows.length; i++) {
                 const cells = rows[i].split('|').slice(1, -1);
@@ -259,7 +296,7 @@
                 html += '</tr>';
             }
             html += '</tbody></table></div>';
-            
+
             return html;
         }
 
@@ -313,18 +350,18 @@
         // Timer Logic
         let timeLeft = 3 * 60 * 60; // 3 hours in seconds
         const timerElement = document.getElementById('timer');
-        
+
         const timerInterval = setInterval(() => {
             if (timeLeft <= 0) {
                 clearInterval(timerInterval);
                 submitExam(); // Auto submit
                 return;
             }
-            
+
             const hours = Math.floor(timeLeft / 3600);
             const minutes = Math.floor((timeLeft % 3600) / 60);
             const seconds = timeLeft % 60;
-            
+
             timerElement.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
             timeLeft--;
         }, 1000);

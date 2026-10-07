@@ -4,7 +4,7 @@
   --psy-text: #3f3f46;
   --psy-muted: #64748b;
   --psy-border: rgba(255,255,255,.82);
-  --psy-glass: rgba(255,255,255,.68);
+  --psy-glass: var(--site-glass, rgba(255,255,255,.68));
 }
 html { background: var(--psy-bg); }
 body {
@@ -17,7 +17,6 @@ body {
   background-size: auto, auto, 32px 32px, 32px 32px, auto !important;
   color: var(--psy-text) !important;
   padding-top: 76px !important;
-  background-attachment: fixed !important;
 }
 .psyhub-course-shell {
   position: fixed;
@@ -35,8 +34,8 @@ body {
   border: 1px solid var(--psy-border);
   border-radius: 16px;
   background: rgba(255,255,255,.72);
-  backdrop-filter: blur(20px) saturate(150%);
-  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   box-shadow: 0 12px 34px rgba(15,23,42,.08);
   font-family: Inter, "Noto Sans SC", system-ui, sans-serif;
 }
@@ -61,12 +60,18 @@ body {
 .glass-card, .card, .quiz-card, .stats, .toc-top, .modal-content {
   background: var(--psy-glass) !important;
   border-color: var(--psy-border) !important;
-  box-shadow: 0 16px 42px rgba(15,23,42,.08) !important;
-  backdrop-filter: blur(20px) saturate(145%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(145%) !important;
+  box-shadow: var(--site-rim), var(--site-shadow) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.stats { color: var(--psy-text) !important; }
+.stats > * { color: inherit; }
+:is(a, button):focus-visible { outline: 2px solid #475569; outline-offset: 4px; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition-duration: 0s !important; scroll-behavior: auto !important; }
 }
 .glass-button, .btn, button {
-  border-radius: 12px !important;
+  border-radius: 16px !important;
 }
 .header, .header h1, header h1, .section-title {
   color: #27272a !important;
@@ -77,5 +82,4 @@ a { text-underline-offset: 3px; }
   body { padding-top: 86px !important; }
   .psyhub-course-shell { align-items: flex-start; }
   .psyhub-course-links a { padding: 7px 8px; font-size: 12px; }
-  .psyhub-course-links a:first-child { display: none; }
 }
