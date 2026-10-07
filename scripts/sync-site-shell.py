@@ -6,11 +6,12 @@ ROOT = Path(__file__).resolve().parent.parent
 PRIMARY = [
     ('home', '总览', 'index.html'),
     ('courses', '本科课程', 'undergraduate/index.html'),
+    ('reading', '学习方法', 'article.html?id=metacognition'),
     ('exam', '考研备考', '考研全攻略.html'),
     ('practice', '练习题库', '刷题.html'),
     ('research', '研究探索', 'psychology40/index.html'),
 ]
-MORE = [('学习方法', '文章与复习方法', 'article.html?id=review'), ('备考时间线', '按阶段安排复习', '备考时间线.html'), ('资源合辑', '常用资料与学习资源', '资源合辑.html')]
+MORE = [('备考时间线', '按阶段安排复习', '备考时间线.html'), ('资源合辑', '常用资料与学习资源', '资源合辑.html')]
 CALENDAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="4"/><path d="M8 3v4m8-4v4M4 11h16m-10 5h4"/></svg>'
 MENU = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14M5 16h14"/></svg>'
 
