@@ -1,11 +1,13 @@
 """Generate a shared navigation shell into the existing static HTML pages."""
 from pathlib import Path
+from html import escape
 import re
 
 ROOT = Path(__file__).resolve().parent.parent
 PRIMARY = [
     ('home', '总览', 'index.html'),
     ('courses', '本科课程', 'undergraduate/index.html'),
+    ('thesis', '本科毕业论文', 'https://stingy-emperor-211.notion.site/3ff7cb52e98280ecb0dae82178cb8047?source=copy_link'),
     ('reading', '学习方法', 'article.html?id=metacognition'),
     ('exam', '考研备考', '考研全攻略.html'),
     ('practice', '练习题库', '刷题.html'),
@@ -46,7 +48,8 @@ def metadata(path):
 def shell(prefix, section):
     def link(key, text, url):
         current = ' aria-current="page"' if section == key else ''
-        return f'<a href="{prefix}{url}"{current}>{text}</a>'
+        href = url if url.startswith(('https://', 'http://')) else prefix + url
+        return f'<a href="{escape(href, quote=True)}"{current}>{text}</a>'
     links = '\n'.join(link(*entry) for entry in PRIMARY)
     more = '\n'.join(f'<a href="{prefix}{url}">{label}<small>{description}</small></a>' for label, description, url in MORE)
     return f'''<!-- SITE SHELL START -->

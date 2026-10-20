@@ -27,6 +27,14 @@
   font-style: normal;
   font-display: swap;
 }
+@font-face {
+  font-family: 'Noven UI';
+  src: url('fonts/noven-ui-thesis.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+4E1A, U+6587, U+672C, U+6BD5, U+79D1, U+8BBA;
+}
 :root {
   --site-ink: #3f3f46;
   --site-muted: #64748b;
@@ -240,7 +248,7 @@ body[data-site-page='resources'] > main { padding-top: 30px; }
   .site-shell .site-navbar { gap: 10px; }
   .site-calendar span { display: none; }
 }
-@media (max-width: 900px) {
+@media (max-width: 1000px) {
   html body.site-ui { padding-top: 112px !important; }
   .site-shell { width: calc(100% - 24px); top: 12px; }
   .site-shell .site-navbar { height: 78px; border-radius: 25px; padding: 8px 10px 8px 12px; }
