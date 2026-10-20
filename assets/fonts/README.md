@@ -6,6 +6,7 @@ Self-hosted Google Fonts subsets, downloaded 2026-10-07:
 - `noven-title.ttf`: the earlier LXGW WenKai TC title subset; retained as an unused asset, no longer preloaded.
 - `noven-editorial-title.ttf`: Noto Serif SC, weight 600, Chinese home and page titles. CSS family: `Noven Editorial`.
 - `noven-meta.ttf`: DM Mono, weight 400, English home labels. CSS family: `Noven Meta`.
+- `noven-ui-thesis.ttf`: Noto Sans SC, weight 500, the six characters in “本科毕业论文”, added 2026-10-20; shares the `Noven UI` family via a Unicode range.
 - `noven-ui.ttf`: Noto Sans SC, weight 500, navigation and menu labels. CSS family: `Noven UI`.
 - `noven-display.ttf`: the earlier ZCOOL title subset; retained as an unused asset, no longer loaded by the site.
 
