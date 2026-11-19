@@ -8,6 +8,7 @@ PRIMARY = [
     ('home', '总览', 'index.html'),
     ('courses', '本科课程', 'undergraduate/index.html'),
     ('thesis', '本科毕业论文', 'https://stingy-emperor-211.notion.site/3ff7cb52e98280ecb0dae82178cb8047?source=copy_link'),
+    ('methods', '统计方法', 'methods/index.html'),
     ('reading', '学习方法', 'article.html?id=metacognition'),
     ('exam', '考研备考', '考研全攻略.html'),
     ('practice', '练习题库', '刷题.html'),
@@ -31,6 +32,7 @@ def remove_block(text, pattern):
 
 def metadata(path):
     name = path.name
+    if path.parts[0] == 'methods': return 'methods', 'method-index' if name == 'index.html' else 'method-reader'
     if path.parts[0] == 'undergraduate':
         return 'courses', 'courses' if name == 'index.html' else ('flashcards' if '闪卡' in name else 'course-quiz' if '题库' in name else 'course-reader')
     if path.parts[0] == 'psychology40' or name == '裂脑交互.html': return 'research', 'research'
@@ -120,4 +122,4 @@ for path in sorted(ROOT.rglob('*.html')):
         text = text.replace('<nav class="w-full max-w-6xl ', '<nav class="site-context-bar w-full max-w-6xl ')
     text = text.replace('心理学考研学习系统', '心理学学习系统')
     path.write_text('\n'.join(line.rstrip() for line in text.splitlines()) + '\n')
-print('Updated shared navigation and motion assets in 38 static pages.')
+print('Updated shared navigation in all static pages.')

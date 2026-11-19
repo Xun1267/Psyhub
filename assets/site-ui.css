@@ -290,3 +290,9 @@ body[data-site-page='resources'] > main { padding-top: 30px; }
 }
 @media (prefers-reduced-transparency: reduce) { .site-glass-optics, .site-shell .site-menu-panel { background: #f8f7f4; backdrop-filter: none; } }
 @media print { .site-shell, .site-skip { display: none !important; } html body.site-ui { padding-top: 0 !important; background: white !important; } }
+
+/* Keep the expanded navigation within its glass bar. */
+@media (min-width: 1001px) and (max-width: 1160px) {
+  .site-shell .site-nav-links { display: none; }
+  .site-mobile-links { display: block; }
+}

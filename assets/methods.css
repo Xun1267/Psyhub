@@ -1,0 +1,93 @@
+/* Lecture pages inherit the shared Noven background and navigation. */
+body[data-site-section='methods'] { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+.methods-main, .methods-main * { box-sizing: border-box; }
+.methods-main { width: min(1180px, calc(100% - 48px)); margin: 12px auto 80px; }
+.method-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 36px; }
+.method-tabs a { padding: 9px 16px; border: 1px solid transparent; border-radius: 16px; color: #64748b; text-decoration: none; font-size: 16px; }
+.method-tabs a:hover, .method-tabs a[aria-current='page'] { background: rgb(255 255 255 / .72); border-color: white; color: #334155; box-shadow: var(--site-rim); }
+.lecture-header { margin: 0 0 40px; max-width: 860px; }
+.method-eyebrow { color: #64748b; font-size: 14px; letter-spacing: .1em; margin: 0 0 14px; }
+.lecture-header h1 { font-family: 'Noven Editorial', 'Songti SC', SimSun, serif; font-size: clamp(32px, 4vw, 48px); line-height: 1.4; font-weight: 600; margin: 0 0 20px; color: #334155; }
+.lecture-header h1 span { display: block; font-size: .66em; margin-top: 10px; font-weight: 500; color: #64748b; }
+.method-intro { max-width: 720px; color: #64748b; font-size: 18px; line-height: 1.9; margin: 0; }
+.lecture-meta { display: flex; flex-wrap: wrap; gap: 10px 24px; margin-top: 22px; font-size: 14px; color: #64748b; }
+.reader-layout { display: grid; grid-template-columns: 266px minmax(0, 1fr); align-items: start; gap: 28px; }
+.reader-sidebar { position: sticky; top: 124px; min-width: 0; }
+.reader-toc { background: var(--site-glass); border: 1px solid white; border-radius: 22px; box-shadow: var(--site-rim), var(--site-shadow); overflow: hidden; }
+.reader-toc > summary { padding: 19px 20px; font-weight: 600; font-size: 17px; cursor: pointer; list-style-position: inside; color: #334155; }
+.reader-toc > summary span { display: block; margin: 4px 0 0 17px; color: #64748b; font-size: 14px; font-weight: 400; }
+.toc-scroll { max-height: calc(100dvh - 240px); min-height: 140px; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; padding: 0 12px 14px; }
+.toc-group p { margin: 13px 9px 8px; color: #64748b; font-size: 14px; }
+.toc-group ol { list-style: none; padding: 0; margin: 0; }
+.toc-group li { margin: 3px 0; }
+.toc-group a { display: block; padding: 10px 10px; border-radius: 12px; font-size: 15px; line-height: 1.65; text-decoration: none; color: #475569; }
+.toc-group a:hover { background: rgb(255 255 255 / .7); }
+.toc-group a[aria-current='location'] { color: #334155; background: rgb(255 255 255 / .9); box-shadow: var(--site-rim); font-weight: 600; }
+.lecture-content { min-width: 0; background: var(--site-glass); border: 1px solid white; border-radius: 24px; box-shadow: var(--site-rim), var(--site-shadow); padding: 10px 40px 32px; font-size: 18px; line-height: 1.95; overflow-wrap: break-word; }
+.lecture-chapter { min-width: 0; padding: 24px 0 20px; border-bottom: 1px solid rgb(71 85 105 / .12); }
+.lecture-chapter h2 { font-family: 'Songti SC', SimSun, serif; font-size: clamp(25px, 2.4vw, 30px); line-height: 1.6; margin: 12px 0 28px; color: #334155; font-weight: 700; scroll-margin-top: 16px; }
+.lecture-chapter h2:focus { outline: none; }
+.lecture-chapter p { margin: 1em 0; }
+.lecture-chapter :is(ul, ol) { padding-left: 1.5em; margin: .8em 0; }
+.lecture-chapter :is(ul, ol) :is(ul, ol) { margin: .2em 0; }
+.lecture-chapter li { padding-left: .2em; }
+.lecture-chapter blockquote { margin: 24px 0; padding: 12px 20px; background: rgb(226 217 243 / .22); border-left: 3px solid #b2afc2; border-radius: 0 14px 14px 0; }
+.lecture-chapter blockquote p { margin: .4em 0; }
+.lecture-table { overflow-x: auto; margin: 24px 0; border: 1px solid rgb(148 163 184 / .25); border-radius: 14px; scrollbar-width: thin; }
+.lecture-table table { width: 100%; border-collapse: collapse; margin: 0; font-size: 16px; line-height: 1.7; }
+.lecture-table :is(th, td) { text-align: left; vertical-align: top; padding: 11px 14px; min-width: 84px; border-bottom: 1px solid rgb(148 163 184 / .18); }
+.lecture-table th { background: rgb(226 217 243 / .22); font-weight: 600; color: #334155; }
+.lecture-table tr:last-child td { border-bottom: 0; }
+.lecture-chapter :not(pre) > code { background: rgb(71 85 105 / .06); border-radius: 5px; padding: 2px 5px; font-size: .88em; overflow-wrap: anywhere; }
+.lecture-chapter .lecture-code { position: relative; border: 1px solid rgb(148 163 184 / .18); background: rgb(248 250 252 / .88); border-radius: 14px; margin: 24px 0; padding: 40px 20px 20px; overflow-x: auto; font-size: 14px; line-height: 1.8; tab-size: 2; }
+.lecture-code code, .lecture-code code[class*='language-'] { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace; font-size: inherit; line-height: inherit; white-space: pre; word-break: normal; word-wrap: normal; text-shadow: none; background: none; color: #334155; }
+.copy-code { position: absolute; top: 7px; right: 10px; border: 1px solid rgb(148 163 184 / .25); background: white; color: #475569; border-radius: 8px; padding: 3px 10px; min-height: 30px; font: 14px/1.5 -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; cursor: pointer; }
+.copy-code:hover { background: #f1f5f9; }
+.lecture-chapter figure.equation { margin: 26px 0; padding: 4px 0; overflow-x: auto; overflow-y: hidden; }
+.lecture-chapter .equation-container { width: max-content; min-width: 100%; }
+.lecture-chapter .katex { font-size: 1.1em; }
+.export-formula { padding: 16px; border-radius: 12px; background: rgb(255 255 255 / .6); text-align: center; }
+.lecture-footer { padding-top: 28px; font-size: 16px; color: #64748b; }
+.lecture-footer a { display: inline-block; margin: 4px 22px 4px 0; color: #475569; text-underline-offset: 4px; }
+.method-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.method-card { display: flex; flex-direction: column; padding: 32px; background: var(--site-glass); border: 1px solid white; border-radius: 24px; box-shadow: var(--site-rim), var(--site-shadow); color: inherit; text-decoration: none; transition: background-color 180ms ease; }
+.method-card:hover { background: rgb(255 255 255 / .82); }
+.card-tag { font-size: 14px; color: #64748b; }
+.method-card h2 { color: #334155; font-size: 28px; line-height: 1.5; margin: 18px 0 12px; }
+.method-card p { font-size: 17px; color: #64748b; margin: 0 0 28px; line-height: 1.9; }
+.card-action { margin-top: auto; font-size: 16px; color: #475569; text-decoration: underline; text-underline-offset: 5px; }
+.method-roadmap { margin-top: 38px; padding: 24px 0; max-width: 800px; }
+.method-roadmap h2 { font-size: 24px; color: #334155; }
+.method-roadmap p { color: #64748b; }
+.toc-return { display: none; }
+.reader-toc { scroll-margin-top: 16px; }
+@media (max-width: 900px) {
+  .methods-main { width: calc(100% - 32px); }
+  .reader-layout { display: block; }
+  .reader-sidebar { position: static; margin-bottom: 22px; }
+  .toc-scroll { max-height: min(55dvh, 440px); }
+  .lecture-content { padding: 10px 28px 28px; }
+  .toc-return { display: block; position: fixed; bottom: 20px; right: 20px; z-index: 100; background: #faf9f7; border: 1px solid white; border-radius: 16px; box-shadow: var(--site-rim), var(--site-shadow); padding: 10px 16px; color: #475569; text-decoration: none; font-size: 15px; }
+}
+@media (max-width: 600px) {
+  .methods-main { width: calc(100% - 24px); margin-top: 6px; }
+  .method-tabs { gap: 4px; margin-bottom: 28px; }
+  .method-tabs a { font-size: 15px; padding: 8px 11px; }
+  .lecture-header { padding: 0 8px; margin-bottom: 28px; }
+  .method-intro { font-size: 17px; }
+  .lecture-content { padding: 4px 20px 24px; font-size: 17px; }
+  .lecture-code { max-width: 100%; }
+  .lecture-table table { font-size: 15px; }
+  .method-cards { grid-template-columns: 1fr; gap: 18px; }
+  .method-card { padding: 26px; }
+  .method-roadmap { padding: 0 8px; }
+}
+@media print {
+  .method-tabs, .reader-sidebar, .copy-code, .lecture-footer, .toc-return { display: none; }
+  .methods-main { width: 100%; margin: 0; }
+  .reader-layout { display: block; }
+  .lecture-content { padding: 0; background: white; border: none; box-shadow: none; }
+  .lecture-chapter { break-before: page; }
+  .lecture-table { overflow: visible; }
+  .lecture-code code { white-space: pre-wrap; overflow-wrap: anywhere; }
+}
