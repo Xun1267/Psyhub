@@ -292,6 +292,9 @@ body[data-site-page='resources'] > main { padding-top: 30px; }
 @media print { .site-shell, .site-skip { display: none !important; } html body.site-ui { padding-top: 0 !important; background: white !important; } }
 
 /* Keep the expanded navigation within its glass bar. */
+.site-topic-links { width: min(1180px, calc(100% - 40px)); margin: 0 auto 24px; display: flex; flex-wrap: wrap; gap: 8px; }
+.site-topic-links a { color: #475569; text-decoration: none; padding: 9px 16px; border-radius: 14px; font-size: 16px; }
+.site-topic-links a:hover, .site-topic-links a[aria-current='page'] { background: rgb(255 255 255 / .7); box-shadow: var(--site-rim); }
 @media (min-width: 1001px) and (max-width: 1160px) {
   .site-shell .site-nav-links { display: none; }
   .site-mobile-links { display: block; }
